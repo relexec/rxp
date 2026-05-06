@@ -94,16 +94,39 @@ Data managed by `rxp` is uniformly organized in a common taxonomy.
 Briefly, a `KindVersion` uniquely identifies a *type and version* of a thing
 that is managed by `rxp`.
 
+```mermaid
+erDiagram
+    KindVersion {
+        string **kind**
+        string **version**
+    }
+```
+
 An `Object` is an *instance* of a `KindVersion`.
 
 ```mermaid
 erDiagram
-    KindVersion ||--|{ Object : instance-of
+    KindVersion ||--|{ Object : defines
 ```
 
-`Objects` *always* have a UUID globally-unique identifier.
 `Objects` *always* have a [`System`][#system] identifier. System identifiers
 are globally-unique.
+
+`Objects` *always* have a UUID globally-unique identifier.
+
+```mermaid
+erDiagram
+    KindVersion ||--|{ Object : defines
+    KindVersion {
+        string **kind**
+        string **version**
+    }
+    Object{
+        string **kindversion**
+        string **uuid**
+        string **system**
+    }
+```
 
 `Objects` *always* have a Name. An `Object`'s Name is unique within the
 [`Namescope`][#namescope] associated with the `KindVersion`.
@@ -115,6 +138,24 @@ is guaranteed to have a [`Domain`][#domain]. If that `Namescope` is
 `Objects` *may* have zero or more `Labels` associated with them. `Labels` are
 structures with a `Key` and optional `Value` that can be used to categorize
 `Objects`.
+
+```mermaid
+erDiagram
+    KindVersion ||--|{ Object : defines
+    KindVersion {
+        string **kind**
+        string **version**
+        string **namescope**
+    }
+    Object{
+        string **kindversion**
+        string **uuid**
+        string **system**
+        string **name**
+        string domain
+        string namespace
+    }
+```
 
 ## Reference
 

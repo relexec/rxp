@@ -102,38 +102,38 @@ erDiagram
     }
 ```
 
-An `Object` is an *instance* of a `KindVersion`.
+A `Meta` contains the definition for a `KindVersion`. This definition includes
+a [`Namescope`](#namescope) and a `Schema` that defines the fields that
+comprise desired state for things of that `KindVersion`.
 
 ```mermaid
 erDiagram
-    KindVersion ||--|{ Object : defines
-```
-
-`Objects` *always* have a [`System`][#system] identifier. System identifiers
-are globally-unique.
-
-`Objects` *always* have a UUID globally-unique identifier.
-
-```mermaid
-erDiagram
-    KindVersion ||--|{ Object : defines
+    KindVersion ||--|| Meta : defines
     KindVersion {
         string **kind**
         string **version**
     }
-    Object{
+    Meta{
         string **kindversion**
-        string **uuid**
-        string **system**
+        int **namescope**
+        string **schema**
     }
 ```
 
+An `Object` is an *instance* of a `KindVersion`.
+
+`Objects` *always* have a [`System`](#system) identifier. System identifiers
+are globally-unique.
+
+`Objects` *always* have a UUID globally-unique identifier.
+
 `Objects` *always* have a Name. An `Object`'s Name is unique within the
-[`Namescope`][#namescope] associated with the `KindVersion`.
+`Namescope` associated with the `KindVersion`.
 
 If that `Namescope` is `NamescopeNamespace` or `NamescopeDomain`, the `Object`
-is guaranteed to have a [`Domain`][#domain]. If that `Namescope` is
-`NamescopeNamespace`, the `Object` is guaranteed to have a `Namespace`.
+is guaranteed to have a [`Domain`](#domain). If that `Namescope` is
+`NamescopeNamespace`, the `Object` is guaranteed to have a
+[`Namespace`](#namespace).
 
 `Objects` *may* have zero or more `Labels` associated with them. `Labels` are
 structures with a `Key` and optional `Value` that can be used to categorize
@@ -141,19 +141,36 @@ structures with a `Key` and optional `Value` that can be used to categorize
 
 ```mermaid
 erDiagram
-    KindVersion ||--|{ Object : defines
+    KindVersion ||--|| Meta : defines
+    Meta ||--|{ Object : defines
+    Domain ||--|{ Namespace : "may have"
+    Domain ||--|{ Object : "may have"
+    Namespace ||--|{ Object : "may have"
     KindVersion {
         string **kind**
         string **version**
-        string **namescope**
+    }
+    Meta{
+        string **kindversion**
+        int **namescope**
+        string **schema**
+    }
+    Domain{
+        string **system**
+        string **name**
+    }
+    Namespace{
+        string **domain**
+        string **name**
     }
     Object{
-        string **kindversion**
-        string **uuid**
         string **system**
+        string **meta**
+        string **uuid**
         string **name**
         string domain
         string namespace
+        array labels
     }
 ```
 
@@ -258,11 +275,11 @@ All `Object`s have the following methods:
 
 * `KindVersion()`: returns a unique identifier for the type and version of the
   Object.
-* `ID()`: returns the globally-unique identifier.
-* `Domain()`: returns an optional top-level partitioning key.
-* `Namespace()`: returns an optional intra-domain tenancy or namespace key.
-* `Name()`: returns a human-readable name.
-* `Generation()`: returns the number of times the Object's desired state has
+* `UUID()`: returns the globally-unique identifier.
+* `Domain()`: returns the optional `Domain`.
+* `Namespace()`: returns the optional intra-`Domain` `Namespace`.
+* `Name()`: returns the human-readable name.
+* `Generation()`: returns the number of times the `Object`'s desired state has
   changed.
 * `Spec()`: returns the desired state.
 
@@ -272,8 +289,7 @@ All `Object`s have the following methods:
 
 All `Meta`s have the following methods:
 
-* `Kind()`: returns the type.
-* `KindVersion()`: returns the type and version.
+* `KindVersion()`: returns the `KindVersion`
 * `Version()`: returns the [`semver.Version`][semver-version] struct indicating
   the Semantic Version of the `Kind` of `Object` the `Meta` defines.
 * `Namescope()`: returns the `Namescope` uniqueness constraint.

@@ -1,0 +1,224 @@
+# Taxonomy
+
+Data managed by `rxp` is uniformly organized in a common taxonomy.
+
+Briefly, a `KindVersion` uniquely identifies a *type and version* of a thing
+that is managed by `rxp`.
+
+```mermaid
+erDiagram
+    KindVersion {
+        string **kind**
+        string **version**
+    }
+```
+
+A `Meta` contains the definition for a `KindVersion`. This definition includes
+a [`Namescope`](#namescope) and a `Schema` that defines the fields that
+comprise desired state for things of that `KindVersion`.
+
+```mermaid
+erDiagram
+    KindVersion ||--|| Meta : defines
+    KindVersion {
+        string **kind**
+        string **version**
+    }
+    Meta{
+        string **kindversion**
+        int **namescope**
+        string **schema**
+    }
+```
+
+An `Object` is an *instance* of a `KindVersion`.
+
+`Objects` *always* have a [`System`](#system) identifier. System identifiers
+are globally-unique.
+
+`Objects` *always* have a UUID globally-unique identifier.
+
+`Objects` *always* have a Name. An `Object`'s Name is unique within the
+`Namescope` associated with the `KindVersion`.
+
+If that `Namescope` is `NamescopeNamespace` or `NamescopeDomain`, the `Object`
+is guaranteed to have a [`Domain`](#domain). If that `Namescope` is
+`NamescopeNamespace`, the `Object` is guaranteed to have a
+[`Namespace`](#namespace).
+
+`Objects` *may* have zero or more `Labels` associated with them. `Labels` are
+structures with a `Key` and optional `Value` that can be used to categorize
+`Objects`.
+
+```mermaid
+erDiagram
+    KindVersion ||--|| Meta : defines
+    Meta ||--|{ Object : defines
+    Domain ||--|{ Namespace : "may have"
+    Domain ||--|{ Object : "may have"
+    Namespace ||--|{ Object : "may have"
+    KindVersion {
+        string **kind**
+        string **version**
+    }
+    Meta{
+        string **kindversion**
+        int **namescope**
+        string **schema**
+    }
+    Domain{
+        string **system**
+        string **name**
+    }
+    Namespace{
+        string **domain**
+        string **name**
+    }
+    Object{
+        string **system**
+        string **meta**
+        string **uuid**
+        string **name**
+        string domain
+        string namespace
+        array labels
+    }
+```
+
+## `System`
+
+`System` represents the boundaries of an `rxp` system installation.
+
+## `Domain`
+
+`Domain` is a specialized string containing a top-level division or partition
+of things managed by `rxp`.
+
+A valid `Domain` is a DNS-formatted (RFC 1035-compliant) name less than 254
+characters.
+
+A `Domain` must be unique within the scope of the `rxp` system installation.
+
+## `Namespace`
+
+`Namespace` describes a logical division within a `Domain`.
+
+A `Namespace` is typically used to segregate data by tenancy boundaries.
+
+A valid `Namespace` is a DNS-formatted (RFC 1035-compliant) name.
+
+Note that unlike RFC 1035, there is no 253 character size limit on `Namespace`
+string length.
+
+A `Namespace` must be unique within its containing `Domain`.
+
+## `Kind`
+
+`Kind` is a specialized string containing the *type* of an `Object`.
+
+A valid `Kind` is a DNS-formatted (RFC 1035-compliant) name of the type of
+`Object`, e.g.  `flow.temporal.io`.
+
+Conventionally, a `Kind` is specified as a singular, not plural, noun. So,
+`flow`, not `flows`.
+
+Furthermore, a `Kind` is conventionally all lower-cased, with dots separating
+coarser-grained categories/groups. So, `flow.temporal.io`, not
+`TemporalFlow`.
+
+You can use only alphanumeric characters and hyphens in the `Kind` name parts,
+separated by periods. Furthermore, the first character of the `Kind` must be a
+letter or number, not a hyphen or period.
+
+> Note that unlike RFC 1035, there is no 253 character size limit on the
+> `Kind` string length.
+
+A `Kind` must be unique within the scope of the `rxp` system installation,
+however for any `Kind` that is intended to be used across multiple `rxp` system
+installations, the `Kind` should be globally-unique.
+
+## `KindVersion`
+
+`KindVersion` is a specialized string that contains the `Kind` and optionally a
+SemVer version string that uniquely identifies the exact type of an `Object`.
+
+A `KindVersion` string has the format `<kind>[@<version>]`, where `<kind>` is a
+valid `Kind` and the optional `<version>` component must be a valid SemVer
+version string.
+
+> Note that a valid SemVer version string does *not* contain a `v` prefix.
+
+## `Namescope`
+
+`Namescope` refers to the uniqueness constraint applied to the name of some
+thing managed by `rxp`.
+
+There are five `Namescope` values, listed here in order of specificity, from
+the narrowest to broadest specificity.
+
+* `NamescopeNamespace`: name is unique within the scope of the `Object`'s
+  `Kind`, `Domain`, and `Namespace`.
+* `NamescopeDomain`: name is unique within the scope of the `Object`'s `Kind`
+  and `Domain`.
+* `NamescopeKind`: name is unique within the scope of the `Object`'s `Kind`.
+* `NamescopeSystem`: name is unique within the scope of the `rxp` system
+  installation
+* `NamescopeGlobal`: name is globally-unique.
+
+## `Object`
+
+`Object` describes an instance of something whose lifecycle is controlled by
+`rxp`.
+
+An `Object`'s lifecycle encompasses its creation, mutation and deletion.
+
+All `Object`s have the following methods:
+
+* `KindVersion()`: returns a unique identifier for the type and version of the
+  Object.
+* `UUID()`: returns the globally-unique identifier.
+* `Domain()`: returns the optional `Domain`.
+* `Namespace()`: returns the optional intra-`Domain` `Namespace`.
+* `Name()`: returns the human-readable name.
+* `Generation()`: returns the number of times the `Object`'s desired state has
+  changed.
+* `Spec()`: returns the desired state.
+
+## `Meta`
+
+`Meta` contains metadata about a versioned type of `Object`.
+
+All `Meta`s have the following methods:
+
+* `KindVersion()`: returns the `KindVersion`
+* `Version()`: returns the [`semver.Version`][semver-version] struct indicating
+  the Semantic Version of the `Kind` of `Object` the `Meta` defines.
+* `Namescope()`: returns the `Namescope` uniqueness constraint.
+* `Schema()`: returns the [jsonschema.Schema][jsonschema-schema] describing the
+  field composition of desired state.
+* `SchemaJSON()`: returns a string representation of the `Schema`
+
+When the definition of a `Kind` of `Object` changes, the `Version` is
+incremented, allowing for the controlled evolution of the schema and definition
+of a `Kind`.
+
+[semver-version]: https://pkg.go.dev/github.com/Masterminds/semver/v3#Version
+[jsonschema-schema]: https://github.com/google/jsonschema-go/blob/main/jsonschema/schema.go
+
+## `Spec`
+
+`Spec` represents the *desired state* of an `Object`.
+
+When an `Object` is read, its `Spec` will always has a non-zero `Generation`
+value. The `Generation` represents the number of times that the desired state
+of the `Object` has been mutated.
+
+The fields that comprise a `Spec` are defined in the `Meta`'s `Schema`.
+
+## `Generation`
+
+One of `rxp`'s primary purposes is to control the evolution of changes to both
+the structure and desired state of data.
+
+`rxp` controls change using a `Generation` on both the `Meta` and the `Spec` of
+an `Object`.

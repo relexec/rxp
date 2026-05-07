@@ -11,7 +11,7 @@ type Object interface {
 	UUID() string
 	// Domain returns the Object's optional Domain.
 	Domain() Domain
-	// Namespace returns the Object's Namespace.
+	// Namespace returns the Object's optional Namespace.
 	Namespace() Namespace
 	// Name returns the Object's name.
 	//

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/relexec/rxp/domain"
+	"github.com/relexec/rxp/namespace"
 	"github.com/relexec/rxp/types"
 )
 
@@ -134,13 +135,15 @@ func (o Object) MarshalJSON() ([]byte, error) {
 		System:      o.system,
 		UUID:        o.uuid,
 		Name:        o.name,
-		Namespace:   string(o.namespace),
 		Labels:      o.labels,
 		Generation:  int(o.generation),
 		Spec:        o.spec,
 	}
 	if o.domain != nil {
 		jo.Domain = string(o.domain.Name())
+	}
+	if o.namespace != nil {
+		jo.Namespace = string(o.namespace.Name())
 	}
 	return json.Marshal(&jo)
 }
@@ -154,16 +157,21 @@ func (o *Object) UnmarshalJSON(text []byte) error {
 	o.kindVersion = types.KindVersion(jo.KindVersion)
 	o.system = jo.System
 	o.uuid = jo.UUID
+	o.name = jo.Name
+	o.labels = jo.Labels
+	o.generation = types.Generation(jo.Generation)
+	o.spec = jo.Spec
 	if jo.Domain != "" {
 		o.domain = domain.New(
 			domain.WithSystem(o.system),
 			domain.WithName(types.DomainName(jo.Domain)),
 		)
 	}
-	o.namespace = types.Namespace(jo.Namespace)
-	o.name = jo.Name
-	o.labels = jo.Labels
-	o.generation = types.Generation(jo.Generation)
-	o.spec = jo.Spec
+	if jo.Namespace != "" {
+		o.namespace = namespace.New(
+			namespace.WithDomain(o.domain),
+			namespace.WithName(types.NamespaceName(jo.Namespace)),
+		)
+	}
 	return nil
 }

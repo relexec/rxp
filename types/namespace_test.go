@@ -10,13 +10,13 @@ import (
 func TestNamespace(t *testing.T) {
 	cases := []struct {
 		name             string
-		subject          types.Namespace
+		subject          types.NamespaceName
 		expValidateError string
 	}{
 		{
-			"empty namespace is fine",
+			"empty namespace",
 			"",
-			"",
+			"namespace name cannot be empty",
 		},
 		{
 			"spaces not allowed",

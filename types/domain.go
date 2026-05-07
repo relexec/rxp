@@ -24,7 +24,7 @@ type DomainName string
 // Note that we do not use regexp parsing here for performance reasons.
 func (n DomainName) Validate() error {
 	if len(n) == 0 {
-		return nil
+		return errors.ErrDomainNameEmpty
 	}
 	if len(n) > DomainNameMaxLength {
 		return errors.ErrDomainNameMaxLengthExceeded

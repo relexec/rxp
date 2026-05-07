@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"github.com/relexec/rxp/errors"
 	"github.com/relexec/rxp/types"
 )
 
@@ -21,9 +20,6 @@ type Domain struct {
 
 // Validate returns an error if the Domain is invalid.
 func (d Domain) Validate() error {
-	if d.name == "" {
-		return errors.ErrDomainNameEmpty
-	}
 	return d.name.Validate()
 }
 

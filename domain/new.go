@@ -9,11 +9,11 @@ type Option func(*Domain)
 
 // New returns a new [Domain].
 func New(opts ...Option) *Domain {
-	m := &Domain{}
+	d := &Domain{}
 	for _, opt := range opts {
-		opt(m)
+		opt(d)
 	}
-	return m
+	return d
 }
 
 // WithSystem sets the Domain's System.

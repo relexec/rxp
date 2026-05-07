@@ -17,7 +17,7 @@ func TestDomainName(t *testing.T) {
 		{
 			"empty domain is fine",
 			"",
-			"",
+			"domain name cannot be empty",
 		},
 		{
 			"spaces not allowed",

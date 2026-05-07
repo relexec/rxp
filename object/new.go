@@ -18,6 +18,13 @@ func New(kv types.KindVersion, opts ...Option) *Object {
 	return o
 }
 
+// WithSystem sets the Object's System.
+func WithSystem(system types.System) Option {
+	return func(o *Object) {
+		o.system = system
+	}
+}
+
 // WithUUID sets the Object's UUID.
 func WithUUID(uuid string) Option {
 	return func(o *Object) {

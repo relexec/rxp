@@ -3,6 +3,7 @@ package write
 import (
 	"context"
 
+	"github.com/relexec/rxp/meta/write/option"
 	"github.com/relexec/rxp/types"
 )
 
@@ -12,6 +13,6 @@ type MetaWriter interface {
 	MetaWrite(
 		context.Context,
 		types.Meta,
-		...Option,
+		...option.Option,
 	) error
 }

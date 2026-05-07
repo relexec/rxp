@@ -1,14 +1,13 @@
-package read
+package option
 
 import (
 	"github.com/relexec/rxp/types"
 )
 
-// Option can be used to control how [ObjectReader.ReadObject] method behaves.
+// Option can be used to control how [ObjectReader.ObjectRead] behaves.
 type Option func(*Options)
 
-// Options controls how a call to one of the [ObjectReader.ReadObject] methods
-// behaves.
+// Options controls how a call to [ObjectReader.ObjectRead] behaves.
 type Options struct {
 	// generation is the Generation of the Object's Spec that should be read.
 	// If this is 0, the Object Spec's latest generation is returned.
@@ -29,11 +28,11 @@ func HavingGeneration(generation types.Generation) Option {
 	}
 }
 
-// NewOptions returns a new Options given zero or more Option modifiers.
-func NewOptions(opts ...Option) *Options {
-	o := &Options{}
+// New returns a new Options given zero or more Option modifiers.
+func New(opts ...Option) Options {
+	o := Options{}
 	for _, opt := range opts {
-		opt(o)
+		opt(&o)
 	}
 	return o
 }

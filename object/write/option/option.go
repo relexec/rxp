@@ -1,13 +1,13 @@
-package write
+package option
 
 import (
 	"github.com/relexec/rxp/types"
 )
 
-// Option can be used to control how [ObjectWriter.WriteObject] method behaves.
+// Option can be used to control how [ObjectWriter.ObjectWrite] behaves.
 type Option func(*Options)
 
-// Options controls how [ObjectWriter.WriteObject] method behaves.
+// Options controls how [ObjectWriter.ObjectWrite] behaves.
 type Options struct {
 	// generation is the Generation of the Spec expected of the Object being
 	// written.
@@ -28,11 +28,11 @@ func ExpectingGeneration(generation types.Generation) Option {
 	}
 }
 
-// NewOptions returns a new Options given zero or more Option modifiers.
-func NewOptions(opts ...Option) *Options {
-	o := &Options{}
+// New returns a new Options given zero or more Option modifiers.
+func New(opts ...Option) Options {
+	o := Options{}
 	for _, opt := range opts {
-		opt(o)
+		opt(&o)
 	}
 	return o
 }

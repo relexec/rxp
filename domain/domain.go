@@ -6,8 +6,8 @@ import (
 
 // Domain describes a top-level division or partition of things managed by rxp.
 type Domain struct {
-	// system contains the system identifier for the Domain.
-	system string
+	// system contains the System containing the Domain.
+	system types.System
 	// name contains the Domain name.
 	//
 	// A valid Domain Name is a DNS-formatted (RFC 1035-compliant) name less than
@@ -24,12 +24,12 @@ func (d Domain) Validate() error {
 }
 
 // System returns the System of the Domain.
-func (d Domain) System() string {
+func (d Domain) System() types.System {
 	return d.system
 }
 
 // SetSystem sets the System of Domain.
-func (d *Domain) SetSystem(system string) {
+func (d *Domain) SetSystem(system types.System) {
 	d.system = system
 }
 

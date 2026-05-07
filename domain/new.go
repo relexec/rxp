@@ -17,7 +17,7 @@ func New(opts ...Option) *Domain {
 }
 
 // WithSystem sets the Domain's System.
-func WithSystem(system string) Option {
+func WithSystem(system types.System) Option {
 	return func(d *Domain) {
 		d.system = system
 	}

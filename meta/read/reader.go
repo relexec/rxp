@@ -3,6 +3,8 @@ package read
 import (
 	"context"
 
+	"github.com/relexec/rxp/meta/read/option"
+	"github.com/relexec/rxp/meta/read/selector"
 	"github.com/relexec/rxp/types"
 )
 
@@ -11,7 +13,7 @@ type MetaReader interface {
 	// MetaRead reads a single Meta from persistent storage.
 	MetaRead(
 		context.Context,
-		types.KindVersion,
-		...Option,
+		selector.Selector,
+		...option.Option,
 	) (types.Meta, error)
 }

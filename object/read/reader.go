@@ -3,6 +3,8 @@ package read
 import (
 	"context"
 
+	"github.com/relexec/rxp/object/read/option"
+	"github.com/relexec/rxp/object/read/selector"
 	"github.com/relexec/rxp/types"
 )
 
@@ -12,7 +14,7 @@ type ObjectReader interface {
 	ObjectRead(
 		ctx context.Context,
 		kv types.KindVersion,
-		sel types.Selector,
-		opts ...Option,
+		sel selector.Selector,
+		opts ...option.Option,
 	) (types.Object, error)
 }

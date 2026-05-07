@@ -5,6 +5,7 @@ import (
 
 	"github.com/relexec/rxp/domain"
 	"github.com/relexec/rxp/namespace"
+	"github.com/relexec/rxp/system"
 	"github.com/relexec/rxp/types"
 )
 
@@ -14,7 +15,7 @@ type Object struct {
 	// kindVersion is the kind and version identifier for the type of Object.
 	kindVersion types.KindVersion
 	// system contains the system identifier for the Object.
-	system string
+	system types.System
 	// uuid is the globally-unique string identifier.
 	uuid string
 	// domain is the optional Domain.
@@ -44,12 +45,12 @@ func (o Object) KindVersion() types.KindVersion {
 }
 
 // System returns the System of the Object.
-func (o Object) System() string {
+func (o Object) System() types.System {
 	return o.system
 }
 
 // SetSystem sets the System of Object.
-func (o *Object) SetSystem(system string) {
+func (o *Object) SetSystem(system types.System) {
 	o.system = system
 }
 
@@ -132,12 +133,14 @@ type jsonObject struct {
 func (o Object) MarshalJSON() ([]byte, error) {
 	jo := jsonObject{
 		KindVersion: string(o.kindVersion),
-		System:      o.system,
 		UUID:        o.uuid,
 		Name:        o.name,
 		Labels:      o.labels,
 		Generation:  int(o.generation),
 		Spec:        o.spec,
+	}
+	if o.system != nil {
+		jo.System = o.system.UUID()
 	}
 	if o.domain != nil {
 		jo.Domain = string(o.domain.Name())
@@ -155,12 +158,16 @@ func (o *Object) UnmarshalJSON(text []byte) error {
 		return err
 	}
 	o.kindVersion = types.KindVersion(jo.KindVersion)
-	o.system = jo.System
 	o.uuid = jo.UUID
 	o.name = jo.Name
 	o.labels = jo.Labels
 	o.generation = types.Generation(jo.Generation)
 	o.spec = jo.Spec
+	if jo.System != "" {
+		o.system = system.New(
+			system.WithUUID(jo.System),
+		)
+	}
 	if jo.Domain != "" {
 		o.domain = domain.New(
 			domain.WithSystem(o.system),

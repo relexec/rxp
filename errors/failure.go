@@ -25,7 +25,7 @@ var (
 	ErrInvalidReadRequest = New("invalid read request", WithCode(ErrCodeBadRequest))
 	ErrMissingSelector    = New("missing selector", WithWrap(ErrInvalidReadRequest))
 	ErrInvalidSelector    = New("invalid selector", WithWrap(ErrInvalidReadRequest))
-	ErrIDOrNameRequired   = New("ID or Name required", WithWrap(ErrInvalidSelector))
+	ErrUUIDOrNameRequired = New("UUID or Name required", WithWrap(ErrInvalidSelector))
 )
 
 // Internal returns an Error with a 500 Internal Server Error code and the
@@ -86,12 +86,12 @@ func ExpectedGeneration(subject any, expected any, got any, opts ...option) erro
 	return e
 }
 
-// DuplicateID returns an Error wrapping ErrConflict that explains the supplied
+// DuplicateKey returns an Error wrapping ErrConflict that explains the supplied
 // thing violated a unique key constraint.
-func DuplicateID(typ any, id any, opts ...option) error {
+func DuplicateKey(typ any, key any, value any, opts ...option) error {
 	e := &Error{
 		code:    ErrCodeConflict,
-		msg:     fmt.Sprintf("%q already exists with ID %q", typ, id),
+		msg:     fmt.Sprintf("%q already exists with key %q of %q", typ, key, value),
 		wrapped: ErrConflict,
 	}
 	for _, o := range opts {

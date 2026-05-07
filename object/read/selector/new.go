@@ -1,25 +1,36 @@
 package selector
 
+import "github.com/relexec/rxp/types"
+
 // Option controls the returned [Selector] from [New]
 type Option func(*Selector)
 
-// WithID is used to look up an Object with a specified globally-unique string
-// identifier.
-func WithID(id string) Option {
+// WithSystem is used to look up an Object in a specific System. If no system
+// identifier is specified, the host system responding to the ObjectRead
+// request is used.
+func WithSystem(system types.System) Option {
 	return func(s *Selector) {
-		s.id = id
+		s.system = system
+	}
+}
+
+// WithUUID is used to look up an Object with a specified globally-unique
+// string identifier.
+func WithUUID(uuid string) Option {
+	return func(s *Selector) {
+		s.uuid = uuid
 	}
 }
 
 // WithDomain is used to look up an Object with a specified Domain.
-func WithDomain(domain string) Option {
+func WithDomain(domain types.Domain) Option {
 	return func(s *Selector) {
 		s.domain = domain
 	}
 }
 
 // WithNamespace is used to look up an Object with a specified Namespace.
-func WithNamespace(namespace string) Option {
+func WithNamespace(namespace types.Namespace) Option {
 	return func(s *Selector) {
 		s.namespace = namespace
 	}
@@ -33,10 +44,10 @@ func WithName(name string) Option {
 }
 
 // New returns a new Selector given zero or more Option modifiers.
-func New(opts ...Option) *Selector {
-	o := &Selector{}
+func New(opts ...Option) Selector {
+	s := Selector{}
 	for _, opt := range opts {
-		opt(o)
+		opt(&s)
 	}
-	return o
+	return s
 }

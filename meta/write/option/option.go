@@ -1,13 +1,13 @@
-package write
+package option
 
 import (
 	"github.com/relexec/rxp/types"
 )
 
-// Option can be used to control how [MetaWriter.WriteMeta] method behaves.
+// Option can be used to control how [MetaWriter.MetaWrite] method behaves.
 type Option func(*Options)
 
-// Options controls how [MetaWriter.WriteMeta] method behaves.
+// Options controls how [MetaWriter.MetaWrite] method behaves.
 type Options struct {
 	// generation is the Generation expected of the Meta being written.
 	generation types.Generation
@@ -26,11 +26,11 @@ func ExpectingGeneration(generation types.Generation) Option {
 	}
 }
 
-// NewOptions returns a new Options given zero or more Option modifiers.
-func NewOptions(opts ...Option) *Options {
-	o := &Options{}
+// New returns a new Options given zero or more Option modifiers.
+func New(opts ...Option) Options {
+	o := Options{}
 	for _, opt := range opts {
-		opt(o)
+		opt(&o)
 	}
 	return o
 }

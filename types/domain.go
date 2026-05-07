@@ -52,7 +52,7 @@ func (n DomainName) Validate() error {
 type Domain interface {
 	Validatable
 	// System returns the system identifier associated with the Domain.
-	System() string
+	System() System
 	// Name returns the name of the Domain.
 	Name() DomainName
 }

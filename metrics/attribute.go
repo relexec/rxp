@@ -27,8 +27,11 @@ func AttributeErrCode(err error) attribute.KeyValue {
 type TargetType string
 
 const (
-	TargetTypeMeta   TargetType = "meta"
-	TargetTypeObject TargetType = "object"
+	TargetTypeSystem    TargetType = "system"
+	TargetTypeDomain    TargetType = "domain"
+	TargetTypeNamespace TargetType = "namespace"
+	TargetTypeMeta      TargetType = "meta"
+	TargetTypeObject    TargetType = "object"
 )
 
 const (

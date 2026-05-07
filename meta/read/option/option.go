@@ -1,13 +1,13 @@
-package read
+package option
 
 import (
 	"github.com/relexec/rxp/types"
 )
 
-// Option can be used to control how [MetaReader.ReadMeta] behaves.
+// Option can be used to control how [MetaReader.MetaRead] behaves.
 type Option func(*Options)
 
-// Options controls how a call to [MetaReader.ReadMeta] behaves.
+// Options controls how a call to [MetaReader.MetaRead] behaves.
 type Options struct {
 	// generation is the Generation of the Meta that should be read. If this
 	// is 0, the Meta's latest generation is read.
@@ -28,11 +28,11 @@ func HavingGeneration(generation types.Generation) Option {
 	}
 }
 
-// NewOptions returns a new Options given zero or more Option modifiers.
-func NewOptions(opts ...Option) *Options {
-	o := &Options{}
+// New returns a new Options given zero or more Option modifiers.
+func New(opts ...Option) Options {
+	o := Options{}
 	for _, opt := range opts {
-		opt(o)
+		opt(&o)
 	}
 	return o
 }

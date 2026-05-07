@@ -3,6 +3,7 @@ package object
 import (
 	"encoding/json"
 
+	"github.com/relexec/rxp/domain"
 	"github.com/relexec/rxp/types"
 )
 
@@ -11,6 +12,8 @@ import (
 type Object struct {
 	// kindVersion is the kind and version identifier for the type of Object.
 	kindVersion types.KindVersion
+	// system contains the system identifier for the Object.
+	system string
 	// uuid is the globally-unique string identifier.
 	uuid string
 	// domain is the optional Domain.
@@ -37,6 +40,16 @@ func (o Object) Kind() types.Kind {
 // identifies the type of an Object.
 func (o Object) KindVersion() types.KindVersion {
 	return o.kindVersion
+}
+
+// System returns the System of the Object.
+func (o Object) System() string {
+	return o.system
+}
+
+// SetSystem sets the System of Object.
+func (o *Object) SetSystem(system string) {
+	o.system = system
 }
 
 // UUID returns the globally-unique string identifier.
@@ -104,6 +117,7 @@ func (o Object) Spec() string {
 
 type jsonObject struct {
 	KindVersion string       `json:"kind_version"`
+	System      string       `json:"system"`
 	UUID        string       `json:"uuid"`
 	Domain      string       `json:"domain,omitempty"`
 	Namespace   string       `json:"namespace,omitempty"`
@@ -117,13 +131,16 @@ type jsonObject struct {
 func (o Object) MarshalJSON() ([]byte, error) {
 	jo := jsonObject{
 		KindVersion: string(o.kindVersion),
+		System:      o.system,
 		UUID:        o.uuid,
-		Domain:      string(o.domain),
-		Namespace:   string(o.namespace),
 		Name:        o.name,
+		Namespace:   string(o.namespace),
 		Labels:      o.labels,
 		Generation:  int(o.generation),
 		Spec:        o.spec,
+	}
+	if o.domain != nil {
+		jo.Domain = string(o.domain.Name())
 	}
 	return json.Marshal(&jo)
 }
@@ -135,8 +152,14 @@ func (o *Object) UnmarshalJSON(text []byte) error {
 		return err
 	}
 	o.kindVersion = types.KindVersion(jo.KindVersion)
+	o.system = jo.System
 	o.uuid = jo.UUID
-	o.domain = types.Domain(jo.Domain)
+	if jo.Domain != "" {
+		o.domain = domain.New(
+			domain.WithSystem(o.system),
+			domain.WithName(types.DomainName(jo.Domain)),
+		)
+	}
 	o.namespace = types.Namespace(jo.Namespace)
 	o.name = jo.Name
 	o.labels = jo.Labels

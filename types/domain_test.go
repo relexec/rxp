@@ -8,10 +8,10 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestDomain(t *testing.T) {
+func TestDomainName(t *testing.T) {
 	cases := []struct {
 		name             string
-		subject          types.Domain
+		subject          types.DomainName
 		expValidateError string
 	}{
 		{
@@ -26,7 +26,7 @@ func TestDomain(t *testing.T) {
 		},
 		{
 			"max length exceeded",
-			types.Domain(strings.Repeat("X", types.DomainMaxLength+1)),
+			types.DomainName(strings.Repeat("X", types.DomainNameMaxLength+1)),
 			"max length exceeded",
 		},
 		{

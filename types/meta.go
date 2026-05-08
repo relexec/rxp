@@ -8,6 +8,8 @@ import (
 type Meta interface {
 	Validatable
 	Differ
+	// System returns the system identifier associated with the KindVersion.
+	System() System
 	// KindVersion returns the Meta's KindVersion.
 	KindVersion() KindVersion
 	// Namescope returns the name uniqueness constraint for Objects having this

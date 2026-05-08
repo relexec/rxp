@@ -20,6 +20,13 @@ func New(opts ...Option) *Meta {
 	return m
 }
 
+// WithSystem sets the Meta's System.
+func WithSystem(system types.System) Option {
+	return func(m *Meta) {
+		m.system = system
+	}
+}
+
 // WithKindVersion sets the Meta's KindVersion.
 func WithKindVersion(kv types.KindVersion) Option {
 	return func(m *Meta) {

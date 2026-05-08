@@ -7,11 +7,9 @@ import (
 // Option modifies an Object returned from New.
 type Option func(*Object)
 
-// New returns a new [Object] of the specified KindVersion.
-func New(kv types.KindVersion, opts ...Option) *Object {
-	o := &Object{
-		kindVersion: kv,
-	}
+// New returns a new [Object]
+func New(opts ...Option) *Object {
+	o := &Object{}
 	for _, opt := range opts {
 		opt(o)
 	}
@@ -22,6 +20,13 @@ func New(kv types.KindVersion, opts ...Option) *Object {
 func WithSystem(system types.System) Option {
 	return func(o *Object) {
 		o.system = system
+	}
+}
+
+// WithKindVersion sets the Object's KindVersion.
+func WithKindVersion(kindVersion types.KindVersion) Option {
+	return func(o *Object) {
+		o.kindVersion = kindVersion
 	}
 }
 

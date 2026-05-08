@@ -14,8 +14,8 @@ func WithSystem(system types.System) Option {
 	}
 }
 
-// WithName is used to look up an Domain with a specified Name.
-func WithName(name string) Option {
+// WithName is used to look up a Domain with a specified Name.
+func WithName(name types.DomainName) Option {
 	return func(s *Selector) {
 		s.name = name
 	}

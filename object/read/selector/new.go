@@ -14,6 +14,13 @@ func WithSystem(system types.System) Option {
 	}
 }
 
+// WithKindVersion specifies the type and version of Object to look up.
+func WithKindVersion(kindVersion types.KindVersion) Option {
+	return func(s *Selector) {
+		s.kindVersion = kindVersion
+	}
+}
+
 // WithUUID is used to look up an Object with a specified globally-unique
 // string identifier.
 func WithUUID(uuid string) Option {
@@ -40,6 +47,15 @@ func WithNamespace(namespace types.Namespace) Option {
 func WithName(name string) Option {
 	return func(s *Selector) {
 		s.name = name
+	}
+}
+
+// WithGeneration is used to look up an Object with a Spec having the supplied
+// Generation. If WithGeneration is not used or a value of 0 is supplied to
+// WithGeneration, the Object Spec's latest generation is read.
+func WithGeneration(generation types.Generation) Option {
+	return func(s *Selector) {
+		s.generation = generation
 	}
 }
 

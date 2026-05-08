@@ -18,6 +18,8 @@ var (
 )
 
 type Meta struct {
+	// system contains the System containing the Meta.
+	system types.System
 	// kindVersion is the [types.KindVersion] that uniquely identifies the type
 	// and version of Objects represented by this Meta.
 	kindVersion types.KindVersion
@@ -48,6 +50,16 @@ func (m Meta) Validate() error {
 		return errors.MetaMissingSchema(kv)
 	}
 	return nil
+}
+
+// System returns the System of the Meta.
+func (m Meta) System() types.System {
+	return m.system
+}
+
+// SetSystem sets the System of Meta.
+func (m *Meta) SetSystem(system types.System) {
+	m.system = system
 }
 
 // KindVersion returns the KindVersion of the Meta.

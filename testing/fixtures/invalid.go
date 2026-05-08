@@ -16,5 +16,5 @@ var (
 		meta.WithKindVersion(InvalidKindVersion),
 		meta.WithNamescope(types.NamescopeKind),
 	)
-	InvalidObject = object.New(InvalidKindVersion)
+	InvalidObject = object.New(object.WithKindVersion(InvalidKindVersion))
 )

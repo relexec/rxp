@@ -9,7 +9,7 @@ type Selector struct {
 	// system is the System to find the Domain in.
 	system types.System
 	// name is the name to look up the Domain for.
-	name string
+	name types.DomainName
 }
 
 // Validate returns an error if the Selector is not valid.
@@ -23,6 +23,6 @@ func (s Selector) System() types.System {
 }
 
 // Name returns the name to use when looking up the Domain.
-func (s Selector) Name() string {
+func (s Selector) Name() types.DomainName {
 	return s.name
 }

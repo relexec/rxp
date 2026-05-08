@@ -15,7 +15,7 @@ type Selector struct {
 // Validate returns an error if the Selector is not valid.
 func (s Selector) Validate() error {
 	if s.uuid == "" && s.name == "" {
-		return errors.ErrUUIDOrNameRequired
+		return errors.ErrSelectorUUIDOrNameRequired
 	}
 	return nil
 }

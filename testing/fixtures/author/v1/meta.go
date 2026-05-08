@@ -30,6 +30,12 @@ var (
 	KindVersion_V1_0_1 = types.KindVersion(string(Kind) + "@" + SemVer_V1_0_1.String())
 )
 
+// LatestMeta returns the [types.Meta] representing the latest known version of
+// the Author object meta.
+func LatestMeta() types.Meta {
+	return Meta_V1_0_1
+}
+
 // LatestVersion returns the [semver.Version] representing the latest known
 // version of the Author object meta in the v1 major version series.
 func LatestVersion() *semver.Version {

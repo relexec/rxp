@@ -112,9 +112,20 @@ func (o Object) Generation() types.Generation {
 	return o.generation
 }
 
+// SetGeneration sets the Object's Generation, which represents the number of
+// mutations to the Object's desired state.
+func (o *Object) SetGeneration(generation types.Generation) {
+	o.generation = generation
+}
+
 // Spec returns the Object's desired state as a JSON-encoded string.
 func (o Object) Spec() string {
 	return o.spec
+}
+
+// SetSpec sets the Object's desired state as a JSON-encoded string.
+func (o *Object) SetSpec(spec string) {
+	o.spec = spec
 }
 
 type jsonObject struct {

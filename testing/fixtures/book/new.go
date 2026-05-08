@@ -14,7 +14,8 @@ import (
 // New returns a new Book [Object] with the latest known Version.
 func New(opts ...object.Option) *object.Object {
 	kv := LatestKindVersion()
-	return object.New(kv, opts...)
+	opts = append(opts, object.WithKindVersion(kv))
+	return object.New(opts...)
 }
 
 // NewAtVersion returns a new Book [Object] with the supplied version.  The
@@ -66,5 +67,6 @@ func NewAtVersion(ver any, opts ...object.Option) (*object.Object, error) {
 		)
 	}
 
-	return object.New(kv, opts...), nil
+	opts = append(opts, object.WithKindVersion(kv))
+	return object.New(opts...), nil
 }

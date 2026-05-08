@@ -23,9 +23,6 @@ var (
 
 var (
 	ErrInvalidReadRequest = New("invalid read request", WithCode(ErrCodeBadRequest))
-	ErrMissingSelector    = New("missing selector", WithWrap(ErrInvalidReadRequest))
-	ErrInvalidSelector    = New("invalid selector", WithWrap(ErrInvalidReadRequest))
-	ErrUUIDOrNameRequired = New("UUID or Name required", WithWrap(ErrInvalidSelector))
 )
 
 // Internal returns an Error with a 500 Internal Server Error code and the

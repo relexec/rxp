@@ -13,6 +13,12 @@ const (
 	Kind = "book.testing.rxp"
 )
 
+// LatestMeta returns the [types.Meta] representing the latest known version of
+// the Book object meta.
+func LatestMeta() types.Meta {
+	return v1.LatestMeta()
+}
+
 // LatestVersion returns the [semver.Version] representing the latest known
 // version of the Book object meta.
 func LatestVersion() *semver.Version {
@@ -22,7 +28,7 @@ func LatestVersion() *semver.Version {
 // LatestKindVersion returns the [types.KindVersion] representing the latest
 // known version of the Book Kind.
 func LatestKindVersion() types.KindVersion {
-	return types.KindVersion(Kind + "@" + LatestVersion().Original())
+	return types.KindVersion(Kind + "@" + LatestVersion().String())
 }
 
 var (

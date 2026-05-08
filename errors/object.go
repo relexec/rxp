@@ -5,24 +5,25 @@ import (
 )
 
 var (
-	ErrInvalidObject = New("invalid object", WithCode(ErrCodeBadRequest))
-	ErrNilObject     = New("nil object parameter", WithWrap(ErrInvalidObject))
+	ErrInvalidObject            = New("invalid object", WithCode(ErrCodeBadRequest))
+	ErrNilObject                = New("nil object parameter", WithWrap(ErrInvalidObject))
+	ErrObjectMissingKindVersion = New("object missing kindversion", WithWrap(ErrInvalidObject))
 )
 
-// ObjectMissingIdentifier returns a wrapped ErrObjectInvalid indicating the
+// ObjectMissingUUID returns a wrapped ErrObjectInvalid indicating the
 // supplied Object type is missing an identifier.
-func ObjectMissingIdentifier(typ any) error {
+func ObjectMissingUUID(typ any) error {
 	return New(
-		fmt.Sprintf("missing identifier for %q", typ),
+		fmt.Sprintf("missing uuid for %q", typ),
 		WithWrap(ErrInvalidObject),
 	)
 }
 
 // ObjectMissingName returns a wrapped ErrObjectInvalid indicating the supplied
 // Object is missing a name.
-func ObjectMissingName(typ any, id any) error {
+func ObjectMissingName(typ any, uuid any) error {
 	return New(
-		fmt.Sprintf("missing name for %q (%s)", typ, id),
+		fmt.Sprintf("missing name for %q (%s)", typ, uuid),
 		WithWrap(ErrInvalidObject),
 	)
 }

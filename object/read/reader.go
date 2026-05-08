@@ -13,7 +13,6 @@ type ObjectReader interface {
 	// ObjectRead reads a single [types.Object] from persistent storage.
 	ObjectRead(
 		ctx context.Context,
-		kv types.KindVersion,
 		sel selector.Selector,
 		opts ...option.Option,
 	) (types.Object, error)

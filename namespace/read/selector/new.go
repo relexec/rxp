@@ -13,7 +13,7 @@ func WithDomain(domain types.Domain) Option {
 }
 
 // WithName is used to look up an Namespace with a specified Name.
-func WithName(name string) Option {
+func WithName(name types.NamespaceName) Option {
 	return func(s *Selector) {
 		s.name = name
 	}

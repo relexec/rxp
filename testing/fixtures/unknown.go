@@ -1,6 +1,7 @@
 package fixtures
 
 import (
+	"github.com/google/uuid"
 	"github.com/relexec/rxp/meta"
 	"github.com/relexec/rxp/object"
 	"github.com/relexec/rxp/types"
@@ -19,5 +20,9 @@ var (
 		meta.WithKindVersion(UnknownKindVersion),
 		meta.WithNamescope(types.NamescopeKind),
 	)
-	UnknownObject = object.New(UnknownKindVersion)
+	UnknownObject = object.New(
+		object.WithKindVersion(UnknownKindVersion),
+		object.WithUUID(uuid.NewString()),
+		object.WithName("unknown"),
+	)
 )

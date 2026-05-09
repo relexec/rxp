@@ -8,6 +8,7 @@ import (
 	"github.com/google/jsonschema-go/jsonschema"
 
 	"github.com/relexec/rxp/meta"
+	"github.com/relexec/rxp/meta/schema"
 	"github.com/relexec/rxp/types"
 )
 
@@ -43,9 +44,9 @@ func LatestVersion() *semver.Version {
 }
 
 var (
-	Schema_V1_0_0     *jsonschema.Schema
+	Schema_V1_0_0     *schema.Schema
 	SchemaJSON_V1_0_0 string
-	Schema_V1_0_1     *jsonschema.Schema
+	Schema_V1_0_1     *schema.Schema
 	SchemaJSON_V1_0_1 string
 )
 
@@ -81,20 +82,21 @@ func Meta(version any) (*meta.Meta, bool) {
 func init() {
 	var err error
 
-	Schema_V1_0_0, err = jsonschema.For[Spec_V1_0_0](nil)
+	js, err := jsonschema.For[Spec_V1_0_0](nil)
 	if err != nil {
 		log.Fatalf(
 			"failed to construct jsonschema.Schema for Book_V1_0_0: %s",
 			err.Error(),
 		)
 	}
-	jsonb, err := Schema_V1_0_0.MarshalJSON()
+	jsonb, err := js.MarshalJSON()
 	if err != nil {
 		log.Fatalf(
 			"failed to marshal JSON for schema for Book_V1_0_0: %s",
 			err.Error(),
 		)
 	}
+	Schema_V1_0_0 = &schema.Schema{Schema: *js}
 	SchemaJSON_V1_0_0 = string(jsonb)
 	Meta_V1_0_0 = meta.New(
 		meta.WithKindVersion(KindVersion_V1_0_0),
@@ -103,20 +105,21 @@ func init() {
 		meta.WithSchemaJSON(SchemaJSON_V1_0_0),
 	)
 
-	Schema_V1_0_1, err = jsonschema.For[Spec_V1_0_1](nil)
+	js, err = jsonschema.For[Spec_V1_0_1](nil)
 	if err != nil {
 		log.Fatalf(
 			"failed to construct jsonschema.Schema for Book_V1_0_1: %s",
 			err.Error(),
 		)
 	}
-	jsonb, err = Schema_V1_0_1.MarshalJSON()
+	jsonb, err = js.MarshalJSON()
 	if err != nil {
 		log.Fatalf(
 			"failed to marshal JSON for schema for Book_V1_0_1: %s",
 			err.Error(),
 		)
 	}
+	Schema_V1_0_1 = &schema.Schema{Schema: *js}
 	SchemaJSON_V1_0_1 = string(jsonb)
 	Meta_V1_0_1 = meta.New(
 		meta.WithKindVersion(KindVersion_V1_0_1),

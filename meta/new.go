@@ -3,8 +3,6 @@ package meta
 import (
 	"encoding/json"
 
-	"github.com/google/jsonschema-go/jsonschema"
-
 	"github.com/relexec/rxp/types"
 )
 
@@ -42,7 +40,7 @@ func WithNamescope(namescope types.Namescope) Option {
 }
 
 // WithSchema sets the Meta's Schema.
-func WithSchema(schema *jsonschema.Schema) Option {
+func WithSchema(schema types.Schema) Option {
 	return func(m *Meta) {
 		m.schema = schema
 	}

@@ -3,8 +3,6 @@ package meta
 import (
 	"fmt"
 
-	"github.com/google/jsonschema-go/jsonschema"
-
 	"github.com/relexec/rxp/cmp"
 	"github.com/relexec/rxp/cmp/fieldpath"
 	"github.com/relexec/rxp/errors"
@@ -28,7 +26,7 @@ type Meta struct {
 	namescope types.Namescope
 	// schema is the [jsonschema.Schema] that describes the Spec field
 	// composition of Object with this Kind+Version.
-	schema *jsonschema.Schema
+	schema types.Schema
 	// schemaJSON stores a cache of the marshaled JSON for the
 	// [jsonschema.Schema] that describes the Spec field composition of the
 	// Objects with this Kind+Version.
@@ -86,13 +84,13 @@ func (m *Meta) SetNamescope(namescope types.Namescope) {
 
 // Schema returns a [jsonschema.Schema] that describes the desired state fields
 // of Objects with this KindVersion.
-func (m Meta) Schema() *jsonschema.Schema {
+func (m Meta) Schema() types.Schema {
 	return m.schema
 }
 
 // SetSchema sets the [jsonschema.Schema] that describes the desired state
 // fields of Objects with this KindVersion.
-func (m *Meta) SetSchema(schema *jsonschema.Schema) {
+func (m *Meta) SetSchema(schema types.Schema) {
 	m.schema = schema
 }
 
@@ -243,7 +241,6 @@ func (m Meta) diffNew() (*cmp.Delta, error) {
 		),
 	)
 	return d, nil
-
 }
 
 var _ types.Meta = (*Meta)(nil)

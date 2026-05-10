@@ -85,14 +85,16 @@ func (d Domain) Diff(subject any) (*cmp.Delta, error) {
 			)
 		} else {
 			otherSystemUUID := otherSystem.UUID()
-			delta.Push(
-				cmp.NewDifference(
-					FieldPathSystem,
-					cmp.DifferenceTypeModify,
-					thisSystemUUID,
-					otherSystemUUID,
-				),
-			)
+			if thisSystemUUID != otherSystem.UUID() {
+				delta.Push(
+					cmp.NewDifference(
+						FieldPathSystem,
+						cmp.DifferenceTypeModify,
+						thisSystemUUID,
+						otherSystemUUID,
+					),
+				)
+			}
 		}
 	} else if otherSystem != nil {
 		otherSystemUUID := otherSystem.UUID()
@@ -102,6 +104,19 @@ func (d Domain) Diff(subject any) (*cmp.Delta, error) {
 				cmp.DifferenceTypeAdd,
 				nil,
 				otherSystemUUID,
+			),
+		)
+	}
+
+	thisName := d.name
+	otherName := other.Name()
+	if thisName != otherName {
+		delta.Push(
+			cmp.NewDifference(
+				FieldPathName,
+				cmp.DifferenceTypeModify,
+				string(thisName),
+				string(otherName),
 			),
 		)
 	}

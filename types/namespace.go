@@ -46,6 +46,7 @@ func (n NamespaceName) Validate() error {
 // Namespaces are typically used to segregate data by tenancy boundaries.
 type Namespace interface {
 	Validatable
+	Differ
 	// DOmain returns the Namespace's Domain.
 	Domain() Domain
 	// Name returns the name of the Namespace.

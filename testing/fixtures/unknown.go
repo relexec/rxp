@@ -4,16 +4,18 @@ import (
 	"github.com/google/uuid"
 	"github.com/relexec/rxp/domain"
 	"github.com/relexec/rxp/meta"
+	"github.com/relexec/rxp/namespace"
 	"github.com/relexec/rxp/object"
 	"github.com/relexec/rxp/system"
 	"github.com/relexec/rxp/types"
 )
 
 const (
-	UnknownSystemUUID = "8ccf20f6-df19-45e1-9086-8eff1283fef5"
-	UnknownSystemName = "unknown system"
-	UnknownDomainName = types.DomainName("unknown.domain.testing.dxp")
-	UnknownKind       = types.Kind("unknown.testing.rxp")
+	UnknownSystemUUID    = "8ccf20f6-df19-45e1-9086-8eff1283fef5"
+	UnknownSystemName    = "unknown system"
+	UnknownDomainName    = types.DomainName("unknown.domain.testing.dxp")
+	UnknownNamespaceName = types.NamespaceName("unknown.ns")
+	UnknownKind          = types.Kind("unknown.testing.rxp")
 )
 
 var (
@@ -27,6 +29,10 @@ var (
 	)
 	UnknownDomain = domain.New(
 		domain.WithName(UnknownDomainName),
+	)
+	UnknownNamespace = namespace.New(
+		namespace.WithDomain(Domain),
+		namespace.WithName(UnknownNamespaceName),
 	)
 	UnknownMeta = meta.New(
 		meta.WithKindVersion(UnknownKindVersion),

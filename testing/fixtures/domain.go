@@ -3,7 +3,7 @@ package fixtures
 import "github.com/relexec/rxp/domain"
 
 const (
-	DomainName = "testing.fixtures.rxp"
+	DomainName = "domain.testing.fixtures.rxp"
 )
 
 var (

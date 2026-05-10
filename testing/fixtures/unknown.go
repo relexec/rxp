@@ -2,13 +2,15 @@ package fixtures
 
 import (
 	"github.com/google/uuid"
+	"github.com/relexec/rxp/domain"
 	"github.com/relexec/rxp/meta"
 	"github.com/relexec/rxp/object"
 	"github.com/relexec/rxp/types"
 )
 
 const (
-	UnknownKind = types.Kind("unknown.testing.rxp")
+	UnknownDomainName = types.DomainName("unknown.domain.testing.dxp")
+	UnknownKind       = types.Kind("unknown.testing.rxp")
 )
 
 var (
@@ -16,6 +18,9 @@ var (
 )
 
 var (
+	UnknownDomain = domain.New(
+		domain.WithName(UnknownDomainName),
+	)
 	UnknownMeta = meta.New(
 		meta.WithKindVersion(UnknownKindVersion),
 		meta.WithNamescope(types.NamescopeKind),

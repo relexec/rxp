@@ -51,6 +51,7 @@ func (n DomainName) Validate() error {
 // Domain describes a top-level division or partition of things managed by rxp.
 type Domain interface {
 	Validatable
+	Differ
 	// System returns the system identifier associated with the Domain.
 	System() System
 	// Name returns the name of the Domain.

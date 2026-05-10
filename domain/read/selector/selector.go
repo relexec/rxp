@@ -1,6 +1,7 @@
 package selector
 
 import (
+	"github.com/relexec/rxp/errors"
 	"github.com/relexec/rxp/types"
 )
 
@@ -14,7 +15,16 @@ type Selector struct {
 
 // Validate returns an error if the Selector is not valid.
 func (s Selector) Validate() error {
-	return nil
+	if s.name == "" {
+		return errors.ErrSelectorNameRequired
+	}
+	if s.system != nil {
+		err := s.system.Validate()
+		if err != nil {
+			return err
+		}
+	}
+	return s.name.Validate()
 }
 
 // System is the rxp system identifier to search for the Meta in.

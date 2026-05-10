@@ -1,8 +1,15 @@
 package system
 
 import (
+	"github.com/relexec/rxp/cmp"
+	"github.com/relexec/rxp/cmp/fieldpath"
 	"github.com/relexec/rxp/errors"
 	"github.com/relexec/rxp/types"
+)
+
+var (
+	FieldPathUUID = fieldpath.FromString("uuid")
+	FieldPathName = fieldpath.FromString("name")
 )
 
 // System represents the boundaries of an rxp system installation.
@@ -39,6 +46,78 @@ func (s System) Name() string {
 // SetName sets the optional human-readable name of the System.
 func (s *System) SetName(name string) {
 	s.name = name
+}
+
+// Diff returns a [cmp.Delta] representing the difference between itself and
+// something else of the same type.
+//
+// If the argument is the [cmp.ZeroGen] sentinel, the returned [cmp.Delta]
+// represents instructions to create the thing.
+func (s System) Diff(subject any) (*cmp.Delta, error) {
+	var other types.System
+	switch subject := subject.(type) {
+	case cmp.ZeroGen:
+		return s.diffNew()
+	case System:
+		other = &subject
+	case *System:
+		other = subject
+	default:
+		return nil, cmp.CannotCompareTypes(s, subject)
+	}
+
+	delta := &cmp.Delta{}
+
+	thisSystemUUID := s.uuid
+	otherSystemUUID := other.UUID()
+	if thisSystemUUID != otherSystemUUID {
+		delta.Push(
+			cmp.NewDifference(
+				FieldPathUUID,
+				cmp.DifferenceTypeModify,
+				thisSystemUUID,
+				otherSystemUUID,
+			),
+		)
+	}
+
+	thisSystemName := s.name
+	otherSystemName := other.Name()
+	if thisSystemName != otherSystemName {
+		delta.Push(
+			cmp.NewDifference(
+				FieldPathName,
+				cmp.DifferenceTypeModify,
+				thisSystemName,
+				otherSystemName,
+			),
+		)
+	}
+	return delta, nil
+}
+
+// diffNew returns a [cmp.Delta] containing instructions to make the System as a
+// new System (i.e. for the first generation)
+func (s System) diffNew() (*cmp.Delta, error) {
+	delta := &cmp.Delta{}
+
+	delta.Push(
+		cmp.NewDifference(
+			FieldPathUUID,
+			cmp.DifferenceTypeAdd,
+			s.uuid,
+			nil,
+		),
+	)
+	delta.Push(
+		cmp.NewDifference(
+			FieldPathName,
+			cmp.DifferenceTypeAdd,
+			s.name,
+			nil,
+		),
+	)
+	return delta, nil
 }
 
 var _ types.System = (*System)(nil)

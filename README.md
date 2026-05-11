@@ -33,7 +33,9 @@ like UUIDs, things are often looked up by their name. This is why names must be
 treated with care by the system.
 
 Human-readable names for various things in the `rxp` system are guaranteed to
-be unique within a particular [`Namescope`][#namescope].
+be unique within a particular [`Namescope`][namescope].
+
+[namescope]: https://github.com/relexec/rxp/blob/main/docs/taxonomy.md#namescope
 
 ### Renaming
 

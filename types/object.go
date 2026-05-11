@@ -2,11 +2,11 @@ package types
 
 // Object is able to be written to and read from persistent storage.
 type Object interface {
+	// System returns the System associated with the Object.
+	System() System
 	// KindVersion returns the Object's KindVersion which uniquely identifies
 	// the type and version of the Object.
 	KindVersion() KindVersion
-	// System returns the System associated with the Object.
-	System() System
 	// UUID returns the Object's globally-unique identifier.
 	UUID() string
 	// Domain returns the Object's optional Domain.

@@ -52,11 +52,18 @@ structures with a `Key` and optional `Value` that can be used to categorize
 
 ```mermaid
 erDiagram
+    System ||--|{ Meta : owns
+    System ||--|{ Domain : owns
+    System ||--|{ Object : owns
     KindVersion ||--|| Meta : defines
     Meta ||--|{ Object : defines
     Domain ||--|{ Namespace : "may have"
     Domain ||--|{ Object : "may have"
     Namespace ||--|{ Object : "may have"
+    System {
+        string **uuid**
+        string name
+    }
     KindVersion {
         string **kind**
         string **version**
@@ -79,6 +86,8 @@ erDiagram
         string **meta**
         string **uuid**
         string **name**
+        int **generation**
+        string **spec**
         string domain
         string namespace
         array labels
@@ -88,6 +97,11 @@ erDiagram
 ## `System`
 
 `System` represents the boundaries of an `rxp` system installation.
+
+`System` has the following methods:
+
+* `UUID()`: returns the globally-unique identifier.
+* `Name()`: returns the optional human-readable name.
 
 ## `Domain`
 
@@ -114,7 +128,7 @@ A `Namespace` must be unique within its containing `Domain`.
 
 ## `Kind`
 
-`Kind` is a specialized string containing the *type* of an `Object`.
+[`Kind`][kind] is a specialized string containing the *type* of an `Object`.
 
 A valid `Kind` is a DNS-formatted (RFC 1035-compliant) name of the type of
 `Object`, e.g.  `flow.temporal.io`.
@@ -137,16 +151,21 @@ A `Kind` must be unique within the scope of the `rxp` system installation,
 however for any `Kind` that is intended to be used across multiple `rxp` system
 installations, the `Kind` should be globally-unique.
 
+[kind]: https://github.com/relexec/rxp/blob/main/types/kind.go
+
 ## `KindVersion`
 
-`KindVersion` is a specialized string that contains the `Kind` and optionally a
-SemVer version string that uniquely identifies the exact type of an `Object`.
+[`KindVersion`][kindversion] is a specialized string that contains the `Kind`
+and optionally a SemVer version string that uniquely identifies the exact type
+of an `Object`.
 
 A `KindVersion` string has the format `<kind>[@<version>]`, where `<kind>` is a
 valid `Kind` and the optional `<version>` component must be a valid SemVer
 version string.
 
 > Note that a valid SemVer version string does *not* contain a `v` prefix.
+
+[kindversion]: https://github.com/relexec/rxp/blob/main/types/kindversion.go
 
 ## `Namescope`
 
@@ -167,29 +186,38 @@ the narrowest to broadest specificity.
 
 ## `Object`
 
-`Object` describes an instance of something whose lifecycle is controlled by
-`rxp`.
+[`Object`][object] describes an *instance* of something whose lifecycle is
+controlled by `rxp`.
 
 An `Object`'s lifecycle encompasses its creation, mutation and deletion.
 
-All `Object`s have the following methods:
+`Object` has the following methods:
 
+* `System()`: returns the `System` to which the the `Meta` is known.
 * `KindVersion()`: returns a unique identifier for the type and version of the
   Object.
 * `UUID()`: returns the globally-unique identifier.
 * `Domain()`: returns the optional `Domain`.
 * `Namespace()`: returns the optional intra-`Domain` `Namespace`.
 * `Name()`: returns the human-readable name.
+* `Labels()`: returns the optional collection of `Label`s.
 * `Generation()`: returns the number of times the `Object`'s desired state has
   changed.
 * `Spec()`: returns the desired state.
+
+When an `Object` is read, it will always have a non-zero `Generation` value.
+The `Generation` represents the number of times that the desired state of the
+`Object` (its `Spec` has been mutated).
+
+[object]: https://github.com/relexec/rxp/blob/main/types/object.go
 
 ## `Meta`
 
 `Meta` contains metadata about a versioned type of `Object`.
 
-All `Meta`s have the following methods:
+`Meta` has the following methods:
 
+* `System()`: returns the `System` to which the the `Meta` is known.
 * `KindVersion()`: returns the `KindVersion`
 * `Version()`: returns the [`semver.Version`][semver-version] struct indicating
   the Semantic Version of the `Kind` of `Object` the `Meta` defines.
@@ -209,16 +237,4 @@ of a `Kind`.
 
 `Spec` represents the *desired state* of an `Object`.
 
-When an `Object` is read, its `Spec` will always has a non-zero `Generation`
-value. The `Generation` represents the number of times that the desired state
-of the `Object` has been mutated.
-
 The fields that comprise a `Spec` are defined in the `Meta`'s `Schema`.
-
-## `Generation`
-
-One of `rxp`'s primary purposes is to control the evolution of changes to both
-the structure and desired state of data.
-
-`rxp` controls change using a `Generation` on both the `Meta` and the `Spec` of
-an `Object`.

@@ -10,13 +10,14 @@ type Namescope int
 // Domain) to the broadest specificity (names are globally-unique).
 
 const (
-	// NamescopeNamespace means the thing's name is unique within its Kind +
-	// Domain + Namespace.
+	// NamescopeNamespace means the thing's name is unique within its System,
+	// Kind, Domain and Namespace.
 	NamescopeNamespace Namescope = 1
-	// NamescopeDomain means the thing's name is unique within its Kind +
-	// Domain.
+	// NamescopeDomain means the thing's name is unique within its System, Kind
+	// and Domain.
 	NamescopeDomain Namescope = 2
-	// NamescopeKind means the thing's name is unique within its Kind.
+	// NamescopeKind means the thing's name is unique within its System and
+	// Kind.
 	NamescopeKind Namescope = 3
 	// NamescopeSystem means the thing's name is unique within the `rxp` system
 	// installation.

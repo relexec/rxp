@@ -17,6 +17,7 @@ At its core, a Reliable Execution platform must be able to:
 * Guarantee uniqueness of names within some scope
 * Safely evolve the definition of a thing
 * Safely mutate desired state of a thing
+* Safely archive managed things
 * Provide auditability for managed things
 
 [rxp-pg]: https://github.com/relexec/rxp-pg
@@ -43,8 +44,10 @@ rename something is a critical piece of functionality for long-lived systems.
 thing is renamed, `rxp` guarantees that the renaming of done in a safe, audited
 and complete fashion.
 
-## Safe evolution of definitions
+## Safe definition evolution
 
-## Safe mutation of desired state
+## Safe desired state mutation
+
+## Safe archival
 
 ## Auditability

@@ -27,3 +27,16 @@ func (s Set) Add(versions ...semver.Version) {
 		s[major] = c
 	}
 }
+
+// Contains returns true if the supplied [semver.Version] is contained within
+// the Set.
+func (s Set) Contains(v semver.Version) bool {
+	for _, c := range s {
+		for _, cv := range c {
+			if cv.Equal(&v) {
+				return true
+			}
+		}
+	}
+	return false
+}

@@ -66,6 +66,23 @@ func ExpectedNotToExist(subject any, opts ...option) error {
 	return e
 }
 
+// ExpectedFirstVersionInSeries returns an Error wrapping ErrPreconditionFailed
+// that explains the supplied kindversion was expected to have a zero minor and
+// patch version number.
+func ExpectedFirstVersionInSeries(kv any, opts ...option) error {
+	e := &Error{
+		code: ErrCodePreconditionFailed,
+		msg: fmt.Sprintf(
+			"expected %q to have minor and patch version of 0", kv,
+		),
+		wrapped: ErrPreconditionFailed,
+	}
+	for _, o := range opts {
+		o(e)
+	}
+	return e
+}
+
 // ExpectedGeneration returns an Error wrapping ErrPreconditionFailed that
 // explains the supplied thing was expected to have a different generation.
 func ExpectedGeneration(subject any, expected any, got any, opts ...option) error {

@@ -44,12 +44,32 @@ rename something is a critical piece of functionality for long-lived systems.
 
 `rxp` treats the action of renaming something as a special operation. When a
 thing is renamed, `rxp` guarantees that the renaming of done in a safe, audited
-and complete fashion.
+and complete fashion. Partly, this means that renaming is isolated to its own
+mutation event. `rxp` ensures that you *cannot modify the desired state of
+something and change its name at the same time*.
 
 ## Safe definition evolution
+
+As business requirements change, developers need to evolve the definition and
+schema of structures used by their applications.
+
+Reliable Execution platforms faciliate the execution of code that is designed
+to potentially run over very long periods of time. `rxp` understands when the
+definition of something changes and provides guardrails that prevent unsafe
+changes to that definition from potentially breaking application clients.
 
 ## Safe desired state mutation
 
 ## Safe archival
+
+Things managed by `rxp` do not get deleted. This is so that `rxp` can ensure
+that the history of changes to some thing under its management are always
+persisted in order to restore a particular version or generation of the thing
+at some point in the future.
+
+Instead of deletion, things managed by `rxp` can be *archived*. Archival marks
+the thing as not being in the *active data set*, which means the thing will no
+longer be returned from Read operations unless the caller indicates `rxp`
+should include archived items in its lookup actions.
 
 ## Auditability

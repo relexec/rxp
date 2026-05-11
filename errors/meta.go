@@ -31,12 +31,3 @@ func MetaMissingSchema(typ any) error {
 		WithWrap(ErrInvalidMeta),
 	)
 }
-
-// MetaMissingObjectConstructor returns a wrapped ErrMetaInvalid indicating the
-// supplied Meta is missing an object constructor.
-func MetaMissingObjectConstructor(typ any) error {
-	return New(
-		fmt.Sprintf("missing object constructor for %q", typ),
-		WithWrap(ErrInvalidMeta),
-	)
-}

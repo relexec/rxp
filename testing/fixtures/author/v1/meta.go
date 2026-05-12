@@ -100,7 +100,7 @@ func init() {
 	SchemaJSON_V1_0_0 = string(jsonb)
 	Meta_V1_0_0 = meta.New(
 		meta.WithKindVersion(KindVersion_V1_0_0),
-		meta.WithNamescope(types.NamescopeKind),
+		meta.WithNamescope(types.NamescopeNamespace),
 		meta.WithSchema(Schema_V1_0_0),
 		meta.WithSchemaJSON(SchemaJSON_V1_0_0),
 	)
@@ -123,7 +123,7 @@ func init() {
 	SchemaJSON_V1_0_1 = string(jsonb)
 	Meta_V1_0_1 = meta.New(
 		meta.WithKindVersion(KindVersion_V1_0_1),
-		meta.WithNamescope(types.NamescopeKind),
+		meta.WithNamescope(types.NamescopeNamespace),
 		meta.WithSchema(Schema_V1_0_1),
 		meta.WithSchemaJSON(SchemaJSON_V1_0_1),
 	)

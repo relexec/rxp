@@ -53,7 +53,7 @@ func TestMeta_Diff(t *testing.T) {
 				cmp.NewDifference(
 					fieldpath.FromString("namescope"),
 					cmp.DifferenceTypeAdd,
-					types.NamescopeKind,
+					types.NamescopeNamespace,
 					nil,
 				),
 				cmp.NewDifference(

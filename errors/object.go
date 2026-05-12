@@ -8,6 +8,8 @@ var (
 	ErrInvalidObject            = New("invalid object", WithCode(ErrCodeBadRequest))
 	ErrNilObject                = New("nil object parameter", WithWrap(ErrInvalidObject))
 	ErrObjectMissingKindVersion = New("object missing kindversion", WithWrap(ErrInvalidObject))
+	ErrObjectDomainRequired     = New("domain required", WithWrap(ErrInvalidObject))
+	ErrObjectNamespaceRequired  = New("namespace required", WithWrap(ErrInvalidObject))
 )
 
 // ObjectMissingUUID returns a wrapped ErrObjectInvalid indicating the

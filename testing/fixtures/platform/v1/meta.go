@@ -13,7 +13,8 @@ import (
 )
 
 const (
-	Kind = types.Kind("book.testing.rxp")
+	Kind      = "platform.testing.rxp"
+	Namescope = types.NamescopeSystem
 )
 
 const (
@@ -31,15 +32,27 @@ var (
 	KindVersion_V1_0_1 = types.KindVersion(string(Kind) + "@" + SemVer_V1_0_1.String())
 )
 
-// LatestMeta returns the [types.Meta] representing the latest known version of
-// the Book object meta.
-func LatestMeta() types.Meta {
+// FirstMeta returns the [types.Meta] representing the first known version of
+// the Platform meta.
+func FirstMeta() types.Meta {
+	return Meta_V1_0_0
+}
+
+// FirstVersion returns the [semver.Version] representing the first known
+// version of the Platform meta in the v1 major version series.
+func FirstVersion() *semver.Version {
+	return SemVer_V1_0_0
+}
+
+// LastMeta returns the [types.Meta] representing the first known version of
+// the Platform meta.
+func LastMeta() types.Meta {
 	return Meta_V1_0_1
 }
 
-// LatestVersion returns the [semver.Version] representing the latest known
-// version of the Book object meta in the v1 major version series.
-func LatestVersion() *semver.Version {
+// LastVersion returns the [semver.Version] representing the first known
+// version of the Platform meta in the v1 major version series.
+func LastVersion() *semver.Version {
 	return SemVer_V1_0_1
 }
 
@@ -85,14 +98,14 @@ func init() {
 	js, err := jsonschema.For[Spec_V1_0_0](nil)
 	if err != nil {
 		log.Fatalf(
-			"failed to construct jsonschema.Schema for Book_V1_0_0: %s",
+			"failed to construct jsonschema.Schema for Platform_V1_0_0: %s",
 			err.Error(),
 		)
 	}
 	jsonb, err := js.MarshalJSON()
 	if err != nil {
 		log.Fatalf(
-			"failed to marshal JSON for schema for Book_V1_0_0: %s",
+			"failed to marshal JSON for schema for Platform_V1_0_0: %s",
 			err.Error(),
 		)
 	}
@@ -100,7 +113,7 @@ func init() {
 	SchemaJSON_V1_0_0 = string(jsonb)
 	Meta_V1_0_0 = meta.New(
 		meta.WithKindVersion(KindVersion_V1_0_0),
-		meta.WithNamescope(types.NamescopeNamespace),
+		meta.WithNamescope(Namescope),
 		meta.WithSchema(Schema_V1_0_0),
 		meta.WithSchemaJSON(SchemaJSON_V1_0_0),
 	)
@@ -108,14 +121,14 @@ func init() {
 	js, err = jsonschema.For[Spec_V1_0_1](nil)
 	if err != nil {
 		log.Fatalf(
-			"failed to construct jsonschema.Schema for Book_V1_0_1: %s",
+			"failed to construct jsonschema.Schema for Platform_V1_0_1: %s",
 			err.Error(),
 		)
 	}
 	jsonb, err = js.MarshalJSON()
 	if err != nil {
 		log.Fatalf(
-			"failed to marshal JSON for schema for Book_V1_0_1: %s",
+			"failed to marshal JSON for schema for Platform_V1_0_1: %s",
 			err.Error(),
 		)
 	}
@@ -123,7 +136,7 @@ func init() {
 	SchemaJSON_V1_0_1 = string(jsonb)
 	Meta_V1_0_1 = meta.New(
 		meta.WithKindVersion(KindVersion_V1_0_1),
-		meta.WithNamescope(types.NamescopeNamespace),
+		meta.WithNamescope(Namescope),
 		meta.WithSchema(Schema_V1_0_1),
 		meta.WithSchemaJSON(SchemaJSON_V1_0_1),
 	)

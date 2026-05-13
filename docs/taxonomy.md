@@ -1,62 +1,82 @@
 # Taxonomy
 
-Data managed by `rxp` is uniformly organized in a common taxonomy.
+Data managed by `rxp` is uniformly organized in a common taxonomy. This
+document describes how this data is defined, categorized, identified and named.
 
-Briefly, a `KindVersion` uniquely identifies a *type and version* of a thing
-that is managed by `rxp`.
+Briefly, a `Kind` identifies a *type* of a thing that is managed by `rxp`. A
+`Kind` has a [`Name`][kindname] and a [`Namescope`](#namescope).
+
+`Kinds` always have a [`System`](#system) identifier. System identifiers are
+globally-unique.
+
+[kindname]: https://github.com/relexec/rxp/blob/b5c989b0a587961dfaecf441c84dff58452fcbff/types/kind.go#L12-L60
 
 ```mermaid
 erDiagram
-    KindVersion {
-        string **kind**
-        string **version**
+    System ||--|{ Kind : "knows about"
+    System {
+        string **uuid**
+        string name
+    }
+    Kind {
+        string **system**
+        string **name**
+        int **namescope**
     }
 ```
 
+A `KindVersion` is a **string** that uniquely identifies a *type and version*
+of a thing that is managed by `rxp`.
+
 A `Meta` contains the definition for a `KindVersion`. This definition includes
-a [`Namescope`](#namescope) and a `Schema` that defines the fields that
-comprise desired state for things of that `KindVersion`.
+a `Schema` that defines the fields that comprise desired state for things of
+that `KindVersion`.
 
 ```mermaid
 erDiagram
-    KindVersion ||--|| Meta : defines
-    KindVersion {
-        string **kind**
-        string **version**
+    System ||--|{ Kind : "knows about"
+    Kind ||--|{ Meta : "has a"
+    System {
+        string **uuid**
+        string name
+    }
+    Kind {
+        string **system**
+        string **name**
+        int **namescope**
     }
     Meta{
-        string **kindversion**
-        int **namescope**
+        string **kind**
+        string **version**
         string **schema**
     }
 ```
 
 An `Object` is an *instance* of a `KindVersion`.
 
-`Objects` *always* have a [`System`](#system) identifier. System identifiers
-are globally-unique.
+`Objects` always have a `System` identifier.
 
-`Objects` *always* have a UUID globally-unique identifier.
+`Objects` always have a UUID globally-unique identifier.
 
-`Objects` *always* have a Name. An `Object`'s Name is unique within the
-`Namescope` associated with the `KindVersion`.
+`Objects` always have a Name. An `Object`'s Name is unique within the
+`Namescope` associated with the `Kind`.
 
 If that `Namescope` is `NamescopeNamespace` or `NamescopeDomain`, the `Object`
 is guaranteed to have a [`Domain`](#domain). If that `Namescope` is
 `NamescopeNamespace`, the `Object` is guaranteed to have a
 [`Namespace`](#namespace).
 
-`Objects` *may* have zero or more `Labels` associated with them. `Labels` are
+`Objects` may have zero or more `Labels` associated with them. `Labels` are
 structures with a `Key` and optional `Value` that can be used to categorize
 `Objects`.
 
 ```mermaid
 erDiagram
-    System ||--|{ Meta : owns
-    System ||--|{ Domain : owns
-    System ||--|{ Object : owns
-    KindVersion ||--|| Meta : defines
-    Meta ||--|{ Object : defines
+    System ||--|{ Meta : "knows about"
+    System ||--|{ Domain : "knows about"
+    System ||--|{ Object : "knows about"
+    Kind ||--|{ Meta : "has a"
+    Meta ||--|{ Object : "instance of"
     Domain ||--|{ Namespace : "may have"
     Domain ||--|{ Object : "may have"
     Namespace ||--|{ Object : "may have"
@@ -64,13 +84,13 @@ erDiagram
         string **uuid**
         string name
     }
-    KindVersion {
-        string **kind**
-        string **version**
+    Kind {
+        string **name**
+        int **namescope**
     }
     Meta{
-        string **kindversion**
-        int **namescope**
+        string **kind**
+        string **version**
         string **schema**
     }
     Domain{
@@ -86,8 +106,6 @@ erDiagram
         string **meta**
         string **uuid**
         string **name**
-        int **generation**
-        string **spec**
         string domain
         string namespace
         array labels
@@ -172,17 +190,15 @@ version string.
 `Namescope` refers to the uniqueness constraint applied to the name of some
 thing managed by `rxp`.
 
-There are five `Namescope` values, listed here in order of specificity, from
+There are three `Namescope` values, listed here in order of specificity, from
 the narrowest to broadest specificity.
 
 * `NamescopeNamespace`: name is unique within the scope of the `Object`'s
-  `Kind`, `Domain`, and `Namespace`.
-* `NamescopeDomain`: name is unique within the scope of the `Object`'s `Kind`
-  and `Domain`.
-* `NamescopeKind`: name is unique within the scope of the `Object`'s `Kind`.
-* `NamescopeSystem`: name is unique within the scope of the `rxp` system
-  installation
-* `NamescopeGlobal`: name is globally-unique.
+  `System`, `Kind`, `Domain`, and `Namespace`.
+* `NamescopeDomain`: name is unique within the scope of the `Object`'s
+  `System`, Kind` and `Domain`.
+* `NamescopeSystem`: name is unique within the scope of the `Object`'s `System`
+  and `Kind`.
 
 ## `Object`
 

@@ -16,14 +16,9 @@ const (
 	// NamescopeDomain means the thing's name is unique within its System, Kind
 	// and Domain.
 	NamescopeDomain Namescope = 2
-	// NamescopeKind means the thing's name is unique within its System and
+	// NamescopeSystem means the thing's name is unique within its System and
 	// Kind.
-	NamescopeKind Namescope = 3
-	// NamescopeSystem means the thing's name is unique within the `rxp` system
-	// installation.
-	NamescopeSystem Namescope = 4
-	// NamescopeGlobal means the thing's name is globally unique.
-	NamescopeGlobal Namescope = 5
+	NamescopeSystem Namescope = 3
 )
 
 func (n Namescope) String() string {
@@ -32,12 +27,8 @@ func (n Namescope) String() string {
 		return "namespace"
 	case NamescopeDomain:
 		return "domain"
-	case NamescopeKind:
-		return "kind"
 	case NamescopeSystem:
 		return "system"
-	case NamescopeGlobal:
-		return "global"
 	default:
 		return "unknown"
 	}
@@ -48,9 +39,7 @@ func (n Namescope) Validate() error {
 	switch n {
 	case NamescopeNamespace,
 		NamescopeDomain,
-		NamescopeKind,
-		NamescopeSystem,
-		NamescopeGlobal:
+		NamescopeSystem:
 		return nil
 	default:
 		return fmt.Errorf("unknown namescope")

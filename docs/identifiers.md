@@ -27,10 +27,12 @@ The scope of uniqueness of a thing's `Name` varies.
 A `System`'s `Name` is optional and therefore is not guaranteed to be unique. A
 `System`'s `UUID` is its only identifier.
 
-A `Meta`'s `Kind` is a special `Name`. It is guaranteed to be unique within the
-scope of the `Meta`'s `System`. However, conventionally `Kind`s for types that
-are intended for public APIs are globally-unique and conventionally are valid
-DNS domain names (e.g. `flow.temporal.io`).
+A `Kind`'s `Name` is guaranteed to be unique within the scope of the `Kind`'s
+`System`.
+
+However, conventionally `Kind`s for types that are intended for public APIs are
+globally-unique and conventionally are valid DNS domain names (e.g.
+`flow.temporal.io`).
 
 A `Domain`'s `Name` is guaranteed to be unique within the scope of the
 `Domain`'s `System`.
@@ -41,35 +43,28 @@ A `Namespace`'s `Name` is guaranteed to be unique within the scope of the
 ## Object names
 
 An `Object`'s `Name` is guaranteed to be unique within the `Namescope`
-associated with the `Object`'s `Meta`.
-
-### Globally-unique names
-
-If the `Meta.Namescope` associated with an `Object`'s `KindVersion` is
-`NamescopeGlobal`, the `Object`'s `Name` is expected to be globally-unique.
-
-There is no way to guarantee global uniqueness of human-readable string names.
+associated with the `Object`'s `Kind`.
 
 ### System-qualified names
 
-If the `Meta.Namescope` associated with an `Object`'s `KindVersion` is
-`NamescopeSystem`, the `Object`'s `Name` `rxp` guarantees the name is unique
-within the `Object`'s `System`.
+If the `Namescope` associated with an `Object`'s `Kind` is
+`NamescopeSystem`, `rxp` guarantees the Object's `Name` is unique within the
+`Object`'s `System` and `Kind`.
 
-### Kind-qualified names
-
-If the `Meta.Namescope` associated with an `Object`'s `KindVersion` is
-`NamescopeKind`, the `Object`'s `Name` `rxp` guarantees the name is unique
-within the `Object`'s `System` and `Kind`.
+Names for these Objects are called *system-qualified names*.
 
 ### Domain-qualified names
 
-If the `Meta.Namescope` associated with an `Object`'s `KindVersion` is
-`NamescopeDomain`, the `Object`'s `Name` `rxp` guarantees the name is  unique
-within the `Object`'s `System`, `Kind` and `Domain`.
+If the `Namescope` associated with an `Object`'s `Kind` is
+`NamescopeDomain`, `rxp` guarantees the Object's `Name` is unique within the
+`Object`'s `System`, `Kind` and `Domain`.
+
+Names for these Objects are called *domain-qualified names*.
 
 ### Namespace-qualified names
 
-If the `Meta.Namescope` associated with an `Object`'s `KindVersion` is
-`NamescopeNamespace`, the `Object`'s `Name` `rxp` guarantees the name is unique
-within the `Object`'s `System`, `Kind`, `Domain` and `Namespace`.
+If the `Namescope` associated with an `Object`'s `Kind` is
+`NamescopeNamescope`, `rxp` guarantees the Object's `Name` is unique within the
+`Object`'s `System`, `Kind`, `Domain` and `Namespace`.
+
+Names for these Objects are called *namespace-qualified names*.

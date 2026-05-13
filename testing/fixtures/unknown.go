@@ -3,6 +3,7 @@ package fixtures
 import (
 	"github.com/google/uuid"
 	"github.com/relexec/rxp/domain"
+	"github.com/relexec/rxp/kind"
 	"github.com/relexec/rxp/meta"
 	"github.com/relexec/rxp/namespace"
 	"github.com/relexec/rxp/object"
@@ -15,14 +16,17 @@ const (
 	UnknownSystemName    = "unknown system"
 	UnknownDomainName    = types.DomainName("unknown.domain.testing.dxp")
 	UnknownNamespaceName = types.NamespaceName("unknown.ns")
-	UnknownKind          = types.Kind("unknown.testing.rxp")
+	UnknownKindName      = types.KindName("unknown.testing.rxp")
 )
 
 var (
-	UnknownKindVersion = types.KindVersion(string(UnknownKind) + "@" + SemVer_V1_0_0.String())
+	UnknownKindVersion = types.NewKindVersion(UnknownKindName, *SemVer_V1_0_0)
 )
 
 var (
+	UnknownKind = kind.New(
+		kind.WithName(UnknownKindName),
+	)
 	UnknownSystem = system.New(
 		system.WithUUID(UnknownSystemUUID),
 		system.WithName(UnknownSystemName),
@@ -35,8 +39,8 @@ var (
 		namespace.WithName(UnknownNamespaceName),
 	)
 	UnknownMeta = meta.New(
-		meta.WithKindVersion(UnknownKindVersion),
-		meta.WithNamescope(types.NamescopeKind),
+		meta.WithKind(UnknownKind),
+		meta.WithVersion(*SemVer_V1_0_0),
 	)
 	UnknownObject = object.New(
 		object.WithKindVersion(UnknownKindVersion),

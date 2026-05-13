@@ -1,4 +1,4 @@
-package meta_test
+package kind_test
 
 import (
 	"testing"
@@ -11,10 +11,10 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestMeta_Diff(t *testing.T) {
+func TestKind_Diff(t *testing.T) {
 	cases := []struct {
 		name         string
-		a            types.Meta
+		a            types.Kind
 		b            any
 		expError     string
 		expDifferent bool
@@ -22,86 +22,53 @@ func TestMeta_Diff(t *testing.T) {
 	}{
 		{
 			"cannot compare different types",
-			book.Meta_V1_0_0,
+			book.Kind,
 			"",
 			"incompatible type comparison",
 			false,
 			nil,
 		},
 		{
-			"same meta no diff",
-			book.Meta_V1_0_0,
-			book.Meta_V1_0_0,
+			"same kind no diff",
+			book.Kind,
+			book.Kind,
 			"",
 			false,
 			nil,
 		},
 		{
-			"new meta",
-			book.Meta_V1_0_0,
+			"new kind",
+			book.Kind,
 			cmp.Zero,
 			"",
 			true,
 			[]cmp.Difference{
 				cmp.NewDifference(
-					fieldpath.FromString("kind"),
+					fieldpath.FromString("name"),
 					cmp.DifferenceTypeAdd,
 					string(book.KindName),
 					nil,
 				),
 				cmp.NewDifference(
-					fieldpath.FromString("version"),
+					fieldpath.FromString("namescope"),
 					cmp.DifferenceTypeAdd,
-					book.SemVer_V1_0_0.String(),
-					nil,
-				),
-				cmp.NewDifference(
-					fieldpath.FromString("schema"),
-					cmp.DifferenceTypeAdd,
-					book.SchemaJSON_V1_0_0,
+					types.NamescopeNamespace,
 					nil,
 				),
 			},
 		},
 		{
-			"different kind and schema",
-			book.Meta_V1_0_0,
-			author.Meta_V1_0_0,
+			"different kind name",
+			book.Kind,
+			author.Kind,
 			"",
 			true,
 			[]cmp.Difference{
 				cmp.NewDifference(
-					fieldpath.FromString("kind"),
+					fieldpath.FromString("name"),
 					cmp.DifferenceTypeModify,
 					string(book.KindName),
 					string(author.KindName),
-				),
-				cmp.NewDifference(
-					fieldpath.FromString("schema"),
-					cmp.DifferenceTypeModify,
-					book.SchemaJSON_V1_0_0,
-					author.SchemaJSON_V1_0_0,
-				),
-			},
-		},
-		{
-			"different version and schema",
-			book.Meta_V1_0_0,
-			book.Meta_V1_0_1,
-			"",
-			true,
-			[]cmp.Difference{
-				cmp.NewDifference(
-					fieldpath.FromString("version"),
-					cmp.DifferenceTypeModify,
-					string(book.SemVer_V1_0_0.String()),
-					string(book.SemVer_V1_0_1.String()),
-				),
-				cmp.NewDifference(
-					fieldpath.FromString("schema"),
-					cmp.DifferenceTypeModify,
-					book.SchemaJSON_V1_0_0,
-					book.SchemaJSON_V1_0_1,
 				),
 			},
 		},

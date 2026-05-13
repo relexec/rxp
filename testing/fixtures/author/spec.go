@@ -1,4 +1,4 @@
-package v1
+package author
 
 import (
 	"github.com/relexec/rxp/cmp"
@@ -7,19 +7,14 @@ import (
 )
 
 var (
-	FieldPathDescription = fieldpath.FromString("description")
-	FieldPathType        = fieldpath.FromString("type")
+	FieldPathName      = fieldpath.FromString("name")
+	FieldPathPublisher = fieldpath.FromString("publisher")
 )
 
 type Spec_V1_0_0 struct {
-	Description string `json:"description"`
+	Name string `json:"name"`
 }
 
-// Diff returns a [cmp.Delta] representing the difference between itself and
-// something else of the same type.
-//
-// If the argument is the [cmp.ZeroGen] sentinel, the returned [cmp.Delta]
-// represents instructions to create the thing.
 func (s Spec_V1_0_0) Diff(subject any) (*cmp.Delta, error) {
 	var other Spec_V1_0_0
 	switch subject := subject.(type) {
@@ -35,13 +30,13 @@ func (s Spec_V1_0_0) Diff(subject any) (*cmp.Delta, error) {
 
 	d := &cmp.Delta{}
 
-	if s.Description != other.Description {
+	if s.Name != other.Name {
 		d.Push(
 			cmp.NewDifference(
-				FieldPathDescription,
+				FieldPathName,
 				cmp.DifferenceTypeModify,
-				s.Description,
-				other.Description,
+				s.Name,
+				other.Name,
 			),
 		)
 	}
@@ -54,10 +49,10 @@ func (s Spec_V1_0_0) diffNew() (*cmp.Delta, error) {
 	d := &cmp.Delta{}
 	d.Push(
 		cmp.NewDifference(
-			FieldPathDescription,
+			FieldPathName,
 			cmp.DifferenceTypeAdd,
 			nil,
-			s.Description,
+			s.Name,
 		),
 	)
 	return d, nil
@@ -66,15 +61,10 @@ func (s Spec_V1_0_0) diffNew() (*cmp.Delta, error) {
 var _ types.Spec = (*Spec_V1_0_0)(nil)
 
 type Spec_V1_0_1 struct {
-	Description string `json:"description"`
-	Type        string `json:"type"`
+	Name      string `json:"name"`
+	Publisher string `json:"publisher"`
 }
 
-// Diff returns a [cmp.Delta] representing the difference between itself and
-// something else of the same type.
-//
-// If the argument is the [cmp.ZeroGen] sentinel, the returned [cmp.Delta]
-// represents instructions to create the thing.
 func (s Spec_V1_0_1) Diff(subject any) (*cmp.Delta, error) {
 	var other Spec_V1_0_1
 	switch subject := subject.(type) {
@@ -90,23 +80,23 @@ func (s Spec_V1_0_1) Diff(subject any) (*cmp.Delta, error) {
 
 	d := &cmp.Delta{}
 
-	if s.Description != other.Description {
+	if s.Name != other.Name {
 		d.Push(
 			cmp.NewDifference(
-				FieldPathDescription,
+				FieldPathName,
 				cmp.DifferenceTypeModify,
-				s.Description,
-				other.Description,
+				s.Name,
+				other.Name,
 			),
 		)
 	}
-	if s.Type != other.Type {
+	if s.Publisher != other.Publisher {
 		d.Push(
 			cmp.NewDifference(
-				FieldPathType,
+				FieldPathPublisher,
 				cmp.DifferenceTypeModify,
-				s.Type,
-				other.Type,
+				s.Publisher,
+				other.Publisher,
 			),
 		)
 	}
@@ -119,18 +109,10 @@ func (s Spec_V1_0_1) diffNew() (*cmp.Delta, error) {
 	d := &cmp.Delta{}
 	d.Push(
 		cmp.NewDifference(
-			FieldPathDescription,
+			FieldPathName,
 			cmp.DifferenceTypeAdd,
 			nil,
-			s.Description,
-		),
-	)
-	d.Push(
-		cmp.NewDifference(
-			FieldPathType,
-			cmp.DifferenceTypeAdd,
-			nil,
-			s.Type,
+			s.Name,
 		),
 	)
 	return d, nil

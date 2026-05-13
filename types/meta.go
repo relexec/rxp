@@ -1,5 +1,7 @@
 package types
 
+import "github.com/Masterminds/semver/v3"
+
 // Meta contains the definition of a type and version of an Object.
 type Meta interface {
 	Validatable
@@ -8,9 +10,10 @@ type Meta interface {
 	System() System
 	// KindVersion returns the Meta's KindVersion.
 	KindVersion() KindVersion
-	// Namescope returns the name uniqueness constraint for Objects having this
-	// KindVersion.
-	Namescope() Namescope
+	// Kind returns the Meta's Kind.
+	Kind() Kind
+	// Version returns the Version of the Meta.
+	Version() semver.Version
 	// Schema returns a [jsonschema.Schema] that describes the desired state
 	// fields of Objects with this KindVersion.
 	Schema() Schema

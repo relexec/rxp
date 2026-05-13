@@ -8,6 +8,10 @@ import (
 	"github.com/relexec/rxp/errors"
 )
 
+const (
+	KindVersionSeparator = "@"
+)
+
 // KindVersion is a string that can contain a Kind and optionally a SemVer
 // version string that uniquely identifies a type of Meta.
 //
@@ -49,16 +53,16 @@ func (kv KindVersion) Validate() error {
 
 // Kind returns the Kind identifier of the KindVersion. Note that this does not
 // attempt to do any validation of the kind string.
-func (kv KindVersion) Kind() Kind {
-	parts := strings.SplitN(string(kv), "@", 2)
-	return Kind(parts[0])
+func (kv KindVersion) Kind() KindName {
+	parts := strings.SplitN(string(kv), KindVersionSeparator, 2)
+	return KindName(parts[0])
 }
 
 // VersionString returns the SemVer version string from the optional version
 // string component of the KindVersion. Note this does not attempt to do any
 // validation of the version string.
 func (kv KindVersion) VersionString() string {
-	parts := strings.SplitN(string(kv), "@", 2)
+	parts := strings.SplitN(string(kv), KindVersionSeparator, 2)
 	if len(parts) == 2 {
 		return parts[1]
 	}
@@ -73,4 +77,10 @@ func (kv KindVersion) Version() (*semver.Version, error) {
 		return nil, nil
 	}
 	return semver.StrictNewVersion(vs)
+}
+
+// NewKindVersion returns a KindVersion from a supplied KindName and
+// [semver.Version].
+func NewKindVersion(kind KindName, ver semver.Version) KindVersion {
+	return KindVersion(string(kind) + KindVersionSeparator + ver.String())
 }

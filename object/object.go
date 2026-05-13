@@ -34,7 +34,7 @@ type Object struct {
 
 // Kind returns the DNS-formatted name of the Kind of Object, e.g.
 // `flow.temporal.io`.
-func (o Object) Kind() types.Kind {
+func (o Object) Kind() types.KindName {
 	return o.kindVersion.Kind()
 }
 

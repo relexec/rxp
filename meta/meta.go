@@ -3,6 +3,8 @@ package meta
 import (
 	"fmt"
 
+	"github.com/Masterminds/semver/v3"
+
 	"github.com/relexec/rxp/cmp"
 	"github.com/relexec/rxp/cmp/fieldpath"
 	"github.com/relexec/rxp/errors"
@@ -10,20 +12,20 @@ import (
 )
 
 var (
-	FieldPathKindVersion = fieldpath.FromString("kindversion")
-	FieldPathNamescope   = fieldpath.FromString("namescope")
-	FieldPathSchema      = fieldpath.FromString("schema")
+	FieldPathKind    = fieldpath.FromString("kind")
+	FieldPathVersion = fieldpath.FromString("version")
+	FieldPathSchema  = fieldpath.FromString("schema")
 )
 
 type Meta struct {
 	// system contains the System containing the Meta.
 	system types.System
-	// kindVersion is the [types.KindVersion] that uniquely identifies the type
-	// and version of Objects represented by this Meta.
-	kindVersion types.KindVersion
-	// namescope is the uniqueness constraint of the Named.Name of
-	// Objects having this Kind+Version.
-	namescope types.Namescope
+	// kind is the [types.Kind] that identifies the type of Objects represented
+	// by this Meta.
+	kind types.Kind
+	// version is the [semver.Version] that identifies the specific version of
+	// the Kind of Objects represented by this Meta.
+	version semver.Version
 	// schema is the [jsonschema.Schema] that describes the Spec field
 	// composition of Object with this Kind+Version.
 	schema types.Schema
@@ -35,17 +37,16 @@ type Meta struct {
 
 // Validate returns an error if the Meta is not valid.
 func (m Meta) Validate() error {
-	kv := m.kindVersion
-	err := kv.Validate()
-	if err != nil {
-		return err
+	k := m.kind
+	if k == nil {
+		return errors.MetaMissingKind()
 	}
-	err = m.namescope.Validate()
+	err := k.Validate()
 	if err != nil {
 		return err
 	}
 	if m.schema == nil {
-		return errors.MetaMissingSchema(kv)
+		return errors.MetaMissingSchema(m.KindVersion())
 	}
 	return nil
 }
@@ -62,24 +63,27 @@ func (m *Meta) SetSystem(system types.System) {
 
 // KindVersion returns the KindVersion of the Meta.
 func (m Meta) KindVersion() types.KindVersion {
-	return m.kindVersion
+	return types.NewKindVersion(m.kind.Name(), m.version)
 }
 
-// SetKindVersion sets the KindVersion of Meta.
-func (m *Meta) SetKindVersion(kv types.KindVersion) {
-	m.kindVersion = kv
+// Kind returns the Kind of the Meta.
+func (m Meta) Kind() types.Kind {
+	return m.kind
 }
 
-// Namescope returns the name uniqueness constraint for Objects having this
-// KindVersion.
-func (m Meta) Namescope() types.Namescope {
-	return m.namescope
+// SetKind sets the Kind of the Meta.
+func (m *Meta) SetKind(k types.Kind) {
+	m.kind = k
 }
 
-// SetNamescope sets the name uniqueness constraint for Objects having this
-// KindVersion.
-func (m *Meta) SetNamescope(namescope types.Namescope) {
-	m.namescope = namescope
+// Version returns the Version of the Meta.
+func (m Meta) Version() semver.Version {
+	return m.version
+}
+
+// SetKind sets the Version of the Meta.
+func (m *Meta) SetVersion(ver semver.Version) {
+	m.version = ver
 }
 
 // Schema returns a [jsonschema.Schema] that describes the desired state fields
@@ -106,7 +110,8 @@ func (m *Meta) SchemaJSON() (string, error) {
 	jsonb, err := m.schema.MarshalJSON()
 	if err != nil {
 		return "", fmt.Errorf(
-			"failed to marshal JSON for schema for %q: %w", m.kindVersion, err,
+			"failed to marshal JSON for schema for %q: %w",
+			m.KindVersion(), err,
 		)
 	}
 	m.schemaJSON = string(jsonb)
@@ -133,25 +138,27 @@ func (m Meta) Diff(subject any) (*cmp.Delta, error) {
 
 	d := &cmp.Delta{}
 
-	thisKV := string(m.kindVersion)
-	otherKV := string(other.KindVersion())
-	if thisKV != otherKV {
+	thisKind := string(m.kind.Name())
+	otherKind := string(other.Kind().Name())
+	if thisKind != otherKind {
 		d.Push(
 			cmp.NewDifference(
-				FieldPathKindVersion,
+				FieldPathKind,
 				cmp.DifferenceTypeModify,
-				thisKV,
-				otherKV,
+				thisKind,
+				otherKind,
 			),
 		)
 	}
-	if m.namescope != other.Namescope() {
+	thisVersion := m.version.String()
+	otherVersion := other.Version().String()
+	if thisVersion != otherVersion {
 		d.Push(
 			cmp.NewDifference(
-				FieldPathNamescope,
+				FieldPathVersion,
 				cmp.DifferenceTypeModify,
-				m.namescope,
-				other.Namescope(),
+				thisVersion,
+				otherVersion,
 			),
 		)
 	}
@@ -164,7 +171,7 @@ func (m Meta) Diff(subject any) (*cmp.Delta, error) {
 		if other.Schema() == nil {
 			d.Push(
 				cmp.NewDifference(
-					FieldPathNamescope,
+					FieldPathSchema,
 					cmp.DifferenceTypeRemove,
 					thisSchemaJSON,
 					nil,
@@ -218,17 +225,17 @@ func (m Meta) diffNew() (*cmp.Delta, error) {
 
 	d.Push(
 		cmp.NewDifference(
-			FieldPathKindVersion,
+			FieldPathKind,
 			cmp.DifferenceTypeAdd,
-			string(m.kindVersion),
+			string(m.kind.Name()),
 			nil,
 		),
 	)
 	d.Push(
 		cmp.NewDifference(
-			FieldPathNamescope,
+			FieldPathVersion,
 			cmp.DifferenceTypeAdd,
-			m.namescope,
+			m.version.String(),
 			nil,
 		),
 	)

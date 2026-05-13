@@ -1,18 +1,22 @@
-package v1
+package book
 
 import (
+	"time"
+
 	"github.com/relexec/rxp/cmp"
 	"github.com/relexec/rxp/cmp/fieldpath"
 	"github.com/relexec/rxp/types"
 )
 
 var (
-	FieldPathName      = fieldpath.FromString("name")
-	FieldPathPublisher = fieldpath.FromString("publisher")
+	FieldPathAuthor      = fieldpath.FromString("author")
+	FieldPathPublishedOn = fieldpath.FromString("published_on")
+	FieldPathNumPages    = fieldpath.FromString("num_pages")
 )
 
 type Spec_V1_0_0 struct {
-	Name string `json:"name"`
+	Author      string    `json:"author"`
+	PublishedOn time.Time `json:"published_on"`
 }
 
 func (s Spec_V1_0_0) Diff(subject any) (*cmp.Delta, error) {
@@ -30,13 +34,23 @@ func (s Spec_V1_0_0) Diff(subject any) (*cmp.Delta, error) {
 
 	d := &cmp.Delta{}
 
-	if s.Name != other.Name {
+	if s.Author != other.Author {
 		d.Push(
 			cmp.NewDifference(
-				FieldPathName,
+				FieldPathAuthor,
 				cmp.DifferenceTypeModify,
-				s.Name,
-				other.Name,
+				s.Author,
+				other.Author,
+			),
+		)
+	}
+	if !s.PublishedOn.Equal(other.PublishedOn) {
+		d.Push(
+			cmp.NewDifference(
+				FieldPathPublishedOn,
+				cmp.DifferenceTypeModify,
+				s.PublishedOn,
+				other.PublishedOn,
 			),
 		)
 	}
@@ -49,10 +63,18 @@ func (s Spec_V1_0_0) diffNew() (*cmp.Delta, error) {
 	d := &cmp.Delta{}
 	d.Push(
 		cmp.NewDifference(
-			FieldPathName,
+			FieldPathAuthor,
 			cmp.DifferenceTypeAdd,
 			nil,
-			s.Name,
+			s.Author,
+		),
+	)
+	d.Push(
+		cmp.NewDifference(
+			FieldPathPublishedOn,
+			cmp.DifferenceTypeAdd,
+			nil,
+			s.PublishedOn,
 		),
 	)
 	return d, nil
@@ -61,8 +83,9 @@ func (s Spec_V1_0_0) diffNew() (*cmp.Delta, error) {
 var _ types.Spec = (*Spec_V1_0_0)(nil)
 
 type Spec_V1_0_1 struct {
-	Name      string `json:"name"`
-	Publisher string `json:"publisher"`
+	Author      string    `json:"author"`
+	PublishedOn time.Time `json:"published_on"`
+	NumPages    int       `json:"num_pages"`
 }
 
 func (s Spec_V1_0_1) Diff(subject any) (*cmp.Delta, error) {
@@ -80,23 +103,33 @@ func (s Spec_V1_0_1) Diff(subject any) (*cmp.Delta, error) {
 
 	d := &cmp.Delta{}
 
-	if s.Name != other.Name {
+	if s.Author != other.Author {
 		d.Push(
 			cmp.NewDifference(
-				FieldPathName,
+				FieldPathAuthor,
 				cmp.DifferenceTypeModify,
-				s.Name,
-				other.Name,
+				s.Author,
+				other.Author,
 			),
 		)
 	}
-	if s.Publisher != other.Publisher {
+	if !s.PublishedOn.Equal(other.PublishedOn) {
 		d.Push(
 			cmp.NewDifference(
-				FieldPathPublisher,
+				FieldPathPublishedOn,
 				cmp.DifferenceTypeModify,
-				s.Publisher,
-				other.Publisher,
+				s.PublishedOn,
+				other.PublishedOn,
+			),
+		)
+	}
+	if s.NumPages != other.NumPages {
+		d.Push(
+			cmp.NewDifference(
+				FieldPathNumPages,
+				cmp.DifferenceTypeModify,
+				s.NumPages,
+				other.NumPages,
 			),
 		)
 	}
@@ -109,10 +142,26 @@ func (s Spec_V1_0_1) diffNew() (*cmp.Delta, error) {
 	d := &cmp.Delta{}
 	d.Push(
 		cmp.NewDifference(
-			FieldPathName,
+			FieldPathAuthor,
 			cmp.DifferenceTypeAdd,
 			nil,
-			s.Name,
+			s.Author,
+		),
+	)
+	d.Push(
+		cmp.NewDifference(
+			FieldPathPublishedOn,
+			cmp.DifferenceTypeAdd,
+			nil,
+			s.PublishedOn,
+		),
+	)
+	d.Push(
+		cmp.NewDifference(
+			FieldPathNumPages,
+			cmp.DifferenceTypeAdd,
+			nil,
+			s.NumPages,
 		),
 	)
 	return d, nil

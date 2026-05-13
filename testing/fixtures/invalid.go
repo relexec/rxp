@@ -2,6 +2,7 @@ package fixtures
 
 import (
 	"github.com/relexec/rxp/domain"
+	"github.com/relexec/rxp/kind"
 	"github.com/relexec/rxp/meta"
 	"github.com/relexec/rxp/namespace"
 	"github.com/relexec/rxp/object"
@@ -11,11 +12,14 @@ import (
 var (
 	InvalidDomainName    = types.DomainName("invalid domain")
 	InvalidNamespaceName = types.NamespaceName("invalid ns")
-	InvalidKind          = types.Kind("invalid kind")
+	InvalidKindName      = types.KindName("invalid kind")
 	InvalidKindVersion   = types.KindVersion("invalid kind version")
 )
 
 var (
+	InvalidKind = kind.New(
+		kind.WithName(InvalidKindName),
+	)
 	InvalidDomain = domain.New(
 		domain.WithName(InvalidDomainName),
 	)
@@ -24,8 +28,8 @@ var (
 		namespace.WithName(InvalidNamespaceName),
 	)
 	InvalidMeta = meta.New(
-		meta.WithKindVersion(InvalidKindVersion),
-		meta.WithNamescope(types.NamescopeKind),
+		meta.WithKind(InvalidKind),
+		meta.WithVersion(*SemVer_V1_0_0),
 	)
 	InvalidObject = object.New(object.WithKindVersion(InvalidKindVersion))
 )

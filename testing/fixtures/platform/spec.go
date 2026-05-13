@@ -1,4 +1,4 @@
-package v1
+package platform
 
 import (
 	"github.com/relexec/rxp/cmp"

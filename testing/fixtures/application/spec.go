@@ -1,24 +1,25 @@
-package v1
+package application
 
 import (
-	"time"
-
 	"github.com/relexec/rxp/cmp"
 	"github.com/relexec/rxp/cmp/fieldpath"
 	"github.com/relexec/rxp/types"
 )
 
 var (
-	FieldPathAuthor      = fieldpath.FromString("author")
-	FieldPathPublishedOn = fieldpath.FromString("published_on")
-	FieldPathNumPages    = fieldpath.FromString("num_pages")
+	FieldPathDescription = fieldpath.FromString("description")
+	FieldPathType        = fieldpath.FromString("type")
 )
 
 type Spec_V1_0_0 struct {
-	Author      string    `json:"author"`
-	PublishedOn time.Time `json:"published_on"`
+	Description string `json:"description"`
 }
 
+// Diff returns a [cmp.Delta] representing the difference between itself and
+// something else of the same type.
+//
+// If the argument is the [cmp.ZeroGen] sentinel, the returned [cmp.Delta]
+// represents instructions to create the thing.
 func (s Spec_V1_0_0) Diff(subject any) (*cmp.Delta, error) {
 	var other Spec_V1_0_0
 	switch subject := subject.(type) {
@@ -34,23 +35,13 @@ func (s Spec_V1_0_0) Diff(subject any) (*cmp.Delta, error) {
 
 	d := &cmp.Delta{}
 
-	if s.Author != other.Author {
+	if s.Description != other.Description {
 		d.Push(
 			cmp.NewDifference(
-				FieldPathAuthor,
+				FieldPathDescription,
 				cmp.DifferenceTypeModify,
-				s.Author,
-				other.Author,
-			),
-		)
-	}
-	if !s.PublishedOn.Equal(other.PublishedOn) {
-		d.Push(
-			cmp.NewDifference(
-				FieldPathPublishedOn,
-				cmp.DifferenceTypeModify,
-				s.PublishedOn,
-				other.PublishedOn,
+				s.Description,
+				other.Description,
 			),
 		)
 	}
@@ -63,18 +54,10 @@ func (s Spec_V1_0_0) diffNew() (*cmp.Delta, error) {
 	d := &cmp.Delta{}
 	d.Push(
 		cmp.NewDifference(
-			FieldPathAuthor,
+			FieldPathDescription,
 			cmp.DifferenceTypeAdd,
 			nil,
-			s.Author,
-		),
-	)
-	d.Push(
-		cmp.NewDifference(
-			FieldPathPublishedOn,
-			cmp.DifferenceTypeAdd,
-			nil,
-			s.PublishedOn,
+			s.Description,
 		),
 	)
 	return d, nil
@@ -83,11 +66,15 @@ func (s Spec_V1_0_0) diffNew() (*cmp.Delta, error) {
 var _ types.Spec = (*Spec_V1_0_0)(nil)
 
 type Spec_V1_0_1 struct {
-	Author      string    `json:"author"`
-	PublishedOn time.Time `json:"published_on"`
-	NumPages    int       `json:"num_pages"`
+	Description string `json:"description"`
+	Type        string `json:"type"`
 }
 
+// Diff returns a [cmp.Delta] representing the difference between itself and
+// something else of the same type.
+//
+// If the argument is the [cmp.ZeroGen] sentinel, the returned [cmp.Delta]
+// represents instructions to create the thing.
 func (s Spec_V1_0_1) Diff(subject any) (*cmp.Delta, error) {
 	var other Spec_V1_0_1
 	switch subject := subject.(type) {
@@ -103,33 +90,23 @@ func (s Spec_V1_0_1) Diff(subject any) (*cmp.Delta, error) {
 
 	d := &cmp.Delta{}
 
-	if s.Author != other.Author {
+	if s.Description != other.Description {
 		d.Push(
 			cmp.NewDifference(
-				FieldPathAuthor,
+				FieldPathDescription,
 				cmp.DifferenceTypeModify,
-				s.Author,
-				other.Author,
+				s.Description,
+				other.Description,
 			),
 		)
 	}
-	if !s.PublishedOn.Equal(other.PublishedOn) {
+	if s.Type != other.Type {
 		d.Push(
 			cmp.NewDifference(
-				FieldPathPublishedOn,
+				FieldPathType,
 				cmp.DifferenceTypeModify,
-				s.PublishedOn,
-				other.PublishedOn,
-			),
-		)
-	}
-	if s.NumPages != other.NumPages {
-		d.Push(
-			cmp.NewDifference(
-				FieldPathNumPages,
-				cmp.DifferenceTypeModify,
-				s.NumPages,
-				other.NumPages,
+				s.Type,
+				other.Type,
 			),
 		)
 	}
@@ -142,26 +119,18 @@ func (s Spec_V1_0_1) diffNew() (*cmp.Delta, error) {
 	d := &cmp.Delta{}
 	d.Push(
 		cmp.NewDifference(
-			FieldPathAuthor,
+			FieldPathDescription,
 			cmp.DifferenceTypeAdd,
 			nil,
-			s.Author,
+			s.Description,
 		),
 	)
 	d.Push(
 		cmp.NewDifference(
-			FieldPathPublishedOn,
+			FieldPathType,
 			cmp.DifferenceTypeAdd,
 			nil,
-			s.PublishedOn,
-		),
-	)
-	d.Push(
-		cmp.NewDifference(
-			FieldPathNumPages,
-			cmp.DifferenceTypeAdd,
-			nil,
-			s.NumPages,
+			s.Type,
 		),
 	)
 	return d, nil

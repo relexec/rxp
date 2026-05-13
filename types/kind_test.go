@@ -7,14 +7,14 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestKind(t *testing.T) {
+func TestKindName(t *testing.T) {
 	cases := []struct {
 		name             string
-		subject          types.Kind
+		subject          types.KindName
 		expValidateError string
 	}{
 		{
-			"empty kind version",
+			"empty kind",
 			"",
 			"kind cannot be empty",
 		},
@@ -29,7 +29,7 @@ func TestKind(t *testing.T) {
 			"first character must be letter or number",
 		},
 		{
-			"valid kind with dots",
+			"valid kind name with dots",
 			"flow.temporal.io",
 			"",
 		},

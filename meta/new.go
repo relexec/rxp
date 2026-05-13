@@ -3,6 +3,7 @@ package meta
 import (
 	"encoding/json"
 
+	"github.com/Masterminds/semver/v3"
 	"github.com/relexec/rxp/types"
 )
 
@@ -25,17 +26,17 @@ func WithSystem(system types.System) Option {
 	}
 }
 
-// WithKindVersion sets the Meta's KindVersion.
-func WithKindVersion(kv types.KindVersion) Option {
+// WithKind sets the Meta's Kind.
+func WithKind(k types.Kind) Option {
 	return func(m *Meta) {
-		m.kindVersion = kv
+		m.kind = k
 	}
 }
 
-// WithNamescope sets the Meta's Namescope.
-func WithNamescope(namescope types.Namescope) Option {
+// WithVersion sets the Meta's Version.
+func WithVersion(ver semver.Version) Option {
 	return func(m *Meta) {
-		m.namescope = namescope
+		m.version = ver
 	}
 }
 

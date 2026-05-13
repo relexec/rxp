@@ -1,4 +1,4 @@
-package v1
+package service
 
 import (
 	"github.com/relexec/rxp/cmp"

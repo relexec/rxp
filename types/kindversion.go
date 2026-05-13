@@ -37,7 +37,7 @@ type KindVersion string
 // Validate returns an error if the KindVersion is invalid.
 func (kv KindVersion) Validate() error {
 	if len(kv) == 0 {
-		return errors.ErrKindEmpty
+		return errors.ErrKindNameEmpty
 	}
 	k := kv.Kind()
 	err := k.Validate()

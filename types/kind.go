@@ -38,11 +38,11 @@ type KindName string
 // Note that we do not use regexp parsing here for performance reasons.
 func (k KindName) Validate() error {
 	if len(k) == 0 {
-		return errors.ErrKindEmpty
+		return errors.ErrKindNameEmpty
 	}
 	first := rune(k[0])
 	if !unicode.IsLetter(first) && !unicode.IsNumber(first) {
-		return errors.ErrKindInvalidFirstCharacter
+		return errors.ErrKindNameInvalidFirstCharacter
 	}
 	hasNonValidChars := func(r rune) bool {
 		if unicode.IsLetter(r) || unicode.IsNumber(r) || r == '.' || r == '-' {
@@ -51,10 +51,10 @@ func (k KindName) Validate() error {
 		return true
 	}
 	if strings.ContainsFunc(string(k), hasNonValidChars) {
-		return errors.ErrKindInvalidCharacters
+		return errors.ErrKindNameInvalidCharacters
 	}
 	if strings.Contains(string(k), "..") {
-		return errors.ErrKindRepeatedPeriods
+		return errors.ErrKindNameRepeatedPeriods
 	}
 	return nil
 }

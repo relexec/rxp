@@ -21,7 +21,7 @@ func TestKindVersion(t *testing.T) {
 		{
 			"empty kind version",
 			"",
-			"invalid kind: kind cannot be empty",
+			"invalid kind name: kind name cannot be empty",
 			"",
 			"",
 			nil,
@@ -30,7 +30,7 @@ func TestKindVersion(t *testing.T) {
 		{
 			"spaces not allowed",
 			"spaces not allowed",
-			"invalid kind: invalid characters",
+			"invalid kind name: invalid characters",
 			"spaces not allowed",
 			"",
 			nil,
@@ -48,7 +48,7 @@ func TestKindVersion(t *testing.T) {
 		{
 			"double periods not allowed",
 			"a..b",
-			"invalid kind: repeated periods",
+			"invalid kind name: repeated periods",
 			"a..b",
 			"",
 			nil,

@@ -28,6 +28,7 @@ type TargetType string
 
 const (
 	TargetTypeSystem    TargetType = "system"
+	TargetTypeKind      TargetType = "kind"
 	TargetTypeDomain    TargetType = "domain"
 	TargetTypeNamespace TargetType = "namespace"
 	TargetTypeMeta      TargetType = "meta"

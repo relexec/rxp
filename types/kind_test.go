@@ -16,7 +16,7 @@ func TestKindName(t *testing.T) {
 		{
 			"empty kind",
 			"",
-			"kind cannot be empty",
+			"kind name cannot be empty",
 		},
 		{
 			"spaces not allowed",

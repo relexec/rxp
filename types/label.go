@@ -16,16 +16,3 @@ type Label struct {
 // Labels. The reason this is not a map[string]string is so that Selectors can
 // select on just a label key or key prefix and not the whole key and value.
 type Labels []Label
-
-// HasLabels has a collection of Labels.
-type HasLabels interface {
-	// Labels returns the Labels.
-	Labels() Labels
-}
-
-// SetsLabels sets a collection of Labels.
-type SetsLabels interface {
-	HasLabels
-	// SetLabels sets the Labels.
-	SetLabels(Labels)
-}

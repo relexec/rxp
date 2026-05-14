@@ -23,6 +23,7 @@ var (
 
 var (
 	ErrInvalidReadRequest = New("invalid read request", WithCode(ErrCodeBadRequest))
+	ErrInvalidListRequest = New("invalid list request", WithCode(ErrCodeBadRequest))
 )
 
 // Internal returns an Error with a 500 Internal Server Error code and the

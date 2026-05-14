@@ -20,6 +20,12 @@ const (
 
 	InstrumentNameWriteDuration = "write.duration"
 	InstrumentDescWriteDuration = "Histogram of write operation duration in seconds. Labels: 'error.code', 'type'."
+
+	InstrumentNameListRequest = "list.request"
+	InstrumentDescListRequest = "Number of list operations. Labels: 'error.code', 'type'."
+
+	InstrumentNameListDuration = "list.duration"
+	InstrumentDescListDuration = "Histogram of list operation duration in seconds. Labels: 'error.code', 'type'."
 )
 
 var (
@@ -27,6 +33,8 @@ var (
 	InstrumentReadDuration  metric.Float64Histogram
 	InstrumentWriteRequest  metric.Int64Counter
 	InstrumentWriteDuration metric.Float64Histogram
+	InstrumentListRequest   metric.Int64Counter
+	InstrumentListDuration  metric.Float64Histogram
 )
 
 // Init initializes the rxp metrics for the supplied Metrics handler.
@@ -66,6 +74,24 @@ func Init(metrics types.Metrics) error {
 		InstrumentNameWriteDuration,
 		metric.WithDescription(InstrumentDescWriteDuration),
 		metric.WithUnit("{seconds"),
+	)
+	if err != nil {
+		return err
+	}
+
+	InstrumentListRequest, err = m.Int64Counter(
+		InstrumentNameListRequest,
+		metric.WithDescription(InstrumentDescListRequest),
+		metric.WithUnit("{call}"),
+	)
+	if err != nil {
+		return err
+	}
+
+	InstrumentListDuration, err = m.Float64Histogram(
+		InstrumentNameListDuration,
+		metric.WithDescription(InstrumentDescListDuration),
+		metric.WithUnit("{seconds}"),
 	)
 	if err != nil {
 		return err

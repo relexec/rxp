@@ -2,21 +2,26 @@ package expression
 
 import "github.com/relexec/rxp/types"
 
-// AndExpression is a filtering expression that evaluates multiple Predicates
+// AndExpression is a filtering expression that evaluates multiple expressions
 // using AND logic.
 type AndExpression struct {
-	predicates []types.Predicate
+	expressions []types.Expression
 }
 
-// Predicates returns the contained Predicates.
-func (e AndExpression) Predicates() []types.Predicate {
-	return e.predicates
+// Unary returns true if the Expression can be reduced to a single Predicate.
+func (u AndExpression) Unary() bool {
+	return false
+}
+
+// Expressions returns the contained Expressions.
+func (e AndExpression) Expressions() []types.Expression {
+	return e.expressions
 }
 
 // And returns a new AndExpression that evaluates the supplied Predicates using
 // AND logic.
-func And(preds ...types.Predicate) AndExpression {
-	return AndExpression{predicates: preds}
+func And(exprs ...types.Expression) AndExpression {
+	return AndExpression{expressions: exprs}
 }
 
 var _ types.Expression = (*AndExpression)(nil)

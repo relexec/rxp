@@ -68,7 +68,7 @@ is guaranteed to have a [`Domain`](#domain). If that `Namescope` is
 
 `Objects` may have zero or more `Labels` associated with them. `Labels` are
 structures with a `Key` and optional `Value` that can be used to categorize
-`Objects`.
+`Objects` and filter them in list operations.
 
 ```mermaid
 erDiagram

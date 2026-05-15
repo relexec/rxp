@@ -5,7 +5,7 @@ package types
 // user's matching/filtering intent into backend-specific filtering expressions
 // (e.g. SQL statements).
 type Expression interface {
-	// Predicates returns the Predicates that comprise the filtering
-	// expression.
-	Predicates() []Predicate
+	// Unary returns true if the Expression can be reduced to a single
+	// Predicate.
+	Unary() bool
 }

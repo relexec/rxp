@@ -7,15 +7,9 @@ type UnaryExpression struct {
 	types.Predicate
 }
 
-// Predicates returns the contained single Predicate.
-func (e UnaryExpression) Predicates() []types.Predicate {
-	return []types.Predicate{e}
-}
-
-// Unary returns a new UnaryExpression that evaluates the single supplied
-// Predicate.
-func Unary(pred types.Predicate) UnaryExpression {
-	return UnaryExpression{pred}
+// Unary returns true if the Expression can be reduced to a single Predicate.
+func (u UnaryExpression) Unary() bool {
+	return true
 }
 
 var _ types.Expression = (*UnaryExpression)(nil)

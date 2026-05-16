@@ -1,6 +1,8 @@
 package result
 
 import (
+	"github.com/relexec/rxp/list"
+	"github.com/relexec/rxp/list/option"
 	"github.com/relexec/rxp/types"
 )
 
@@ -14,7 +16,7 @@ type Result[T any] struct {
 	// not specify a limit for the number of items to return, the server will
 	// always bound this to a default value. That default will be set in this
 	// field.
-	options types.ListOptions
+	options option.Options
 	// marker contains the UUID of the last item on a previous "page" of
 	// results returned from a call to List. This value can be passed in
 	// subsequent calls to List to "continue" the list from that item.
@@ -31,7 +33,7 @@ func (r Result[T]) Items() []T {
 // you did not specify a limit for the number of Objects to return, the
 // server will always bound this to a default value. That default will be
 // set in this field.
-func (r Result[T]) Options() types.ListOptions {
+func (r Result[T]) Options() list.Options {
 	return r.options
 }
 
@@ -47,4 +49,4 @@ func (r Result[T]) More() bool {
 	return r.marker != ""
 }
 
-var _ types.ListResult[types.Object] = Result[types.Object]{}
+var _ list.Result[types.Object] = Result[types.Object]{}

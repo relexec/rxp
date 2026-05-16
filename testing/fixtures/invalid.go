@@ -21,6 +21,7 @@ var (
 		kind.WithName(InvalidKindName),
 	)
 	InvalidDomain = domain.New(
+		domain.WithUUID(DomainUUID),
 		domain.WithName(InvalidDomainName),
 	)
 	InvalidNamespace = namespace.New(

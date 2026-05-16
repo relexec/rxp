@@ -8,4 +8,5 @@ var (
 	ErrDomainNameMaxLengthExceeded     = New("max length exceeded", WithWrap(ErrDomainNameInvalid))
 	ErrDomainNameRepeatedPeriods       = New("repeated periods", WithWrap(ErrDomainNameInvalid))
 	ErrDomainNameInvalidFirstCharacter = New("first character must be letter or number", WithWrap(ErrDomainNameInvalid))
+	ErrDomainUUIDRequired              = New("uuid required", WithWrap(ErrDomainInvalid))
 )

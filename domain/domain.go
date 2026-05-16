@@ -3,11 +3,13 @@ package domain
 import (
 	"github.com/relexec/rxp/cmp"
 	"github.com/relexec/rxp/cmp/fieldpath"
+	"github.com/relexec/rxp/errors"
 	"github.com/relexec/rxp/types"
 )
 
 var (
 	FieldPathSystem = fieldpath.FromString("system")
+	FieldPathUUID   = fieldpath.FromString("uuid")
 	FieldPathName   = fieldpath.FromString("name")
 )
 
@@ -15,6 +17,8 @@ var (
 type Domain struct {
 	// system contains the System containing the Domain.
 	system types.System
+	// uuid stores the Domain's globally-unique identifier.
+	uuid string
 	// name contains the Domain name.
 	//
 	// A valid Domain Name is a DNS-formatted (RFC 1035-compliant) name less than
@@ -27,6 +31,9 @@ type Domain struct {
 
 // Validate returns an error if the Domain is invalid.
 func (d Domain) Validate() error {
+	if d.uuid == "" {
+		return errors.ErrDomainUUIDRequired
+	}
 	return d.name.Validate()
 }
 
@@ -38,6 +45,16 @@ func (d Domain) System() types.System {
 // SetSystem sets the System of Domain.
 func (d *Domain) SetSystem(system types.System) {
 	d.system = system
+}
+
+// UUID returns the globally-unique identifier of the Domain.
+func (d Domain) UUID() string {
+	return d.uuid
+}
+
+// SetUUID sets the globally-unique identifier of the Domain.
+func (d *Domain) SetUUID(uuid string) {
+	d.uuid = uuid
 }
 
 // Name returns the Name of the Domain.
@@ -108,6 +125,19 @@ func (d Domain) Diff(subject any) (*cmp.Delta, error) {
 		)
 	}
 
+	thisUUID := d.uuid
+	otherUUID := other.UUID()
+	if thisUUID != otherUUID {
+		delta.Push(
+			cmp.NewDifference(
+				FieldPathUUID,
+				cmp.DifferenceTypeModify,
+				string(thisUUID),
+				string(otherUUID),
+			),
+		)
+	}
+
 	thisName := d.name
 	otherName := other.Name()
 	if thisName != otherName {
@@ -138,6 +168,14 @@ func (d Domain) diffNew() (*cmp.Delta, error) {
 			),
 		)
 	}
+	delta.Push(
+		cmp.NewDifference(
+			FieldPathUUID,
+			cmp.DifferenceTypeAdd,
+			d.uuid,
+			nil,
+		),
+	)
 	delta.Push(
 		cmp.NewDifference(
 			FieldPathName,

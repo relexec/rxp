@@ -95,6 +95,7 @@ erDiagram
     }
     Domain{
         string **system**
+        string **uuid**
         string **name**
     }
     Namespace{
@@ -123,13 +124,16 @@ erDiagram
 
 ## `Domain`
 
-`Domain` is a specialized string containing a top-level division or partition
-of things managed by `rxp`.
+`Domain` represents a top-level division within a `System` managed by `rxp`.
 
-A valid `Domain` is a DNS-formatted (RFC 1035-compliant) name less than 254
+`Domains` always have a UUID globally-unique identifier.
+
+`Domains` always have a `Name` which is a specialized string type `DomainName`.
+
+A valid `DomainName` is a DNS-formatted (RFC 1035-compliant) name less than 254
 characters.
 
-A `Domain` must be unique within the scope of the `rxp` system installation.
+A `Domain`'s `Name` must be unique within the scope of the `Domain`'s `System`.
 
 ## `Namespace`
 

@@ -23,6 +23,13 @@ func WithSystem(system types.System) Option {
 	}
 }
 
+// WithUUID sets the Domain's UUID.
+func WithUUID(uuid string) Option {
+	return func(d *Domain) {
+		d.uuid = uuid
+	}
+}
+
 // WithName sets the Domain's Name.
 func WithName(name types.DomainName) Option {
 	return func(d *Domain) {

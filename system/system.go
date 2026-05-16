@@ -23,7 +23,7 @@ type System struct {
 // Validate returns an error if the System is invalid.
 func (s System) Validate() error {
 	if s.uuid == "" {
-		return errors.ErrSystemUUIDEmpty
+		return errors.ErrSystemUUIDRequired
 	}
 	return nil
 }

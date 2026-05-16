@@ -54,6 +54,8 @@ type Domain interface {
 	Differ
 	// System returns the system identifier associated with the Domain.
 	System() System
+	// UUID returns the Domain's globally-unique identifier.
+	UUID() string
 	// Name returns the name of the Domain.
 	Name() DomainName
 }

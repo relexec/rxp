@@ -1,18 +1,23 @@
-package list
+package read
 
 import (
 	"context"
 
-	"github.com/relexec/rxp/list/option"
+	"github.com/relexec/rxp/read/option"
 	"github.com/relexec/rxp/types"
 )
 
 type Options interface {
-	// Limit returns the max number of items to return.
-	Limit() int
-	// Marker returns the UUID of the last item on the page of items previously
-	// read.
-	Marker() string
+	// KindVersion returns the KindVersion of the target to look up. If empty,
+	// the latest version of the Kind specified in the Selector is used.
+	KindVersion() types.KindVersion
+	// Generation returns the Generation of the target that should be read.
+	// Only applicable for things that can have multiple generations
+	// representing mutations to desired state (e.g. Object).
+	//
+	// If the Kind of target being read supports multiple generations and this
+	// method returns 0, the target's latest generation is read.
+	Generation() types.Generation
 }
 
 type Result[T any] interface {
@@ -32,12 +37,12 @@ type Result[T any] interface {
 	More() bool
 }
 
-// Lister lists zero or more items.
-type Lister[T any] interface {
-	// List lists zero or more items.
-	List(
+// Reader reads a single thing from persistent storage.
+type Reader[T any] interface {
+	// Read reads a single thing from persistent storage.
+	Read(
 		context.Context,
-		types.Expression,
+		types.Selector,
 		...option.Option,
-	) (Result[T], error)
+	) (T, error)
 }

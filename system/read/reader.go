@@ -3,8 +3,7 @@ package read
 import (
 	"context"
 
-	"github.com/relexec/rxp/system/read/option"
-	"github.com/relexec/rxp/system/read/selector"
+	"github.com/relexec/rxp/read/option"
 	"github.com/relexec/rxp/types"
 )
 
@@ -13,7 +12,7 @@ type SystemReader interface {
 	// SystemRead reads a single System from persistent storage.
 	SystemRead(
 		context.Context,
-		selector.Selector,
+		types.Selector,
 		...option.Option,
 	) (types.System, error)
 }

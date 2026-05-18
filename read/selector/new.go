@@ -1,17 +1,20 @@
 package selector
 
+import "github.com/relexec/rxp/types"
+
 // Option controls the returned [Selector] from [New]
 type Option func(*Selector)
 
-// WithUUID is used to look up the System by its globally-unique identifier.
+// WithUUID is used to look up an target with a specified globally-unique
+// string identifier.
 func WithUUID(uuid string) Option {
 	return func(s *Selector) {
 		s.uuid = uuid
 	}
 }
 
-// WithName is used to look up an Domain with a specified Name.
-func WithName(name string) Option {
+// WithName is used to look up an target with a specified Name.
+func WithName(name types.Name) Option {
 	return func(s *Selector) {
 		s.name = name
 	}

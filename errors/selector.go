@@ -4,6 +4,8 @@ var (
 	ErrMissingSelector             = New("missing selector", WithWrap(ErrInvalidReadRequest))
 	ErrInvalidSelector             = New("invalid selector", WithWrap(ErrInvalidReadRequest))
 	ErrSelectorKindVersionRequired = New("kindversion required", WithWrap(ErrInvalidSelector))
+	ErrSelectorKindRequired        = New("kind required", WithWrap(ErrInvalidSelector))
+	ErrSelectorUUIDRequired        = New("uuid required", WithWrap(ErrInvalidSelector))
 	ErrSelectorUUIDOrNameRequired  = New("uuid or name required", WithWrap(ErrInvalidSelector))
 	ErrSelectorDomainRequired      = New("domain required", WithWrap(ErrInvalidSelector))
 	ErrSelectorNamespaceRequired   = New("namespace required", WithWrap(ErrInvalidSelector))

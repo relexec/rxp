@@ -26,6 +26,7 @@ var (
 	)
 	InvalidNamespace = namespace.New(
 		namespace.WithDomain(Domain),
+		namespace.WithUUID(NamespaceUUID),
 		namespace.WithName(InvalidNamespaceName),
 	)
 	InvalidMeta = meta.New(

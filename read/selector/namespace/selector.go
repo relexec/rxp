@@ -12,27 +12,31 @@ import (
 type Selector struct {
 	// uuid is the globally-unique string identifier to look up the target for.
 	uuid string
-	// system is the System within which the Domain is scoped. If empty, the
-	// host system of the rxp backend is assumed.
-	system types.System
-	// domainName is the DomainName to use when looking up the target via name.
-	domainName types.DomainName
+	// domain is the Domain within which the Namespace is scoped.
+	domain types.Domain
+	// namespaceName is the NamespaceName to use when looking up the target via
+	// name.
+	namespaceName types.NamespaceName
 }
 
 // Validate returns an error if the Selector is not valid.
 func (s Selector) Validate() error {
-	if s.uuid == "" && s.domainName == "" {
+	if s.uuid == "" && s.namespaceName == "" {
 		return errors.ErrSelectorUUIDOrNameRequired
 	}
-	if s.system != nil {
-		err := s.system.Validate()
-		if err != nil {
-			return err
-		}
+	if s.uuid != "" {
+		return nil
 	}
-	// We should have been given a valid domain name.
-	if s.domainName != "" {
-		err := s.domainName.Validate()
+	if s.domain == nil {
+		return errors.ErrSelectorDomainRequired
+	}
+	err := s.domain.Validate()
+	if err != nil {
+		return err
+	}
+	// We should have been given a valid namespace name.
+	if s.namespaceName != "" {
+		err := s.namespaceName.Validate()
 		if err != nil {
 			return err
 		}
@@ -51,10 +55,12 @@ func (s Selector) Name() types.Name {
 	if s.uuid != "" {
 		return nil
 	}
-	if s.system == nil {
-		return name.New(string(s.domainName))
+	if s.domain == nil {
+		// This is not really valid, but validate ensures that we don't end up
+		// here...
+		return name.New(string(s.namespaceName))
 	}
-	return name.New(string(s.domainName), name.WithSystem(s.system))
+	return name.New(string(s.namespaceName), name.WithDomain(s.domain))
 }
 
 var _ types.Selector = (*Selector)(nil)

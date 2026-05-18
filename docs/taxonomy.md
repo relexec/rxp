@@ -100,6 +100,7 @@ erDiagram
     }
     Namespace{
         string **domain**
+        string **uuid**
         string **name**
     }
     Object{
@@ -141,12 +142,17 @@ A `Domain`'s `Name` must be unique within the scope of the `Domain`'s `System`.
 
 A `Namespace` is typically used to segregate data by tenancy boundaries.
 
-A valid `Namespace` is a DNS-formatted (RFC 1035-compliant) name.
+`Namespaces` always have a UUID globally-unique identifier.
 
-Note that unlike RFC 1035, there is no 253 character size limit on `Namespace`
-string length.
+`Namespaces` always have a `Name` which is a specialized string type
+`NamespaceName`.
 
-A `Namespace` must be unique within its containing `Domain`.
+A valid `NamespaceName` is a DNS-formatted (RFC 1035-compliant) name.
+
+Note that unlike RFC 1035, there is no 253 character size limit on
+`NamespaceName` string length.
+
+A `Namespace`'s `Name` must be unique within its containing `Domain`.
 
 ## `Kind`
 

@@ -23,6 +23,13 @@ func WithDomain(domain types.Domain) Option {
 	}
 }
 
+// WithUUID sets the Namespace's UUID.
+func WithUUID(uuid string) Option {
+	return func(n *Namespace) {
+		n.uuid = uuid
+	}
+}
+
 // WithName sets the Namespace's Name.
 func WithName(name types.NamespaceName) Option {
 	return func(n *Namespace) {

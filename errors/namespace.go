@@ -2,8 +2,9 @@ package errors
 
 var (
 	ErrNamespaceInvalid                   = New("invalid namespace", WithCode(ErrCodeBadRequest))
-	ErrNamespaceDomainEmpty               = New("domain cannot be empty", WithWrap(ErrNamespaceInvalid))
-	ErrNamespaceNameEmpty                 = New("namespace name cannot be empty", WithWrap(ErrNamespaceInvalid))
+	ErrNamespaceDomainRequired            = New("domain required", WithWrap(ErrNamespaceInvalid))
+	ErrNamespaceUUIDRequired              = New("uuid required", WithWrap(ErrNamespaceInvalid))
+	ErrNamespaceNameRequired              = New("name required", WithWrap(ErrNamespaceInvalid))
 	ErrNamespaceNameInvalid               = New("invalid namespace name", WithWrap(ErrNamespaceInvalid))
 	ErrNamespaceNameInvalidCharacters     = New("invalid characters", WithWrap(ErrNamespaceNameInvalid))
 	ErrNamespaceNameRepeatedPeriods       = New("repeated periods", WithWrap(ErrNamespaceNameInvalid))

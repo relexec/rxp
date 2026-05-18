@@ -9,6 +9,7 @@ import (
 
 var (
 	FieldPathDomain = fieldpath.FromString("domain")
+	FieldPathUUID   = fieldpath.FromString("uuid")
 	FieldPathName   = fieldpath.FromString("name")
 )
 
@@ -16,6 +17,8 @@ var (
 type Namespace struct {
 	// domain contains the Namespace's Domain.
 	domain types.Domain
+	// uuid stores the Namespace's globally-unique identifier.
+	uuid string
 	// name contains the Namespace name.
 	//
 	// A valid Namespace Name is a DNS-formatted (RFC 1035-compliant) name less than
@@ -28,10 +31,13 @@ type Namespace struct {
 // Validate returns an error if the Domain is invalid.
 func (n Namespace) Validate() error {
 	if n.domain == nil {
-		return errors.ErrNamespaceDomainEmpty
+		return errors.ErrNamespaceDomainRequired
 	}
 	if err := n.domain.Validate(); err != nil {
 		return err
+	}
+	if n.uuid == "" {
+		return errors.ErrNamespaceUUIDRequired
 	}
 	return n.name.Validate()
 }
@@ -44,6 +50,16 @@ func (n Namespace) Domain() types.Domain {
 // SetDomain sets the Domain of Namespace.
 func (n *Namespace) SetDomain(domain types.Domain) {
 	n.domain = domain
+}
+
+// UUID returns the globally-unique identifier of the Namespace.
+func (n Namespace) UUID() string {
+	return n.uuid
+}
+
+// SetUUID sets the globally-unique identifier of the Namespace.
+func (n *Namespace) SetUUID(uuid string) {
+	n.uuid = uuid
 }
 
 // Name returns the Name of the Namespace.
@@ -114,6 +130,19 @@ func (n Namespace) Diff(subject any) (*cmp.Delta, error) {
 		)
 	}
 
+	thisUUID := n.uuid
+	otherUUID := other.UUID()
+	if thisUUID != otherUUID {
+		delta.Push(
+			cmp.NewDifference(
+				FieldPathUUID,
+				cmp.DifferenceTypeModify,
+				string(thisUUID),
+				string(otherUUID),
+			),
+		)
+	}
+
 	thisName := n.name
 	otherName := other.Name()
 	if thisName != otherName {
@@ -144,6 +173,14 @@ func (n Namespace) diffNew() (*cmp.Delta, error) {
 			),
 		)
 	}
+	delta.Push(
+		cmp.NewDifference(
+			FieldPathUUID,
+			cmp.DifferenceTypeAdd,
+			n.uuid,
+			nil,
+		),
+	)
 	delta.Push(
 		cmp.NewDifference(
 			FieldPathName,

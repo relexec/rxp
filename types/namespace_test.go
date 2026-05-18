@@ -7,16 +7,16 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestNamespace(t *testing.T) {
+func TestNamespaceName(t *testing.T) {
 	cases := []struct {
 		name             string
 		subject          types.NamespaceName
 		expValidateError string
 	}{
 		{
-			"empty namespace",
+			"empty name",
 			"",
-			"namespace name cannot be empty",
+			"name required",
 		},
 		{
 			"spaces not allowed",

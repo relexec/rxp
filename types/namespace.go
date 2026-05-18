@@ -20,7 +20,7 @@ type NamespaceName string
 // Note that we do not use regexp parsing here for performance reasons.
 func (n NamespaceName) Validate() error {
 	if len(n) == 0 {
-		return errors.ErrNamespaceNameEmpty
+		return errors.ErrNamespaceNameRequired
 	}
 	first := rune(n[0])
 	if !unicode.IsLetter(first) && !unicode.IsNumber(first) {
@@ -49,6 +49,8 @@ type Namespace interface {
 	Differ
 	// DOmain returns the Namespace's Domain.
 	Domain() Domain
+	// UUID returns the Namespace's globally-unique identifier.
+	UUID() string
 	// Name returns the name of the Namespace.
 	Name() NamespaceName
 }

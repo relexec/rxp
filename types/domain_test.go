@@ -15,9 +15,9 @@ func TestDomainName(t *testing.T) {
 		expValidateError string
 	}{
 		{
-			"empty domain is fine",
+			"empty domain name not allowed",
 			"",
-			"domain name cannot be empty",
+			"name required",
 		},
 		{
 			"spaces not allowed",

@@ -37,6 +37,16 @@ implementations.
   performance. Performance optimization should come only after safety is
   guaranteed.
 
+  This principle manifests in `rxp`'s backend implementation choice to only use
+  **structures with bounded resource consumption** and algorithms that have
+  predictable performance at increasing scale of requests. For example, we do not
+  use standard Go maps or `sync.Map` for caching important read-heavy data.
+  Instead, we use a cache library that provides **bounded and predictable**
+  memory consumption. This choice is deliberate: the design of `rxp` is centered
+  around stability, predictability and reliability. `rxp`'s performance at scale
+  is allowed to degrade but we avoid catastrophic failures such as out-of-memory
+  (OOM) crashes at all cost.
+
 * Design for small to large scale
 
   The library should be capable of handling small (less than 10GB) to large

@@ -3,7 +3,7 @@ package result
 import (
 	"github.com/relexec/rxp/list"
 	"github.com/relexec/rxp/list/option"
-	"github.com/relexec/rxp/types"
+	"github.com/relexec/rxp/object"
 )
 
 // Result wraps the slice of things returned from a successful call to
@@ -49,4 +49,4 @@ func (r Result[T]) More() bool {
 	return r.marker != ""
 }
 
-var _ list.Result[types.Object] = Result[types.Object]{}
+var _ list.Result[*object.Object] = Result[*object.Object]{}

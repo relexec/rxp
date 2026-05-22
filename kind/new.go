@@ -1,7 +1,8 @@
 package kind
 
 import (
-	"github.com/relexec/rxp/types"
+	"github.com/relexec/rxp/api"
+	"github.com/relexec/rxp/system"
 )
 
 // Option modifies a Kind returned from New.
@@ -17,22 +18,22 @@ func New(opts ...Option) *Kind {
 }
 
 // WithSystem sets the Kind's Systek.
-func WithSystem(system types.System) Option {
+func WithSystem(system *system.System) Option {
 	return func(k *Kind) {
 		k.system = system
 	}
 }
 
 // WithName sets the Kind's name.
-func WithName(name types.KindName) Option {
+func WithName(name api.KindName) Option {
 	return func(k *Kind) {
 		k.name = name
 	}
 }
 
-// WithNamescope sets the Kind's Namescope.
-func WithNamescope(namescope types.Namescope) Option {
+// WithScope sets the Kind's Scope.
+func WithScope(scope api.Scope) Option {
 	return func(k *Kind) {
-		k.namescope = namescope
+		k.scope = scope
 	}
 }

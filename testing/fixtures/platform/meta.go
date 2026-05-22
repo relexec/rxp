@@ -8,21 +8,21 @@ import (
 	"github.com/Masterminds/semver/v3"
 	"github.com/google/jsonschema-go/jsonschema"
 
+	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/kind"
 	"github.com/relexec/rxp/meta"
 	"github.com/relexec/rxp/meta/schema"
-	"github.com/relexec/rxp/types"
 )
 
 const (
-	KindName  = types.KindName("platform.testing.rxp")
-	Namescope = types.NamescopeSystem
+	KindName = api.KindName("platform.testing.rxp")
+	Scope    = api.ScopeSystem
 )
 
 var (
 	Kind = kind.New(
 		kind.WithName(KindName),
-		kind.WithNamescope(Namescope),
+		kind.WithScope(Scope),
 	)
 )
 
@@ -70,9 +70,9 @@ func Meta(version any) (*meta.Meta, bool) {
 	return m, ok
 }
 
-// FirstMeta returns the [types.Meta] representing the first known version of
+// FirstMeta returns the [*meta.Meta] representing the first known version of
 // the meta.
-func FirstMeta() types.Meta {
+func FirstMeta() *meta.Meta {
 	return Meta_V1_0_0
 }
 
@@ -82,10 +82,10 @@ func FirstVersion() *semver.Version {
 	return SemVer_V1_0_0
 }
 
-// FirstKindVersion returns the [types.KindVersion] representing the first
+// FirstKindVersion returns the [api.KindVersion] representing the first
 // known version of the Kind.
-func FirstKindVersion() types.KindVersion {
-	return types.NewKindVersion(KindName, *SemVer_V1_0_0)
+func FirstKindVersion() api.KindVersion {
+	return api.NewKindVersion(KindName, *SemVer_V1_0_0)
 }
 
 var (
@@ -108,9 +108,9 @@ func FirstVersionIn(major string) (*semver.Version, error) {
 	return v, nil
 }
 
-// LastMeta returns the [types.Meta] representing the last known version of the
+// LastMeta returns the [*meta.Meta] representing the last known version of the
 // meta.
-func LastMeta() types.Meta {
+func LastMeta() *meta.Meta {
 	return Meta_V1_0_1
 }
 
@@ -120,10 +120,10 @@ func LastVersion() *semver.Version {
 	return SemVer_V1_0_1
 }
 
-// LastKindVersion returns the [types.KindVersion] representing the last known
+// LastKindVersion returns the [api.KindVersion] representing the last known
 // version of the Kind.
-func LastKindVersion() types.KindVersion {
-	return types.NewKindVersion(KindName, *SemVer_V1_0_1)
+func LastKindVersion() api.KindVersion {
+	return api.NewKindVersion(KindName, *SemVer_V1_0_1)
 }
 
 var (

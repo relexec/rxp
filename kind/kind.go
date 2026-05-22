@@ -1,24 +1,25 @@
 package kind
 
 import (
+	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/cmp"
 	"github.com/relexec/rxp/cmp/fieldpath"
-	"github.com/relexec/rxp/types"
+	"github.com/relexec/rxp/system"
 )
 
 var (
-	FieldPathName      = fieldpath.FromString("name")
-	FieldPathNamescope = fieldpath.FromString("namescope")
+	FieldPathName  = fieldpath.FromString("name")
+	FieldPathScope = fieldpath.FromString("scope")
 )
 
 type Kind struct {
 	// system contains the System containing the Kind.
-	system types.System
+	system *system.System
 	// name is the name of the Kind.
-	name types.KindName
-	// namescope is the uniqueness constraint of the names of Objects having
-	// this Kind.
-	namescope types.Namescope
+	name api.KindName
+	// scope is the uniqueness constraint of the names of Objects having this
+	// Kind.
+	scope api.Scope
 }
 
 // Validate returns an error if the Kind is not valid.
@@ -27,39 +28,42 @@ func (k Kind) Validate() error {
 	if err != nil {
 		return err
 	}
-	return k.namescope.Validate()
+	if k.system != nil {
+		return k.system.Validate()
+	}
+	return nil
 }
 
 // System returns the System of the Kind.
-func (k Kind) System() types.System {
+func (k Kind) System() *system.System {
 	return k.system
 }
 
 // SetSystem sets the System of Kind.
-func (k *Kind) SetSystem(system types.System) {
+func (k *Kind) SetSystem(system *system.System) {
 	k.system = system
 }
 
 // Name returns the name of the Kind.
-func (k Kind) Name() types.KindName {
+func (k Kind) Name() api.KindName {
 	return k.name
 }
 
 // SetName sets the Name of the Kind.
-func (k *Kind) SetName(name types.KindName) {
+func (k *Kind) SetName(name api.KindName) {
 	k.name = name
 }
 
-// Namescope returns the name uniqueness constraint for Objects having this
-// KindVersion.
-func (k Kind) Namescope() types.Namescope {
-	return k.namescope
+// Scope returns the name uniqueness constraint for Objects having this
+// Kind.
+func (k Kind) Scope() api.Scope {
+	return k.scope
 }
 
-// SetNamescope sets the name uniqueness constraint for Objects having this
-// KindVersion.
-func (k *Kind) SetNamescope(namescope types.Namescope) {
-	k.namescope = namescope
+// SetScope sets the name uniqueness constraint for Objects having this
+// Kind.
+func (k *Kind) SetScope(scope api.Scope) {
+	k.scope = scope
 }
 
 // Diff returns a [cmp.Delta] representing the difference between itself and
@@ -68,7 +72,7 @@ func (k *Kind) SetNamescope(namescope types.Namescope) {
 // If the argument is the [cmp.ZeroGen] sentinel, the returned [cmp.Delta]
 // represents instructions to create the thing.
 func (k Kind) Diff(subject any) (*cmp.Delta, error) {
-	var other types.Kind
+	var other *Kind
 	switch subject := subject.(type) {
 	case cmp.ZeroGen:
 		return k.diffNew()
@@ -94,13 +98,13 @@ func (k Kind) Diff(subject any) (*cmp.Delta, error) {
 			),
 		)
 	}
-	if k.namescope != other.Namescope() {
+	if k.scope != other.Scope() {
 		d.Push(
 			cmp.NewDifference(
-				FieldPathNamescope,
+				FieldPathScope,
 				cmp.DifferenceTypeModify,
-				k.namescope,
-				other.Namescope(),
+				k.scope,
+				other.Scope(),
 			),
 		)
 	}
@@ -121,13 +125,11 @@ func (k Kind) diffNew() (*cmp.Delta, error) {
 	)
 	d.Push(
 		cmp.NewDifference(
-			FieldPathNamescope,
+			FieldPathScope,
 			cmp.DifferenceTypeAdd,
-			k.namescope,
+			k.scope,
 			nil,
 		),
 	)
 	return d, nil
 }
-
-var _ types.Kind = (*Kind)(nil)

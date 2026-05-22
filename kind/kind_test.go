@@ -3,18 +3,19 @@ package kind_test
 import (
 	"testing"
 
+	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/cmp"
 	"github.com/relexec/rxp/cmp/fieldpath"
-	"github.com/relexec/rxp/testing/fixtures/author"
-	"github.com/relexec/rxp/testing/fixtures/book"
-	"github.com/relexec/rxp/types"
+	"github.com/relexec/rxp/kind"
+	"github.com/relexec/rxp/testing/fixtures/application"
+	"github.com/relexec/rxp/testing/fixtures/platform"
 	"github.com/stretchr/testify/require"
 )
 
 func TestKind_Diff(t *testing.T) {
 	cases := []struct {
 		name         string
-		a            types.Kind
+		a            *kind.Kind
 		b            any
 		expError     string
 		expDifferent bool
@@ -22,7 +23,7 @@ func TestKind_Diff(t *testing.T) {
 	}{
 		{
 			"cannot compare different types",
-			book.Kind,
+			platform.Kind,
 			"",
 			"incompatible type comparison",
 			false,
@@ -30,15 +31,15 @@ func TestKind_Diff(t *testing.T) {
 		},
 		{
 			"same kind no diff",
-			book.Kind,
-			book.Kind,
+			platform.Kind,
+			platform.Kind,
 			"",
 			false,
 			nil,
 		},
 		{
 			"new kind",
-			book.Kind,
+			platform.Kind,
 			cmp.Zero,
 			"",
 			true,
@@ -46,29 +47,35 @@ func TestKind_Diff(t *testing.T) {
 				cmp.NewDifference(
 					fieldpath.FromString("name"),
 					cmp.DifferenceTypeAdd,
-					string(book.KindName),
+					string(platform.KindName),
 					nil,
 				),
 				cmp.NewDifference(
-					fieldpath.FromString("namescope"),
+					fieldpath.FromString("scope"),
 					cmp.DifferenceTypeAdd,
-					types.NamescopeNamespace,
+					api.ScopeSystem,
 					nil,
 				),
 			},
 		},
 		{
-			"different kind name",
-			book.Kind,
-			author.Kind,
+			"different kind name and scope",
+			platform.Kind,
+			application.Kind,
 			"",
 			true,
 			[]cmp.Difference{
 				cmp.NewDifference(
 					fieldpath.FromString("name"),
 					cmp.DifferenceTypeModify,
-					string(book.KindName),
-					string(author.KindName),
+					string(platform.KindName),
+					string(application.KindName),
+				),
+				cmp.NewDifference(
+					fieldpath.FromString("scope"),
+					cmp.DifferenceTypeModify,
+					api.ScopeSystem,
+					api.ScopeDomain,
 				),
 			},
 		},

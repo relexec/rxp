@@ -1,7 +1,10 @@
 package object
 
 import (
-	"github.com/relexec/rxp/types"
+	"github.com/relexec/rxp/api"
+	"github.com/relexec/rxp/domain"
+	"github.com/relexec/rxp/namespace"
+	"github.com/relexec/rxp/system"
 )
 
 // Option modifies an Object returned from New.
@@ -17,14 +20,14 @@ func New(opts ...Option) *Object {
 }
 
 // WithSystem sets the Object's System.
-func WithSystem(system types.System) Option {
+func WithSystem(system *system.System) Option {
 	return func(o *Object) {
 		o.system = system
 	}
 }
 
 // WithKindVersion sets the Object's KindVersion.
-func WithKindVersion(kindVersion types.KindVersion) Option {
+func WithKindVersion(kindVersion api.KindVersion) Option {
 	return func(o *Object) {
 		o.kindVersion = kindVersion
 	}
@@ -38,14 +41,14 @@ func WithUUID(uuid string) Option {
 }
 
 // WithDomain sets the Object's Domain.
-func WithDomain(domain types.Domain) Option {
+func WithDomain(domain *domain.Domain) Option {
 	return func(o *Object) {
 		o.domain = domain
 	}
 }
 
 // WithNamespace sets the Object's Namespace.
-func WithNamespace(namespace types.Namespace) Option {
+func WithNamespace(namespace *namespace.Namespace) Option {
 	return func(o *Object) {
 		o.namespace = namespace
 	}
@@ -59,14 +62,14 @@ func WithName(name string) Option {
 }
 
 // WithLabels sets the Object's Labels.
-func WithLabels(labels types.Labels) Option {
+func WithLabels(labels api.Labels) Option {
 	return func(o *Object) {
 		o.labels = labels
 	}
 }
 
 // WithGeneration sets the Object's Generation.
-func WithGeneration(generation types.Generation) Option {
+func WithGeneration(generation api.Generation) Option {
 	return func(o *Object) {
 		o.generation = generation
 	}

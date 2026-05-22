@@ -1,6 +1,7 @@
 package expression
 
 import (
+	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/errors"
 	"github.com/relexec/rxp/predicate"
 	"github.com/relexec/rxp/types"
@@ -17,7 +18,7 @@ func (p KindNamePredicate) Validate() error {
 	}
 	vals := p.Predicate.Values()
 	for _, v := range vals {
-		k, ok := v.(types.KindName)
+		k, ok := v.(api.KindName)
 		if !ok {
 			return errors.PredicateUnsupportedValueType(v)
 		}
@@ -31,7 +32,7 @@ func (p KindNamePredicate) Validate() error {
 
 // KindNameEqual returns an Expression that will match Objects of a particular
 // KindName.
-func KindNameEqual(k types.KindName) types.Expression {
+func KindNameEqual(k api.KindName) types.Expression {
 	return UnaryExpression{
 		KindNamePredicate{
 			predicate.New(
@@ -44,7 +45,7 @@ func KindNameEqual(k types.KindName) types.Expression {
 
 // KindNameNotEqual returns an Expression that will match Objects not of a
 // particular KindName.
-func KindNameNotEqual(k types.KindName) types.Expression {
+func KindNameNotEqual(k api.KindName) types.Expression {
 	return UnaryExpression{
 		KindNamePredicate{
 			predicate.New(
@@ -58,7 +59,7 @@ func KindNameNotEqual(k types.KindName) types.Expression {
 
 // KindNameIn returns an Expression that will match Objects that are any of a
 // set of specified KindNames.
-func KindNameIn(kinds ...types.KindName) types.Expression {
+func KindNameIn(kinds ...api.KindName) types.Expression {
 	values := make([]any, 0, len(kinds))
 	for _, k := range kinds {
 		values = append(values, k)
@@ -75,7 +76,7 @@ func KindNameIn(kinds ...types.KindName) types.Expression {
 
 // KindNameNotIn returns an Expression that will match Objects that are not any
 // of a set of specified KindNames.
-func KindNameNotIn(kinds ...types.KindName) types.Expression {
+func KindNameNotIn(kinds ...api.KindName) types.Expression {
 	values := make([]any, 0, len(kinds))
 	for _, k := range kinds {
 		values = append(values, k)

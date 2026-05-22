@@ -4,7 +4,6 @@ import (
 	"github.com/relexec/rxp/cmp"
 	"github.com/relexec/rxp/cmp/fieldpath"
 	"github.com/relexec/rxp/errors"
-	"github.com/relexec/rxp/types"
 )
 
 var (
@@ -54,7 +53,7 @@ func (s *System) SetName(name string) {
 // If the argument is the [cmp.ZeroGen] sentinel, the returned [cmp.Delta]
 // represents instructions to create the thing.
 func (s System) Diff(subject any) (*cmp.Delta, error) {
-	var other types.System
+	var other *System
 	switch subject := subject.(type) {
 	case cmp.ZeroGen:
 		return s.diffNew()
@@ -119,5 +118,3 @@ func (s System) diffNew() (*cmp.Delta, error) {
 	)
 	return delta, nil
 }
-
-var _ types.System = (*System)(nil)

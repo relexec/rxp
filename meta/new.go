@@ -4,7 +4,10 @@ import (
 	"encoding/json"
 
 	"github.com/Masterminds/semver/v3"
-	"github.com/relexec/rxp/types"
+
+	"github.com/relexec/rxp/kind"
+	"github.com/relexec/rxp/meta/schema"
+	"github.com/relexec/rxp/system"
 )
 
 // Option modifies a Meta returned from New.
@@ -20,14 +23,14 @@ func New(opts ...Option) *Meta {
 }
 
 // WithSystem sets the Meta's System.
-func WithSystem(system types.System) Option {
+func WithSystem(system *system.System) Option {
 	return func(m *Meta) {
 		m.system = system
 	}
 }
 
 // WithKind sets the Meta's Kind.
-func WithKind(k types.Kind) Option {
+func WithKind(k *kind.Kind) Option {
 	return func(m *Meta) {
 		m.kind = k
 	}
@@ -41,7 +44,7 @@ func WithVersion(ver semver.Version) Option {
 }
 
 // WithSchema sets the Meta's Schema.
-func WithSchema(schema types.Schema) Option {
+func WithSchema(schema *schema.Schema) Option {
 	return func(m *Meta) {
 		m.schema = schema
 	}

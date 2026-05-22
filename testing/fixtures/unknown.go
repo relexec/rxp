@@ -2,25 +2,25 @@ package fixtures
 
 import (
 	"github.com/google/uuid"
+	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/domain"
 	"github.com/relexec/rxp/kind"
 	"github.com/relexec/rxp/meta"
 	"github.com/relexec/rxp/namespace"
 	"github.com/relexec/rxp/object"
 	"github.com/relexec/rxp/system"
-	"github.com/relexec/rxp/types"
 )
 
 const (
 	UnknownSystemUUID    = "8ccf20f6-df19-45e1-9086-8eff1283fef5"
 	UnknownSystemName    = "unknown system"
-	UnknownDomainName    = types.DomainName("unknown.domain.testing.dxp")
-	UnknownNamespaceName = types.NamespaceName("unknown.ns")
-	UnknownKindName      = types.KindName("unknown.testing.rxp")
+	UnknownDomainName    = api.DomainName("unknown.domain.testing.dxp")
+	UnknownNamespaceName = api.NamespaceName("unknown.ns")
+	UnknownKindName      = api.KindName("unknown.testing.rxp")
 )
 
 var (
-	UnknownKindVersion = types.NewKindVersion(UnknownKindName, *SemVer_V1_0_0)
+	UnknownKindVersion = api.NewKindVersion(UnknownKindName, *SemVer_V1_0_0)
 )
 
 var (

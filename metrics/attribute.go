@@ -1,9 +1,8 @@
 package metrics
 
 import (
+	"github.com/relexec/rxp/api"
 	"go.opentelemetry.io/otel/attribute"
-
-	"github.com/relexec/rxp/types"
 )
 
 const (
@@ -24,25 +23,14 @@ func AttributeErrCode(err error) attribute.KeyValue {
 	return attribute.Int(AttributeNameErrCode, code)
 }
 
-type TargetType string
-
 const (
-	TargetTypeSystem    TargetType = "system"
-	TargetTypeKind      TargetType = "kind"
-	TargetTypeDomain    TargetType = "domain"
-	TargetTypeNamespace TargetType = "namespace"
-	TargetTypeMeta      TargetType = "meta"
-	TargetTypeObject    TargetType = "object"
+	AttributeNameType = "type"
 )
 
-const (
-	AttributeNameTargetType = "target.type"
-)
-
-// AttributeTargetType returns the target type attribute KeyValue with the
+// AttributeType returns the target type attribute KeyValue with the
 // value of the supplied target type.
-func AttributeTargetType(tt TargetType) attribute.KeyValue {
-	return attribute.String(AttributeNameTargetType, string(tt))
+func AttributeType(tt api.Type) attribute.KeyValue {
+	return attribute.String(AttributeNameType, string(tt))
 }
 
 const (
@@ -51,6 +39,6 @@ const (
 
 // AttributeKindVersion returns the kindversion attribute KeyValue with the
 // value of the supplied KindVersion.
-func AttributeKindVersion(kv types.KindVersion) attribute.KeyValue {
+func AttributeKindVersion(kv api.KindVersion) attribute.KeyValue {
 	return attribute.String(AttributeNameKindVersion, string(kv))
 }

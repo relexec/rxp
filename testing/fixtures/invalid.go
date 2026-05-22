@@ -1,19 +1,19 @@
 package fixtures
 
 import (
+	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/domain"
 	"github.com/relexec/rxp/kind"
 	"github.com/relexec/rxp/meta"
 	"github.com/relexec/rxp/namespace"
 	"github.com/relexec/rxp/object"
-	"github.com/relexec/rxp/types"
 )
 
 var (
-	InvalidDomainName    = types.DomainName("invalid domain")
-	InvalidNamespaceName = types.NamespaceName("invalid ns")
-	InvalidKindName      = types.KindName("invalid kind")
-	InvalidKindVersion   = types.KindVersion("invalid kind version")
+	InvalidDomainName    = api.DomainName("invalid domain")
+	InvalidNamespaceName = api.NamespaceName("invalid ns")
+	InvalidKindName      = api.KindName("invalid kind")
+	InvalidKindVersion   = api.KindVersion("invalid kind version")
 )
 
 var (

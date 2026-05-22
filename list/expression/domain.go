@@ -1,6 +1,7 @@
 package expression
 
 import (
+	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/errors"
 	"github.com/relexec/rxp/predicate"
 	"github.com/relexec/rxp/types"
@@ -17,7 +18,7 @@ func (p DomainNamePredicate) Validate() error {
 	}
 	vals := p.Predicate.Values()
 	for _, v := range vals {
-		d, ok := v.(types.DomainName)
+		d, ok := v.(api.DomainName)
 		if !ok {
 			return errors.PredicateUnsupportedValueType(v)
 		}
@@ -31,7 +32,7 @@ func (p DomainNamePredicate) Validate() error {
 
 // DomainNameEqual returns an Expression that will match Objects of a particular
 // DomainName.
-func DomainNameEqual(k types.DomainName) types.Expression {
+func DomainNameEqual(k api.DomainName) types.Expression {
 	return UnaryExpression{
 		DomainNamePredicate{
 			predicate.New(
@@ -44,7 +45,7 @@ func DomainNameEqual(k types.DomainName) types.Expression {
 
 // DomainNameNotEqual returns an Expression that will match Objects not of a
 // particular DomainName.
-func DomainNameNotEqual(k types.DomainName) types.Expression {
+func DomainNameNotEqual(k api.DomainName) types.Expression {
 	return UnaryExpression{
 		DomainNamePredicate{
 			predicate.New(
@@ -58,7 +59,7 @@ func DomainNameNotEqual(k types.DomainName) types.Expression {
 
 // DomainNameIn returns an Expression that will match Objects that are any of a
 // set of specified DomainNames.
-func DomainNameIn(domains ...types.DomainName) types.Expression {
+func DomainNameIn(domains ...api.DomainName) types.Expression {
 	values := make([]any, 0, len(domains))
 	for _, k := range domains {
 		values = append(values, k)
@@ -75,7 +76,7 @@ func DomainNameIn(domains ...types.DomainName) types.Expression {
 
 // DomainNameNotIn returns an Expression that will match Objects that are not any
 // of a set of specified DomainNames.
-func DomainNameNotIn(domains ...types.DomainName) types.Expression {
+func DomainNameNotIn(domains ...api.DomainName) types.Expression {
 	values := make([]any, 0, len(domains))
 	for _, k := range domains {
 		values = append(values, k)

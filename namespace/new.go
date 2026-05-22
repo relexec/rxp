@@ -1,7 +1,8 @@
 package namespace
 
 import (
-	"github.com/relexec/rxp/types"
+	"github.com/relexec/rxp/api"
+	"github.com/relexec/rxp/domain"
 )
 
 // Option modifies a Namespace returned from New.
@@ -17,7 +18,7 @@ func New(opts ...Option) *Namespace {
 }
 
 // WithDomain sets the Namespace's Domain.
-func WithDomain(domain types.Domain) Option {
+func WithDomain(domain *domain.Domain) Option {
 	return func(n *Namespace) {
 		n.domain = domain
 	}
@@ -31,7 +32,7 @@ func WithUUID(uuid string) Option {
 }
 
 // WithName sets the Namespace's Name.
-func WithName(name types.NamespaceName) Option {
+func WithName(name api.NamespaceName) Option {
 	return func(n *Namespace) {
 		n.name = name
 	}

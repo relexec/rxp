@@ -9,10 +9,12 @@ import (
 var (
 	FieldPathDescription = fieldpath.FromString("description")
 	FieldPathType        = fieldpath.FromString("type")
+	FieldPathOwner       = fieldpath.FromString("owner")
 )
 
 type Spec_V1_0_0 struct {
 	Description string `json:"description"`
+	Type        string `json:"type"`
 }
 
 // Diff returns a [cmp.Delta] representing the difference between itself and
@@ -45,6 +47,16 @@ func (s Spec_V1_0_0) Diff(subject any) (*cmp.Delta, error) {
 			),
 		)
 	}
+	if s.Type != other.Type {
+		d.Push(
+			cmp.NewDifference(
+				FieldPathType,
+				cmp.DifferenceTypeModify,
+				s.Type,
+				other.Type,
+			),
+		)
+	}
 	return d, nil
 }
 
@@ -60,6 +72,14 @@ func (s Spec_V1_0_0) diffNew() (*cmp.Delta, error) {
 			s.Description,
 		),
 	)
+	d.Push(
+		cmp.NewDifference(
+			FieldPathType,
+			cmp.DifferenceTypeAdd,
+			nil,
+			s.Type,
+		),
+	)
 	return d, nil
 }
 
@@ -68,6 +88,7 @@ var _ types.Spec = (*Spec_V1_0_0)(nil)
 type Spec_V1_0_1 struct {
 	Description string `json:"description"`
 	Type        string `json:"type"`
+	Owner       string `json:"owner"`
 }
 
 // Diff returns a [cmp.Delta] representing the difference between itself and
@@ -110,6 +131,16 @@ func (s Spec_V1_0_1) Diff(subject any) (*cmp.Delta, error) {
 			),
 		)
 	}
+	if s.Owner != other.Owner {
+		d.Push(
+			cmp.NewDifference(
+				FieldPathOwner,
+				cmp.DifferenceTypeModify,
+				s.Owner,
+				other.Owner,
+			),
+		)
+	}
 	return d, nil
 }
 
@@ -131,6 +162,14 @@ func (s Spec_V1_0_1) diffNew() (*cmp.Delta, error) {
 			cmp.DifferenceTypeAdd,
 			nil,
 			s.Type,
+		),
+	)
+	d.Push(
+		cmp.NewDifference(
+			FieldPathOwner,
+			cmp.DifferenceTypeAdd,
+			nil,
+			s.Owner,
 		),
 	)
 	return d, nil

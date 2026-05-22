@@ -1,10 +1,11 @@
 package domain
 
 import (
+	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/cmp"
 	"github.com/relexec/rxp/cmp/fieldpath"
 	"github.com/relexec/rxp/errors"
-	"github.com/relexec/rxp/types"
+	"github.com/relexec/rxp/system"
 )
 
 var (
@@ -16,7 +17,7 @@ var (
 // Domain describes a top-level division or partition of things managed by rxp.
 type Domain struct {
 	// system contains the System containing the Domain.
-	system types.System
+	system *system.System
 	// uuid stores the Domain's globally-unique identifier.
 	uuid string
 	// name contains the Domain name.
@@ -26,7 +27,7 @@ type Domain struct {
 	//
 	// A Domain's Name must be unique within the scope of the `rxp` system
 	// installation.
-	name types.DomainName
+	name api.DomainName
 }
 
 // Validate returns an error if the Domain is invalid.
@@ -38,12 +39,12 @@ func (d Domain) Validate() error {
 }
 
 // System returns the System of the Domain.
-func (d Domain) System() types.System {
+func (d Domain) System() *system.System {
 	return d.system
 }
 
 // SetSystem sets the System of Domain.
-func (d *Domain) SetSystem(system types.System) {
+func (d *Domain) SetSystem(system *system.System) {
 	d.system = system
 }
 
@@ -58,12 +59,12 @@ func (d *Domain) SetUUID(uuid string) {
 }
 
 // Name returns the Name of the Domain.
-func (d Domain) Name() types.DomainName {
+func (d Domain) Name() api.DomainName {
 	return d.name
 }
 
 // SetName sets the Name of Domain.
-func (d *Domain) SetName(name types.DomainName) {
+func (d *Domain) SetName(name api.DomainName) {
 	d.name = name
 }
 
@@ -73,7 +74,7 @@ func (d *Domain) SetName(name types.DomainName) {
 // If the argument is the [cmp.ZeroGen] sentinel, the returned [cmp.Delta]
 // represents instructions to create the thing.
 func (d Domain) Diff(subject any) (*cmp.Delta, error) {
-	var other types.Domain
+	var other *Domain
 	switch subject := subject.(type) {
 	case cmp.ZeroGen:
 		return d.diffNew()
@@ -186,5 +187,3 @@ func (d Domain) diffNew() (*cmp.Delta, error) {
 	)
 	return delta, nil
 }
-
-var _ types.Domain = (*Domain)(nil)

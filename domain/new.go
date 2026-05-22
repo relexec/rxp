@@ -1,7 +1,8 @@
 package domain
 
 import (
-	"github.com/relexec/rxp/types"
+	"github.com/relexec/rxp/api"
+	"github.com/relexec/rxp/system"
 )
 
 // Option modifies a Domain returned from New.
@@ -17,7 +18,7 @@ func New(opts ...Option) *Domain {
 }
 
 // WithSystem sets the Domain's System.
-func WithSystem(system types.System) Option {
+func WithSystem(system *system.System) Option {
 	return func(d *Domain) {
 		d.system = system
 	}
@@ -31,7 +32,7 @@ func WithUUID(uuid string) Option {
 }
 
 // WithName sets the Domain's Name.
-func WithName(name types.DomainName) Option {
+func WithName(name api.DomainName) Option {
 	return func(d *Domain) {
 		d.name = name
 	}

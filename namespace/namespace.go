@@ -1,10 +1,11 @@
 package namespace
 
 import (
+	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/cmp"
 	"github.com/relexec/rxp/cmp/fieldpath"
+	"github.com/relexec/rxp/domain"
 	"github.com/relexec/rxp/errors"
-	"github.com/relexec/rxp/types"
 )
 
 var (
@@ -16,7 +17,7 @@ var (
 // Namespace describes a logical division within a Domain.
 type Namespace struct {
 	// domain contains the Namespace's Domain.
-	domain types.Domain
+	domain *domain.Domain
 	// uuid stores the Namespace's globally-unique identifier.
 	uuid string
 	// name contains the Namespace name.
@@ -25,7 +26,7 @@ type Namespace struct {
 	// 254 characters.
 	//
 	// A Namespace's Name must be unique within the scope of its Domain.
-	name types.NamespaceName
+	name api.NamespaceName
 }
 
 // Validate returns an error if the Domain is invalid.
@@ -43,12 +44,12 @@ func (n Namespace) Validate() error {
 }
 
 // Domain returns the Domain of the Namespace.
-func (n Namespace) Domain() types.Domain {
+func (n Namespace) Domain() *domain.Domain {
 	return n.domain
 }
 
 // SetDomain sets the Domain of Namespace.
-func (n *Namespace) SetDomain(domain types.Domain) {
+func (n *Namespace) SetDomain(domain *domain.Domain) {
 	n.domain = domain
 }
 
@@ -63,12 +64,12 @@ func (n *Namespace) SetUUID(uuid string) {
 }
 
 // Name returns the Name of the Namespace.
-func (n Namespace) Name() types.NamespaceName {
+func (n Namespace) Name() api.NamespaceName {
 	return n.name
 }
 
 // SetName sets the Name of Namespace.
-func (n *Namespace) SetName(name types.NamespaceName) {
+func (n *Namespace) SetName(name api.NamespaceName) {
 	n.name = name
 }
 
@@ -78,7 +79,7 @@ func (n *Namespace) SetName(name types.NamespaceName) {
 // If the argument is the [cmp.ZeroGen] sentinel, the returned [cmp.Delta]
 // represents instructions to create the thing.
 func (n Namespace) Diff(subject any) (*cmp.Delta, error) {
-	var other types.Namespace
+	var other *Namespace
 	switch subject := subject.(type) {
 	case cmp.ZeroGen:
 		return n.diffNew()
@@ -191,5 +192,3 @@ func (n Namespace) diffNew() (*cmp.Delta, error) {
 	)
 	return delta, nil
 }
-
-var _ types.Namespace = (*Namespace)(nil)

@@ -5,10 +5,13 @@ import (
 
 	"github.com/Masterminds/semver/v3"
 
+	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/cmp"
 	"github.com/relexec/rxp/cmp/fieldpath"
 	"github.com/relexec/rxp/errors"
-	"github.com/relexec/rxp/types"
+	"github.com/relexec/rxp/kind"
+	"github.com/relexec/rxp/meta/schema"
+	"github.com/relexec/rxp/system"
 )
 
 var (
@@ -19,16 +22,16 @@ var (
 
 type Meta struct {
 	// system contains the System containing the Meta.
-	system types.System
-	// kind is the [types.Kind] that identifies the type of Objects represented
+	system *system.System
+	// kind is the [kind.Kind] that identifies the type of Objects represented
 	// by this Meta.
-	kind types.Kind
+	kind *kind.Kind
 	// version is the [semver.Version] that identifies the specific version of
 	// the Kind of Objects represented by this Meta.
 	version semver.Version
 	// schema is the [jsonschema.Schema] that describes the Spec field
 	// composition of Object with this Kind+Version.
-	schema types.Schema
+	schema *schema.Schema
 	// schemaJSON stores a cache of the marshaled JSON for the
 	// [jsonschema.Schema] that describes the Spec field composition of the
 	// Objects with this Kind+Version.
@@ -52,27 +55,27 @@ func (m Meta) Validate() error {
 }
 
 // System returns the System of the Meta.
-func (m Meta) System() types.System {
+func (m Meta) System() *system.System {
 	return m.system
 }
 
 // SetSystem sets the System of Meta.
-func (m *Meta) SetSystem(system types.System) {
+func (m *Meta) SetSystem(system *system.System) {
 	m.system = system
 }
 
 // KindVersion returns the KindVersion of the Meta.
-func (m Meta) KindVersion() types.KindVersion {
-	return types.NewKindVersion(m.kind.Name(), m.version)
+func (m Meta) KindVersion() api.KindVersion {
+	return api.NewKindVersion(m.kind.Name(), m.version)
 }
 
 // Kind returns the Kind of the Meta.
-func (m Meta) Kind() types.Kind {
+func (m Meta) Kind() *kind.Kind {
 	return m.kind
 }
 
 // SetKind sets the Kind of the Meta.
-func (m *Meta) SetKind(k types.Kind) {
+func (m *Meta) SetKind(k *kind.Kind) {
 	m.kind = k
 }
 
@@ -88,13 +91,13 @@ func (m *Meta) SetVersion(ver semver.Version) {
 
 // Schema returns a [jsonschema.Schema] that describes the desired state fields
 // of Objects with this KindVersion.
-func (m Meta) Schema() types.Schema {
+func (m Meta) Schema() *schema.Schema {
 	return m.schema
 }
 
 // SetSchema sets the [jsonschema.Schema] that describes the desired state
 // fields of Objects with this KindVersion.
-func (m *Meta) SetSchema(schema types.Schema) {
+func (m *Meta) SetSchema(schema *schema.Schema) {
 	m.schema = schema
 }
 
@@ -124,7 +127,7 @@ func (m *Meta) SchemaJSON() (string, error) {
 // If the argument is the [cmp.ZeroGen] sentinel, the returned [cmp.Delta]
 // represents instructions to create the thing.
 func (m Meta) Diff(subject any) (*cmp.Delta, error) {
-	var other types.Meta
+	var other *Meta
 	switch subject := subject.(type) {
 	case cmp.ZeroGen:
 		return m.diffNew()
@@ -249,5 +252,3 @@ func (m Meta) diffNew() (*cmp.Delta, error) {
 	)
 	return d, nil
 }
-
-var _ types.Meta = (*Meta)(nil)

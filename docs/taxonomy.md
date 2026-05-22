@@ -1,266 +1,54 @@
 # Taxonomy
 
-Data managed by `rxp` is uniformly organized in a common taxonomy. This
-document describes how this data is defined, categorized, identified and named.
+Data managed by `rxp` is organized in a uniform taxonomy.
 
-Briefly, a `Kind` identifies a *type* of a thing that is managed by `rxp`. A
-`Kind` has a [`Name`][kindname] and a [`Namescope`](#namescope).
+This document describes how this data is categorized and identified.
 
-`Kinds` always have a [`System`](#system) identifier. System identifiers are
-globally-unique.
+## Categorization
 
-[kindname]: https://github.com/relexec/rxp/blob/b5c989b0a587961dfaecf441c84dff58452fcbff/types/kind.go#L12-L60
+Categorization refers to the ways in which things are grouped.
 
-```mermaid
-erDiagram
-    System ||--|{ Kind : "knows about"
-    System {
-        string **uuid**
-        string name
-    }
-    Kind {
-        string **system**
-        string **name**
-        int **namescope**
-    }
-```
+In `rxp`, data is categorized by *Type* and *Scope*.
 
-A `KindVersion` is a **string** that uniquely identifies a *type and version*
-of a thing that is managed by `rxp`.
+Type refers to the class of thing. Examples of types include System,
+Domain, Namespace, Kind, Meta and Object.
 
-A `Meta` contains the definition for a `KindVersion`. This definition includes
-a `Schema` that defines the fields that comprise desired state for things of
-that `KindVersion`.
+Scope refers to the *extent to which Names of instances of a Type of thing are
+unique*. There are four scopes, shown here in decreasing order of breadth.
 
 ```mermaid
-erDiagram
-    System ||--|{ Kind : "knows about"
-    Kind ||--|{ Meta : "has a"
-    System {
-        string **uuid**
-        string name
-    }
-    Kind {
-        string **system**
-        string **name**
-        int **namescope**
-    }
-    Meta{
-        string **kind**
-        string **version**
-        string **schema**
-    }
+flowchart TD
+    subgraph Global
+        subgraph System
+            subgraph Domain
+                subgraph Namespace
 ```
 
-An `Object` is an *instance* of a `KindVersion`.
+Instances of a Type that is *globally*-scoped can *only* be identified by UUID
+and never by Name.
 
-`Objects` always have a `System` identifier.
+Instances of a Type that is *system*-scoped can be identified by Name and
+System.
 
-`Objects` always have a UUID globally-unique identifier.
+Instances of a Type that is *domain-scoped* can be identified by Name and
+Domain.
 
-`Objects` always have a Name. An `Object`'s Name is unique within the
-`Namescope` associated with the `Kind`.
+Instances of a Type that is *namespaced*-scoped can be identified by Name and
+Namespace.
 
-If that `Namescope` is `NamescopeNamespace` or `NamescopeDomain`, the `Object`
-is guaranteed to have a [`Domain`](#domain). If that `Namescope` is
-`NamescopeNamespace`, the `Object` is guaranteed to have a
-[`Namespace`](#namespace).
+## Identification
 
-`Objects` may have zero or more `Labels` associated with them. `Labels` are
-structures with a `Key` and optional `Value` that can be used to categorize
-`Objects` and filter them in list operations.
+Identification refers to the way in which a *single instance of a thing is
+uniquely selected from a set of things of the same type*.
 
-```mermaid
-erDiagram
-    System ||--|{ Meta : "knows about"
-    System ||--|{ Domain : "knows about"
-    System ||--|{ Object : "knows about"
-    Kind ||--|{ Meta : "has a"
-    Meta ||--|{ Object : "instance of"
-    Domain ||--|{ Namespace : "may have"
-    Domain ||--|{ Object : "may have"
-    Namespace ||--|{ Object : "may have"
-    System {
-        string **uuid**
-        string name
-    }
-    Kind {
-        string **name**
-        int **namescope**
-    }
-    Meta{
-        string **kind**
-        string **version**
-        string **schema**
-    }
-    Domain{
-        string **system**
-        string **uuid**
-        string **name**
-    }
-    Namespace{
-        string **domain**
-        string **uuid**
-        string **name**
-    }
-    Object{
-        string **system**
-        string **meta**
-        string **uuid**
-        string **name**
-        string domain
-        string namespace
-        array labels
-    }
-```
+In `rxp`, you can select a single unique thing **by UUID** or **by Name**.
 
-## `System`
+When selecting something by UUID, you supply a UUID value which is guaranteed
+to be globally unique.
 
-`System` represents the boundaries of an `rxp` system installation.
+When selecting something by Name, you supply a human-readable string name along
+with a System, Domain or Namespace, depending on the thing's Scope.
 
-`System` has the following methods:
-
-* `UUID()`: returns the globally-unique identifier.
-* `Name()`: returns the optional human-readable name.
-
-## `Domain`
-
-`Domain` represents a top-level division within a `System` managed by `rxp`.
-
-`Domains` always have a UUID globally-unique identifier.
-
-`Domains` always have a `Name` which is a specialized string type `DomainName`.
-
-A valid `DomainName` is a DNS-formatted (RFC 1035-compliant) name less than 254
-characters.
-
-A `Domain`'s `Name` must be unique within the scope of the `Domain`'s `System`.
-
-## `Namespace`
-
-`Namespace` describes a logical division within a `Domain`.
-
-A `Namespace` is typically used to segregate data by tenancy boundaries.
-
-`Namespaces` always have a UUID globally-unique identifier.
-
-`Namespaces` always have a `Name` which is a specialized string type
-`NamespaceName`.
-
-A valid `NamespaceName` is a DNS-formatted (RFC 1035-compliant) name.
-
-Note that unlike RFC 1035, there is no 253 character size limit on
-`NamespaceName` string length.
-
-A `Namespace`'s `Name` must be unique within its containing `Domain`.
-
-## `Kind`
-
-[`Kind`][kind] is a specialized string containing the *type* of an `Object`.
-
-A valid `Kind` is a DNS-formatted (RFC 1035-compliant) name of the type of
-`Object`, e.g.  `flow.temporal.io`.
-
-Conventionally, a `Kind` is specified as a singular, not plural, noun. So,
-`flow`, not `flows`.
-
-Furthermore, a `Kind` is conventionally all lower-cased, with dots separating
-coarser-grained categories/groups. So, `flow.temporal.io`, not
-`TemporalFlow`.
-
-You can use only alphanumeric characters and hyphens in the `Kind` name parts,
-separated by periods. Furthermore, the first character of the `Kind` must be a
-letter or number, not a hyphen or period.
-
-> Note that unlike RFC 1035, there is no 253 character size limit on the
-> `Kind` string length.
-
-A `Kind` must be unique within the scope of the `rxp` system installation,
-however for any `Kind` that is intended to be used across multiple `rxp` system
-installations, the `Kind` should be globally-unique.
-
-[kind]: https://github.com/relexec/rxp/blob/main/types/kind.go
-
-## `KindVersion`
-
-[`KindVersion`][kindversion] is a specialized string that contains the `Kind`
-and optionally a SemVer version string that uniquely identifies the exact type
-of an `Object`.
-
-A `KindVersion` string has the format `<kind>[@<version>]`, where `<kind>` is a
-valid `Kind` and the optional `<version>` component must be a valid SemVer
-version string.
-
-> Note that a valid SemVer version string does *not* contain a `v` prefix.
-
-[kindversion]: https://github.com/relexec/rxp/blob/main/types/kindversion.go
-
-## `Namescope`
-
-`Namescope` refers to the uniqueness constraint applied to the name of some
-thing managed by `rxp`.
-
-There are three `Namescope` values, listed here in order of specificity, from
-the narrowest to broadest specificity.
-
-* `NamescopeNamespace`: name is unique within the scope of the `Object`'s
-  `System`, `Kind`, `Domain`, and `Namespace`.
-* `NamescopeDomain`: name is unique within the scope of the `Object`'s
-  `System`, Kind` and `Domain`.
-* `NamescopeSystem`: name is unique within the scope of the `Object`'s `System`
-  and `Kind`.
-
-## `Object`
-
-[`Object`][object] describes an *instance* of something whose lifecycle is
-controlled by `rxp`.
-
-An `Object`'s lifecycle encompasses its creation, mutation and deletion.
-
-`Object` has the following methods:
-
-* `System()`: returns the `System` to which the the `Meta` is known.
-* `KindVersion()`: returns a unique identifier for the type and version of the
-  Object.
-* `UUID()`: returns the globally-unique identifier.
-* `Domain()`: returns the optional `Domain`.
-* `Namespace()`: returns the optional intra-`Domain` `Namespace`.
-* `Name()`: returns the human-readable name.
-* `Labels()`: returns the optional collection of `Label`s.
-* `Generation()`: returns the number of times the `Object`'s desired state has
-  changed.
-* `Spec()`: returns the desired state.
-
-When an `Object` is read, it will always have a non-zero `Generation` value.
-The `Generation` represents the number of times that the desired state of the
-`Object` (its `Spec` has been mutated).
-
-[object]: https://github.com/relexec/rxp/blob/main/types/object.go
-
-## `Meta`
-
-`Meta` contains metadata about a versioned type of `Object`.
-
-`Meta` has the following methods:
-
-* `System()`: returns the `System` to which the the `Meta` is known.
-* `KindVersion()`: returns the `KindVersion`
-* `Version()`: returns the [`semver.Version`][semver-version] struct indicating
-  the Semantic Version of the `Kind` of `Object` the `Meta` defines.
-* `Namescope()`: returns the `Namescope` uniqueness constraint.
-* `Schema()`: returns the [jsonschema.Schema][jsonschema-schema] describing the
-  field composition of desired state.
-* `SchemaJSON()`: returns a string representation of the `Schema`
-
-When the definition of a `Kind` of `Object` changes, the `Version` is
-incremented, allowing for the controlled evolution of the schema and definition
-of a `Kind`.
-
-[semver-version]: https://pkg.go.dev/github.com/Masterminds/semver/v3#Version
-[jsonschema-schema]: https://github.com/google/jsonschema-go/blob/main/jsonschema/schema.go
-
-## `Spec`
-
-`Spec` represents the *desired state* of an `Object`.
-
-The fields that comprise a `Spec` are defined in the `Meta`'s `Schema`.
+For instance, if looking up a Domain by Name, you would supply the System in
+which the Domain is found. If looking up an Object having a Kind that is scoped
+to a Namespace, you would supply the Namespace.

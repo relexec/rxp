@@ -1,4 +1,4 @@
-package types
+package expression
 
 // Expression describes a filtering expression. Similar to Predicates,
 // Expressions are used by `rxp` backend implementations to translate the

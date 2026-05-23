@@ -3,20 +3,18 @@ package expression
 import (
 	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/errors"
-	"github.com/relexec/rxp/predicate"
-	"github.com/relexec/rxp/types"
 )
 
 type KindNamePredicate struct {
-	predicate.Predicate
+	BasePredicate
 }
 
 func (p KindNamePredicate) Validate() error {
-	err := p.Predicate.Validate()
+	err := p.BasePredicate.Validate()
 	if err != nil {
 		return err
 	}
-	vals := p.Predicate.Values()
+	vals := p.BasePredicate.Values()
 	for _, v := range vals {
 		k, ok := v.(api.KindName)
 		if !ok {
@@ -32,72 +30,72 @@ func (p KindNamePredicate) Validate() error {
 
 // KindNameEqual returns an Expression that will match Objects of a particular
 // KindName.
-func KindNameEqual(k api.KindName) types.Expression {
+func KindNameEqual(k api.KindName) Expression {
 	return UnaryExpression{
 		KindNamePredicate{
-			predicate.New(
-				predicate.WithOperator(types.PredicateOperatorEqual),
-				predicate.WithValues(k),
-			),
+			BasePredicate{
+				op:     PredicateOperatorEqual,
+				values: []any{k},
+			},
 		},
 	}
 }
 
 // KindNameNotEqual returns an Expression that will match Objects not of a
 // particular KindName.
-func KindNameNotEqual(k api.KindName) types.Expression {
+func KindNameNotEqual(k api.KindName) Expression {
 	return UnaryExpression{
 		KindNamePredicate{
-			predicate.New(
-				predicate.WithOperator(types.PredicateOperatorEqual),
-				predicate.WithNegated(true),
-				predicate.WithValues(k),
-			),
+			BasePredicate{
+				op:      PredicateOperatorEqual,
+				negated: true,
+				values:  []any{k},
+			},
 		},
 	}
 }
 
 // KindNameIn returns an Expression that will match Objects that are any of a
 // set of specified KindNames.
-func KindNameIn(kinds ...api.KindName) types.Expression {
+func KindNameIn(kinds ...api.KindName) Expression {
 	values := make([]any, 0, len(kinds))
 	for _, k := range kinds {
 		values = append(values, k)
 	}
 	return UnaryExpression{
 		KindNamePredicate{
-			predicate.New(
-				predicate.WithOperator(types.PredicateOperatorIn),
-				predicate.WithValues(values...),
-			),
+			BasePredicate{
+				op:     PredicateOperatorIn,
+				values: values,
+			},
 		},
 	}
 }
 
 // KindNameNotIn returns an Expression that will match Objects that are not any
 // of a set of specified KindNames.
-func KindNameNotIn(kinds ...api.KindName) types.Expression {
+func KindNameNotIn(kinds ...api.KindName) Expression {
 	values := make([]any, 0, len(kinds))
 	for _, k := range kinds {
 		values = append(values, k)
 	}
 	return UnaryExpression{
 		KindNamePredicate{
-			predicate.New(
-				predicate.WithOperator(types.PredicateOperatorIn),
-				predicate.WithNegated(true),
-				predicate.WithValues(values...),
-			),
+			BasePredicate{
+				op:      PredicateOperatorIn,
+				negated: true,
+				values:  values,
+			},
 		},
 	}
 }
 
-// ContainsKindPredicate returns true if the supplied [types.Expression] has a
+// ContainsKindPredicate returns true if the supplied [Expression] has a
 // KindNamePredicate. If the supplied expression is an
 // [expression.OrExpression] or [expression.AndExpression], this function
 // recursively checks sub-expressions to ensure that a KindNamePredicate is
 // present in all sub-expressions.
-func ContainsKindPredicate(expr types.Expression) bool {
+func ContainsKindPredicate(expr Expression) bool {
 	switch expr := expr.(type) {
 	case UnaryExpression:
 		pred := expr.Predicate

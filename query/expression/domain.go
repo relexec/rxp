@@ -3,20 +3,18 @@ package expression
 import (
 	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/errors"
-	"github.com/relexec/rxp/predicate"
-	"github.com/relexec/rxp/types"
 )
 
 type DomainNamePredicate struct {
-	predicate.Predicate
+	BasePredicate
 }
 
 func (p DomainNamePredicate) Validate() error {
-	err := p.Predicate.Validate()
+	err := p.BasePredicate.Validate()
 	if err != nil {
 		return err
 	}
-	vals := p.Predicate.Values()
+	vals := p.BasePredicate.Values()
 	for _, v := range vals {
 		d, ok := v.(api.DomainName)
 		if !ok {
@@ -32,62 +30,62 @@ func (p DomainNamePredicate) Validate() error {
 
 // DomainNameEqual returns an Expression that will match Objects of a particular
 // DomainName.
-func DomainNameEqual(k api.DomainName) types.Expression {
+func DomainNameEqual(k api.DomainName) Expression {
 	return UnaryExpression{
 		DomainNamePredicate{
-			predicate.New(
-				predicate.WithOperator(types.PredicateOperatorEqual),
-				predicate.WithValues(k),
-			),
+			BasePredicate{
+				op:     PredicateOperatorEqual,
+				values: []any{k},
+			},
 		},
 	}
 }
 
 // DomainNameNotEqual returns an Expression that will match Objects not of a
 // particular DomainName.
-func DomainNameNotEqual(k api.DomainName) types.Expression {
+func DomainNameNotEqual(k api.DomainName) Expression {
 	return UnaryExpression{
 		DomainNamePredicate{
-			predicate.New(
-				predicate.WithOperator(types.PredicateOperatorEqual),
-				predicate.WithNegated(true),
-				predicate.WithValues(k),
-			),
+			BasePredicate{
+				op:      PredicateOperatorEqual,
+				negated: true,
+				values:  []any{k},
+			},
 		},
 	}
 }
 
 // DomainNameIn returns an Expression that will match Objects that are any of a
 // set of specified DomainNames.
-func DomainNameIn(domains ...api.DomainName) types.Expression {
+func DomainNameIn(domains ...api.DomainName) Expression {
 	values := make([]any, 0, len(domains))
 	for _, k := range domains {
 		values = append(values, k)
 	}
 	return UnaryExpression{
 		DomainNamePredicate{
-			predicate.New(
-				predicate.WithOperator(types.PredicateOperatorIn),
-				predicate.WithValues(values...),
-			),
+			BasePredicate{
+				op:     PredicateOperatorIn,
+				values: values,
+			},
 		},
 	}
 }
 
 // DomainNameNotIn returns an Expression that will match Objects that are not any
 // of a set of specified DomainNames.
-func DomainNameNotIn(domains ...api.DomainName) types.Expression {
+func DomainNameNotIn(domains ...api.DomainName) Expression {
 	values := make([]any, 0, len(domains))
 	for _, k := range domains {
 		values = append(values, k)
 	}
 	return UnaryExpression{
 		DomainNamePredicate{
-			predicate.New(
-				predicate.WithOperator(types.PredicateOperatorIn),
-				predicate.WithNegated(true),
-				predicate.WithValues(values...),
-			),
+			BasePredicate{
+				op:      PredicateOperatorIn,
+				negated: true,
+				values:  values,
+			},
 		},
 	}
 }

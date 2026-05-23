@@ -1,6 +1,7 @@
 package object
 
 import (
+	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/domain"
 	"github.com/relexec/rxp/errors"
 	"github.com/relexec/rxp/namespace"
@@ -19,6 +20,8 @@ type Selector struct {
 	namespace *namespace.Namespace
 	// name is the Name to use when looking up the Object via name.
 	name string
+	// generation is the specific generation of the Object to select.
+	generation api.Generation
 }
 
 // System is the System to search for the Object in.
@@ -47,6 +50,12 @@ func (s Selector) Name() string {
 	return s.name
 }
 
+// Generation returns the specific Generation of the Object to select. If this
+// returns 0, the latest Object is selected.
+func (s Selector) Generation() api.Generation {
+	return s.generation
+}
+
 // Validate returns an error if the Selector is not valid.
 func (s Selector) Validate() error {
 	if s.uuid != "" {
@@ -73,50 +82,56 @@ func (s Selector) Validate() error {
 	return nil
 }
 
-// ByUUID returns a Selector that looks up an Object having the supplied
-// UUID.
-func ByUUID(uuid string) Selector {
-	return Selector{uuid: uuid}
+// SelectOption modifies the [Selector] returned from [Select].
+type SelectOption func(*Selector)
+
+// ByUUID sets the Selector's UUID.
+func ByUUID(uuid string) SelectOption {
+	return func(s *Selector) {
+		s.uuid = uuid
+	}
 }
 
-// ByName returns a Selector that looks up a Object having the
-// supplied Name.
-func ByName(name string) Selector {
-	return Selector{name: name}
+// BySystem sets the Selector's System.
+func BySystem(system *system.System) SelectOption {
+	return func(s *Selector) {
+		s.system = system
+	}
 }
 
-// BySystemAndUUID returns a Selector that looks up a Object having the
-// supplied UUID in the supplied System.
-func BySystemAndUUID(sys *system.System, uuid string) Selector {
-	return Selector{system: sys, uuid: uuid}
+// ByDomain sets the Selector's Domain.
+func ByDomain(domain *domain.Domain) SelectOption {
+	return func(s *Selector) {
+		s.domain = domain
+	}
 }
 
-// BySystemAndName returns a Selector that looks up a Object having the
-// supplied Name in the supplied System.
-func BySystemAndName(sys *system.System, name string) Selector {
-	return Selector{system: sys, name: name}
+// ByNamespace sets the Selector's Namespace.
+func ByNamespace(namespace *namespace.Namespace) SelectOption {
+	return func(s *Selector) {
+		s.namespace = namespace
+	}
 }
 
-// ByDomainAndUUID returns a Selector that looks up a Object having the
-// supplied UUID in the supplied Domain.
-func ByDomainAndUUID(dom *domain.Domain, uuid string) Selector {
-	return Selector{domain: dom, uuid: uuid}
+// ByName sets the Selector's Name.
+func ByName(name string) SelectOption {
+	return func(s *Selector) {
+		s.name = name
+	}
 }
 
-// ByDomainAndName returns a Selector that looks up a Object having the
-// supplied Name in the supplied Domain.
-func ByDomainAndName(dom *domain.Domain, name string) Selector {
-	return Selector{domain: dom, name: name}
+// ByGeneration sets the Selector's Generation.
+func ByGeneration(generation api.Generation) SelectOption {
+	return func(s *Selector) {
+		s.generation = generation
+	}
 }
 
-// ByNamespaceAndUUID returns a Selector that looks up a Object having
-// the supplied UUID in the supplied Namespace.
-func ByNamespaceAndUUID(ns *namespace.Namespace, uuid string) Selector {
-	return Selector{namespace: ns, uuid: uuid}
-}
-
-// ByNamespaceAndName returns a Selector that looks up a Object having
-// the supplied Name in the supplied Namespace.
-func ByNamespaceAndName(ns *namespace.Namespace, name string) Selector {
-	return Selector{namespace: ns, name: name}
+// Select returns a new [Selector]
+func Select(opts ...SelectOption) Selector {
+	s := Selector{}
+	for _, opt := range opts {
+		opt(&s)
+	}
+	return s
 }

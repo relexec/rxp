@@ -21,11 +21,11 @@ const (
 	InstrumentNameWriteDuration = "write.duration"
 	InstrumentDescWriteDuration = "Histogram of write operation duration in seconds. Labels: 'error.code', 'type'."
 
-	InstrumentNameListRequest = "list.request"
-	InstrumentDescListRequest = "Number of list operations. Labels: 'error.code', 'type'."
+	InstrumentNameQueryRequest = "query.request"
+	InstrumentDescQueryRequest = "Number of query operations. Labels: 'error.code', 'type'."
 
-	InstrumentNameListDuration = "list.duration"
-	InstrumentDescListDuration = "Histogram of list operation duration in seconds. Labels: 'error.code', 'type'."
+	InstrumentNameQueryDuration = "query.duration"
+	InstrumentDescQueryDuration = "Histogram of query operation duration in seconds. Labels: 'error.code', 'type'."
 )
 
 var (
@@ -33,8 +33,8 @@ var (
 	InstrumentReadDuration  metric.Float64Histogram
 	InstrumentWriteRequest  metric.Int64Counter
 	InstrumentWriteDuration metric.Float64Histogram
-	InstrumentListRequest   metric.Int64Counter
-	InstrumentListDuration  metric.Float64Histogram
+	InstrumentQueryRequest  metric.Int64Counter
+	InstrumentQueryDuration metric.Float64Histogram
 )
 
 // Init initializes the rxp metrics for the supplied Metrics handler.
@@ -79,18 +79,18 @@ func Init(metrics types.Metrics) error {
 		return err
 	}
 
-	InstrumentListRequest, err = m.Int64Counter(
-		InstrumentNameListRequest,
-		metric.WithDescription(InstrumentDescListRequest),
+	InstrumentQueryRequest, err = m.Int64Counter(
+		InstrumentNameQueryRequest,
+		metric.WithDescription(InstrumentDescQueryRequest),
 		metric.WithUnit("{call}"),
 	)
 	if err != nil {
 		return err
 	}
 
-	InstrumentListDuration, err = m.Float64Histogram(
-		InstrumentNameListDuration,
-		metric.WithDescription(InstrumentDescListDuration),
+	InstrumentQueryDuration, err = m.Float64Histogram(
+		InstrumentNameQueryDuration,
+		metric.WithDescription(InstrumentDescQueryDuration),
 		metric.WithUnit("{seconds}"),
 	)
 	if err != nil {

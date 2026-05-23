@@ -11,7 +11,7 @@ import (
 type Selector struct {
 	// uuid is the globally-unique identifier of the Meta being selected.
 	uuid string
-	// kindVersion is the KindVersion to look up the Meta in.
+	// kindVersion is the KindVersion of the Meta being selected.
 	kindVersion api.KindVersion
 	// system is the System to find the Meta in.
 	system *system.System
@@ -73,31 +73,49 @@ func (s Selector) Validate() error {
 	return nil
 }
 
-// ByUUID returns a Selector that looks up a Namespace having the supplied UUID.
-func ByUUID(uuid string) Selector {
-	return Selector{uuid: uuid}
+// SelectOption modifies the [Selector] returned from [Select].
+type SelectOption func(*Selector)
+
+// ByUUID sets the Selector's UUID.
+func ByUUID(uuid string) SelectOption {
+	return func(s *Selector) {
+		s.uuid = uuid
+	}
 }
 
-// ByKindVersion returns a Selector that looks up a Meta having the supplied
-// KindVersion.
-func ByKindVersion(kv api.KindVersion) Selector {
-	return Selector{kindVersion: kv}
+// BySystem sets the Selector's System.
+func BySystem(system *system.System) SelectOption {
+	return func(s *Selector) {
+		s.system = system
+	}
 }
 
-// BySystemAndKindVersion returns a Selector that looks up a Meta having the
-// supplied KindVersion in the supplied System.
-func BySystemAndKindVersion(sys *system.System, kv api.KindVersion) Selector {
-	return Selector{system: sys, kindVersion: kv}
+// ByDomain sets the Selector's Domain.
+func ByDomain(domain *domain.Domain) SelectOption {
+	return func(s *Selector) {
+		s.domain = domain
+	}
 }
 
-// ByDomainAndKindVersion returns a Selector that looks up a Meta having the
-// supplied KindVersion in the supplied Domain.
-func ByDomainAndKindVersion(dom *domain.Domain, kv api.KindVersion) Selector {
-	return Selector{domain: dom, kindVersion: kv}
+// ByNamespace sets the Selector's Namespace.
+func ByNamespace(namespace *namespace.Namespace) SelectOption {
+	return func(s *Selector) {
+		s.namespace = namespace
+	}
 }
 
-// ByNamespaceAndKindVersion returns a Selector that looks up a Meta having the
-// supplied KindVersion in the supplied Namespace.
-func ByNamespaceAndKindVersion(ns *namespace.Namespace, kv api.KindVersion) Selector {
-	return Selector{namespace: ns, kindVersion: kv}
+// ByKindVersion sets the Selector's KindVersion.
+func ByKindVersion(kindVersion api.KindVersion) SelectOption {
+	return func(s *Selector) {
+		s.kindVersion = kindVersion
+	}
+}
+
+// Select returns a new [Selector]
+func Select(opts ...SelectOption) Selector {
+	s := Selector{}
+	for _, opt := range opts {
+		opt(&s)
+	}
+	return s
 }

@@ -37,7 +37,7 @@ func (s Selector) Validate() error {
 		return nil
 	}
 	if s.name == "" {
-		return errors.ErrSelectorNameRequired
+		return errors.ErrSelectorUUIDOrNameRequired
 	}
 	// Note that if a nil system is provided, the host System is assumed.
 	if s.system != nil {

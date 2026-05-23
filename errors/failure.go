@@ -22,8 +22,9 @@ var (
 )
 
 var (
-	ErrInvalidReadRequest = New("invalid read request", WithCode(ErrCodeBadRequest))
-	ErrInvalidListRequest = New("invalid list request", WithCode(ErrCodeBadRequest))
+	ErrInvalidReadRequest  = New("invalid read request", WithCode(ErrCodeBadRequest))
+	ErrInvalidWriteRequest = New("invalid write request", WithCode(ErrCodeBadRequest))
+	ErrInvalidListRequest  = New("invalid list request", WithCode(ErrCodeBadRequest))
 )
 
 // Internal returns an Error with a 500 Internal Server Error code and the
@@ -32,6 +33,19 @@ func Internal(msg string, opts ...option) error {
 	e := &Error{
 		code: ErrCodeInternal,
 		msg:  msg,
+	}
+	for _, o := range opts {
+		o(e)
+	}
+	return e
+}
+
+// RequiredParameterNil returns an Error with a 400 Bad Request Error code that
+// explains the supplied required non-nil parameter was nil.
+func RequiredParameterNil(param string, opts ...option) error {
+	e := &Error{
+		code: ErrCodeBadRequest,
+		msg:  fmt.Sprintf("require parameter %q was nil or empty", param),
 	}
 	for _, o := range opts {
 		o(e)

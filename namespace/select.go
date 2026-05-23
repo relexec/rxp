@@ -36,15 +36,15 @@ func (s Selector) Validate() error {
 	if s.uuid != "" {
 		return nil
 	}
+	if s.name == "" {
+		return errors.ErrSelectorUUIDOrNameRequired
+	}
 	if s.domain == nil {
 		return errors.ErrSelectorDomainRequired
 	} else {
 		if err := s.domain.Validate(); err != nil {
 			return err
 		}
-	}
-	if s.name == "" {
-		return errors.ErrSelectorNameRequired
 	}
 	return s.name.Validate()
 }

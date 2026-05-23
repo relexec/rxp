@@ -49,7 +49,10 @@ func (s Selector) Name() string {
 
 // Validate returns an error if the Selector is not valid.
 func (s Selector) Validate() error {
-	if s.uuid == "" && s.name == "" {
+	if s.uuid != "" {
+		return nil
+	}
+	if s.name == "" {
 		return errors.ErrSelectorUUIDOrNameRequired
 	}
 	if s.system != nil {
@@ -76,16 +79,40 @@ func ByUUID(uuid string) Selector {
 	return Selector{uuid: uuid}
 }
 
+// ByName returns a Selector that looks up a Object having the
+// supplied Name.
+func ByName(name string) Selector {
+	return Selector{name: name}
+}
+
+// BySystemAndUUID returns a Selector that looks up a Object having the
+// supplied UUID in the supplied System.
+func BySystemAndUUID(sys *system.System, uuid string) Selector {
+	return Selector{system: sys, uuid: uuid}
+}
+
 // BySystemAndName returns a Selector that looks up a Object having the
 // supplied Name in the supplied System.
 func BySystemAndName(sys *system.System, name string) Selector {
 	return Selector{system: sys, name: name}
 }
 
+// ByDomainAndUUID returns a Selector that looks up a Object having the
+// supplied UUID in the supplied Domain.
+func ByDomainAndUUID(dom *domain.Domain, uuid string) Selector {
+	return Selector{domain: dom, uuid: uuid}
+}
+
 // ByDomainAndName returns a Selector that looks up a Object having the
 // supplied Name in the supplied Domain.
 func ByDomainAndName(dom *domain.Domain, name string) Selector {
 	return Selector{domain: dom, name: name}
+}
+
+// ByNamespaceAndUUID returns a Selector that looks up a Object having
+// the supplied UUID in the supplied Namespace.
+func ByNamespaceAndUUID(ns *namespace.Namespace, uuid string) Selector {
+	return Selector{namespace: ns, uuid: uuid}
 }
 
 // ByNamespaceAndName returns a Selector that looks up a Object having

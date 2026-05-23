@@ -21,7 +21,21 @@ func (s Selector) Validate() error {
 	return nil
 }
 
-// ByUUID returns a Selector that looks up a System having the supplied UUID.
-func ByUUID(uuid string) Selector {
-	return Selector{uuid: uuid}
+// SelectOption modifies the [Selector] returned from [Select].
+type SelectOption func(*Selector)
+
+// ByUUID sets the Selector's UUID.
+func ByUUID(uuid string) SelectOption {
+	return func(s *Selector) {
+		s.uuid = uuid
+	}
+}
+
+// Select returns a new [Selector]
+func Select(opts ...SelectOption) Selector {
+	s := Selector{}
+	for _, opt := range opts {
+		opt(&s)
+	}
+	return s
 }

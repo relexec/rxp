@@ -49,13 +49,35 @@ func (s Selector) Validate() error {
 	return s.name.Validate()
 }
 
-// ByUUID returns a Selector that looks up a Namespace having the supplied UUID.
-func ByUUID(uuid string) Selector {
-	return Selector{uuid: uuid}
+// SelectOption modifies the [Selector] returned from [Select].
+type SelectOption func(*Selector)
+
+// ByUUID sets the Selector's UUID.
+func ByUUID(uuid string) SelectOption {
+	return func(s *Selector) {
+		s.uuid = uuid
+	}
 }
 
-// ByName returns a Selector that looks up a Namespace having the supplied
-// Domain and NamespaceName.
-func ByName(dom *domain.Domain, name api.NamespaceName) Selector {
-	return Selector{domain: dom, name: name}
+// ByDomain sets the Selector's Domain.
+func ByDomain(dom *domain.Domain) SelectOption {
+	return func(s *Selector) {
+		s.domain = dom
+	}
+}
+
+// ByName sets the Selector's Name.
+func ByName(name api.NamespaceName) SelectOption {
+	return func(s *Selector) {
+		s.name = name
+	}
+}
+
+// Select returns a new [Selector]
+func Select(opts ...SelectOption) Selector {
+	s := Selector{}
+	for _, opt := range opts {
+		opt(&s)
+	}
+	return s
 }

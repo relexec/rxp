@@ -8,7 +8,6 @@ import (
 
 	"github.com/relexec/rxp/cmp"
 	"github.com/relexec/rxp/cmp/fieldpath"
-	"github.com/relexec/rxp/types"
 )
 
 var (
@@ -171,5 +170,3 @@ func (s Schema) diffNew() (*cmp.Delta, error) {
 	)
 	return d, nil
 }
-
-var _ types.Differ = (*Schema)(nil)

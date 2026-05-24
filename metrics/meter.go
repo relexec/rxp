@@ -2,8 +2,6 @@ package metrics
 
 import (
 	"go.opentelemetry.io/otel/metric"
-
-	"github.com/relexec/rxp/types"
 )
 
 const (
@@ -38,7 +36,7 @@ var (
 )
 
 // Init initializes the rxp metrics for the supplied Metrics handler.
-func Init(metrics types.Metrics) error {
+func Init(metrics *Metrics) error {
 	var err error
 	p := metrics.MeterProvider()
 	m := p.Meter(ProviderName)

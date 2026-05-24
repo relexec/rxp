@@ -4,8 +4,8 @@ import (
 	"github.com/google/jsonschema-go/jsonschema"
 )
 
-// Schema wraps a [jsonschema.Schema] and implements the [types.Differ]
-// interface.
+// Schema wraps a [jsonschema.Schema] and provides the ability to diff between
+// two Schemas.
 type Schema struct {
 	jsonschema.Schema
 }

@@ -3,7 +3,6 @@ package application
 import (
 	"github.com/relexec/rxp/cmp"
 	"github.com/relexec/rxp/cmp/fieldpath"
-	"github.com/relexec/rxp/types"
 )
 
 var (
@@ -82,8 +81,6 @@ func (s Spec_V1_0_0) diffNew() (*cmp.Delta, error) {
 	)
 	return d, nil
 }
-
-var _ types.Spec = (*Spec_V1_0_0)(nil)
 
 type Spec_V1_0_1 struct {
 	Description string `json:"description"`
@@ -174,5 +171,3 @@ func (s Spec_V1_0_1) diffNew() (*cmp.Delta, error) {
 	)
 	return d, nil
 }
-
-var _ types.Spec = (*Spec_V1_0_1)(nil)

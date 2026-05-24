@@ -59,7 +59,7 @@ Note that unlike RFC 1035, there is no 253 character size limit on
 A `Namespace`'s `Name` must be unique within its containing `Domain`.
 
 Briefly, a `Kind` identifies a *type* of a thing that is managed by `rxp`. A
-`Kind` has a [`Name`][kindname] and a [`Namescope`](#namescope).
+`Kind` has a [`Name`][kindname] and a [`Scope`](#scope).
 
 `Kinds` always have a [`System`](#system) identifier. System identifiers are
 globally-unique.
@@ -71,6 +71,7 @@ erDiagram
     System ||--|{ Kind : "knows about"
     System {
         string **uuid**
+        string tag
     }
     Kind {
         string **system**
@@ -92,6 +93,7 @@ erDiagram
     Kind ||--|{ Meta : "has a"
     System {
         string **uuid**
+        string tag
     }
     Kind {
         string **system**
@@ -112,11 +114,11 @@ An `Object` is an *instance* of a `KindVersion`.
 `Objects` always have a UUID globally-unique identifier.
 
 `Objects` always have a Name. An `Object`'s Name is unique within the
-`Namescope` associated with the `Kind`.
+`Scope` associated with the `Kind`.
 
-If that `Namescope` is `NamescopeNamespace` or `NamescopeDomain`, the `Object`
-is guaranteed to have a [`Domain`](#domain). If that `Namescope` is
-`NamescopeNamespace`, the `Object` is guaranteed to have a
+If that `Scope` is `ScopeNamespace` or `ScopeDomain`, the `Object`
+is guaranteed to have a [`Domain`](#domain). If that `Scope` is
+`ScopeNamespace`, the `Object` is guaranteed to have a
 [`Namespace`](#namespace).
 
 `Objects` may have zero or more `Labels` associated with them. `Labels` are
@@ -135,6 +137,7 @@ erDiagram
     Namespace ||--|{ Object : "may have"
     System {
         string **uuid**
+        string tag
     }
     Kind {
         string **name**
@@ -207,19 +210,19 @@ version string.
 
 [kindversion]: https://github.com/relexec/rxp/blob/main/types/kindversion.go
 
-## `Namescope`
+## `Scope`
 
-`Namescope` refers to the uniqueness constraint applied to the name of some
+`Scope` refers to the uniqueness constraint applied to the name of some
 thing managed by `rxp`.
 
-There are three `Namescope` values, listed here in order of specificity, from
+There are three `Scope` values, listed here in order of specificity, from
 the narrowest to broadest specificity.
 
-* `NamescopeNamespace`: name is unique within the scope of the `Object`'s
+* `ScopeNamespace`: name is unique within the scope of the `Object`'s
   `System`, `Kind`, `Domain`, and `Namespace`.
-* `NamescopeDomain`: name is unique within the scope of the `Object`'s
+* `ScopeDomain`: name is unique within the scope of the `Object`'s
   `System`, Kind` and `Domain`.
-* `NamescopeSystem`: name is unique within the scope of the `Object`'s `System`
+* `ScopeSystem`: name is unique within the scope of the `Object`'s `System`
   and `Kind`.
 
 ## `Object`
@@ -259,7 +262,7 @@ The `Generation` represents the number of times that the desired state of the
 * `KindVersion()`: returns the `KindVersion`
 * `Version()`: returns the [`semver.Version`][semver-version] struct indicating
   the Semantic Version of the `Kind` of `Object` the `Meta` defines.
-* `Namescope()`: returns the `Namescope` uniqueness constraint.
+* `Scope()`: returns the `Scope` uniqueness constraint.
 * `Schema()`: returns the [jsonschema.Schema][jsonschema-schema] describing the
   field composition of desired state.
 * `SchemaJSON()`: returns a string representation of the `Schema`

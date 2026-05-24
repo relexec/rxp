@@ -13,7 +13,7 @@ import (
 
 const (
 	UnknownSystemUUID    = "8ccf20f6-df19-45e1-9086-8eff1283fef5"
-	UnknownSystemName    = "unknown system"
+	UnknownSystemTag     = "unknown system"
 	UnknownDomainName    = api.DomainName("unknown.domain.testing.dxp")
 	UnknownNamespaceName = api.NamespaceName("unknown.ns")
 	UnknownKindName      = api.KindName("unknown.testing.rxp")
@@ -29,7 +29,7 @@ var (
 	)
 	UnknownSystem = system.New(
 		system.WithUUID(UnknownSystemUUID),
-		system.WithName(UnknownSystemName),
+		system.WithTag(UnknownSystemTag),
 	)
 	UnknownDomain = domain.New(
 		domain.WithName(UnknownDomainName),

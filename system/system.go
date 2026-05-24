@@ -8,15 +8,18 @@ import (
 
 var (
 	FieldPathUUID = fieldpath.FromString("uuid")
-	FieldPathName = fieldpath.FromString("name")
+	FieldPathTag  = fieldpath.FromString("tag")
 )
 
 // System represents the boundaries of an rxp system installation.
 type System struct {
 	// uuid contains the System's globally-unique identifier.
 	uuid string
-	// name contains the optional human-readable System name.
-	name string
+	// tag contains an optional string tag for the System. Note this is not
+	// called "name" because a Name in rxp has a specific semantic meaning that
+	// reflects the uniqueness constraint its value. Tags have no such
+	// uniqueness constraint.
+	tag string
 }
 
 // Validate returns an error if the System is invalid.
@@ -37,14 +40,17 @@ func (s *System) SetUUID(uuid string) {
 	s.uuid = uuid
 }
 
-// Name returns the optional human-readable name of the System.
-func (s System) Name() string {
-	return s.name
+// Tag returns an optional string tag for the System. Note this is not called
+// "name" because a Name in rxp has a specific semantic meaning that reflects
+// the uniqueness constraint its value. Tags have no such uniqueness
+// constraint.
+func (s System) Tag() string {
+	return s.tag
 }
 
-// SetName sets the optional human-readable name of the System.
-func (s *System) SetName(name string) {
-	s.name = name
+// SetTag sets the optional string tag for the System.
+func (s *System) SetTag(tag string) {
+	s.tag = tag
 }
 
 // Diff returns a [cmp.Delta] representing the difference between itself and
@@ -80,15 +86,15 @@ func (s System) Diff(subject any) (*cmp.Delta, error) {
 		)
 	}
 
-	thisSystemName := s.name
-	otherSystemName := other.Name()
-	if thisSystemName != otherSystemName {
+	thisSystemTag := s.tag
+	otherSystemTag := other.Tag()
+	if thisSystemTag != otherSystemTag {
 		delta.Push(
 			cmp.NewDifference(
-				FieldPathName,
+				FieldPathTag,
 				cmp.DifferenceTypeModify,
-				thisSystemName,
-				otherSystemName,
+				thisSystemTag,
+				otherSystemTag,
 			),
 		)
 	}
@@ -110,9 +116,9 @@ func (s System) diffNew() (*cmp.Delta, error) {
 	)
 	delta.Push(
 		cmp.NewDifference(
-			FieldPathName,
+			FieldPathTag,
 			cmp.DifferenceTypeAdd,
-			s.name,
+			s.tag,
 			nil,
 		),
 	)

@@ -19,9 +19,12 @@ func WithUUID(uuid string) Option {
 	}
 }
 
-// WithName sets the System's optional human-readable name.
-func WithName(name string) Option {
+// WithTag sets an optional string tag for the System. Note this is not called
+// "name" because a Name in rxp has a specific semantic meaning that reflects
+// the uniqueness constraint its value. Tags have no such uniqueness
+// constraint.
+func WithTag(tag string) Option {
 	return func(s *System) {
-		s.name = name
+		s.tag = tag
 	}
 }

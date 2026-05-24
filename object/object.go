@@ -193,3 +193,8 @@ func (o *Object) UnmarshalJSON(text []byte) error {
 	}
 	return nil
 }
+
+// Clone returns a copy of the Object.
+func (o Object) Clone() Object {
+	return o
+}

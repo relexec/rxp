@@ -14,28 +14,30 @@ func (p KindNamePredicate) Validate() error {
 	if err != nil {
 		return err
 	}
-	vals := p.BasePredicate.Values()
-	for _, v := range vals {
-		k, ok := v.(api.KindName)
-		if !ok {
-			return errors.PredicateUnsupportedValueType(v)
+	v := p.BasePredicate.Value()
+	switch v := v.(type) {
+	case []api.KindName:
+		for _, dn := range v {
+			if err := dn.Validate(); err != nil {
+				return errors.PredicateInvalid(err.Error())
+			}
 		}
-		err = k.Validate()
-		if err != nil {
-			return errors.PredicateInvalid(err.Error())
-		}
+	case api.KindName:
+		return v.Validate()
+	default:
+		return errors.PredicateUnsupportedValueType(v)
 	}
 	return nil
 }
 
 // KindNameEqual returns an Expression that will match Objects of a particular
 // KindName.
-func KindNameEqual(k api.KindName) Expression {
+func KindNameEqual(name api.KindName) Expression {
 	return UnaryExpression{
 		KindNamePredicate{
 			BasePredicate{
-				op:     PredicateOperatorEqual,
-				values: []any{k},
+				op:    PredicateOperatorEqual,
+				value: name,
 			},
 		},
 	}
@@ -43,13 +45,13 @@ func KindNameEqual(k api.KindName) Expression {
 
 // KindNameNotEqual returns an Expression that will match Objects not of a
 // particular KindName.
-func KindNameNotEqual(k api.KindName) Expression {
+func KindNameNotEqual(name api.KindName) Expression {
 	return UnaryExpression{
 		KindNamePredicate{
 			BasePredicate{
 				op:      PredicateOperatorEqual,
 				negated: true,
-				values:  []any{k},
+				value:   name,
 			},
 		},
 	}
@@ -57,16 +59,12 @@ func KindNameNotEqual(k api.KindName) Expression {
 
 // KindNameIn returns an Expression that will match Objects that are any of a
 // set of specified KindNames.
-func KindNameIn(kinds ...api.KindName) Expression {
-	values := make([]any, 0, len(kinds))
-	for _, k := range kinds {
-		values = append(values, k)
-	}
+func KindNameIn(names ...api.KindName) Expression {
 	return UnaryExpression{
 		KindNamePredicate{
 			BasePredicate{
-				op:     PredicateOperatorIn,
-				values: values,
+				op:    PredicateOperatorIn,
+				value: names,
 			},
 		},
 	}
@@ -74,17 +72,13 @@ func KindNameIn(kinds ...api.KindName) Expression {
 
 // KindNameNotIn returns an Expression that will match Objects that are not any
 // of a set of specified KindNames.
-func KindNameNotIn(kinds ...api.KindName) Expression {
-	values := make([]any, 0, len(kinds))
-	for _, k := range kinds {
-		values = append(values, k)
-	}
+func KindNameNotIn(names ...api.KindName) Expression {
 	return UnaryExpression{
 		KindNamePredicate{
 			BasePredicate{
 				op:      PredicateOperatorIn,
 				negated: true,
-				values:  values,
+				value:   names,
 			},
 		},
 	}

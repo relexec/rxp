@@ -25,8 +25,8 @@ type Predicate interface {
 	// returns true, the Predicate will evaluate to true if the target field is
 	// NOT equal to the Values.
 	Negated() bool
-	// Values returns the values that are compared to the target field.
-	Values() []any
+	// Value returns the value that is compared to the target field.
+	Value() any
 }
 
 // BasePredicate is the base struct from which all specialized Predicates
@@ -36,8 +36,8 @@ type BasePredicate struct {
 	op PredicateOperator
 	// negated indicates whether the Predicate's Operator should be negated.
 	negated bool
-	// values contains the values that are compared to the target field.
-	values []any
+	// value contains the value that is compared to the target field.
+	value any
 }
 
 // Operator returns the Predicate's Operator.
@@ -53,14 +53,14 @@ func (p BasePredicate) Negated() bool {
 	return p.negated
 }
 
-// Values returns the values that are compared to the target field.
-func (p BasePredicate) Values() []any {
-	return p.values
+// Values returns the value that is compared to the target field.
+func (p BasePredicate) Value() any {
+	return p.value
 }
 
 // Validate returns an error if the Predicate is not valid.
 func (p BasePredicate) Validate() error {
-	if len(p.values) == 0 {
+	if p.value == nil {
 		return errors.ErrPredicateValueRequired
 	}
 	return nil

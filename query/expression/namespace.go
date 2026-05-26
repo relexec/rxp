@@ -60,6 +60,10 @@ func NamespaceNameNotEqual(name api.NamespaceName) Expression {
 // NamespaceNameIn returns an Expression that will match things that have any of a
 // set of specified NamespaceNames.
 func NamespaceNameIn(names ...api.NamespaceName) Expression {
+	// flatten IN to = when there's only one value...
+	if len(names) == 1 {
+		return NamespaceNameEqual(names[0])
+	}
 	return UnaryExpression{
 		NamespaceNamePredicate{
 			BasePredicate{

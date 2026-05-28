@@ -18,6 +18,7 @@ const (
 	UnknownNamespaceUUID = "8c12b8d9-eada-4c57-aa93-fc2984aea2c0"
 	UnknownNamespaceName = api.NamespaceName("unknown.ns")
 	UnknownKindName      = api.KindName("unknown.testing.rxp")
+	UnknownKindUUID      = "2a6fc010-7c4b-4aef-bff4-e4ce98ad15df"
 	UnknownObjectUUID    = "2f959fc4-e885-4946-ae7b-dc015c185a62"
 )
 
@@ -27,6 +28,7 @@ var (
 
 var (
 	UnknownKind = kind.New(
+		kind.WithUUID(UnknownKindUUID),
 		kind.WithName(UnknownKindName),
 	)
 	UnknownSystem = system.New(

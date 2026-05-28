@@ -8,6 +8,7 @@ import (
 )
 
 var (
+	NoMetaKindUUID = "7e76e553-f11e-42fd-831d-82819839abda"
 	NoMetaKindName = api.KindName("nometa.testing.rxp")
 )
 
@@ -16,6 +17,7 @@ var (
 	// (KindVersions) with it. This allows us to check error responses
 	// attempting to create a KindVersion with a non-0 version of this Kind.
 	NoMetaKind = kind.New(
+		kind.WithUUID(NoMetaKindUUID),
 		kind.WithName(NoMetaKindName),
 	)
 	NoMetaMeta = meta.New(

@@ -13,11 +13,13 @@ var (
 	InvalidDomainName    = api.DomainName("invalid domain")
 	InvalidNamespaceName = api.NamespaceName("invalid ns")
 	InvalidKindName      = api.KindName("invalid kind")
+	InvalidKindUUID      = "6b23fab3-3a19-4885-92b7-0138871c4e62"
 	InvalidKindVersion   = api.KindVersion("invalid kind version")
 )
 
 var (
 	InvalidKind = kind.New(
+		kind.WithUUID(InvalidKindUUID),
 		kind.WithName(InvalidKindName),
 	)
 	InvalidDomain = domain.New(

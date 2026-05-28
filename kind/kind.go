@@ -4,17 +4,22 @@ import (
 	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/cmp"
 	"github.com/relexec/rxp/cmp/fieldpath"
+	"github.com/relexec/rxp/errors"
 	"github.com/relexec/rxp/system"
 )
 
 var (
-	FieldPathName  = fieldpath.FromString("name")
-	FieldPathScope = fieldpath.FromString("scope")
+	FieldPathSystem = fieldpath.FromString("system")
+	FieldPathUUID   = fieldpath.FromString("uuid")
+	FieldPathName   = fieldpath.FromString("name")
+	FieldPathScope  = fieldpath.FromString("scope")
 )
 
 type Kind struct {
 	// system contains the System containing the Kind.
 	system *system.System
+	// uuid stores the Kind's globally-unique identifier.
+	uuid string
 	// name is the name of the Kind.
 	name api.KindName
 	// scope is the uniqueness constraint of the names of Objects having this
@@ -24,6 +29,9 @@ type Kind struct {
 
 // Validate returns an error if the Kind is not valid.
 func (k Kind) Validate() error {
+	if k.uuid == "" {
+		return errors.ErrKindUUIDRequired
+	}
 	err := k.name.Validate()
 	if err != nil {
 		return err
@@ -42,6 +50,16 @@ func (k Kind) System() *system.System {
 // SetSystem sets the System of Kind.
 func (k *Kind) SetSystem(system *system.System) {
 	k.system = system
+}
+
+// UUID returns the globally-unique identifier of the Kind.
+func (k Kind) UUID() string {
+	return k.uuid
+}
+
+// SetUUID sets the globally-unique identifier of the Kind.
+func (k *Kind) SetUUID(uuid string) {
+	k.uuid = uuid
 }
 
 // Name returns the name of the Kind.
@@ -86,6 +104,57 @@ func (k Kind) Diff(subject any) (*cmp.Delta, error) {
 
 	d := &cmp.Delta{}
 
+	thisSystem := k.system
+	otherSystem := other.System()
+	if thisSystem != nil {
+		thisSystemUUID := k.system.UUID()
+		if otherSystem == nil {
+			d.Push(
+				cmp.NewDifference(
+					FieldPathSystem,
+					cmp.DifferenceTypeRemove,
+					thisSystemUUID,
+					nil,
+				),
+			)
+		} else {
+			otherSystemUUID := otherSystem.UUID()
+			if thisSystemUUID != otherSystem.UUID() {
+				d.Push(
+					cmp.NewDifference(
+						FieldPathSystem,
+						cmp.DifferenceTypeModify,
+						thisSystemUUID,
+						otherSystemUUID,
+					),
+				)
+			}
+		}
+	} else if otherSystem != nil {
+		otherSystemUUID := otherSystem.UUID()
+		d.Push(
+			cmp.NewDifference(
+				FieldPathSystem,
+				cmp.DifferenceTypeAdd,
+				nil,
+				otherSystemUUID,
+			),
+		)
+	}
+
+	thisUUID := k.uuid
+	otherUUID := other.UUID()
+	if thisUUID != otherUUID {
+		d.Push(
+			cmp.NewDifference(
+				FieldPathUUID,
+				cmp.DifferenceTypeModify,
+				string(thisUUID),
+				string(otherUUID),
+			),
+		)
+	}
+
 	thisName := string(k.name)
 	otherName := string(other.Name())
 	if thisName != otherName {
@@ -115,6 +184,24 @@ func (k Kind) Diff(subject any) (*cmp.Delta, error) {
 // new Kind (i.e. for the first generation)
 func (k Kind) diffNew() (*cmp.Delta, error) {
 	d := &cmp.Delta{}
+	if k.system != nil {
+		d.Push(
+			cmp.NewDifference(
+				FieldPathSystem,
+				cmp.DifferenceTypeAdd,
+				k.system.UUID(),
+				nil,
+			),
+		)
+	}
+	d.Push(
+		cmp.NewDifference(
+			FieldPathUUID,
+			cmp.DifferenceTypeAdd,
+			k.uuid,
+			nil,
+		),
+	)
 	d.Push(
 		cmp.NewDifference(
 			FieldPathName,

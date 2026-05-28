@@ -45,6 +45,12 @@ func TestKind_Diff(t *testing.T) {
 			true,
 			[]cmp.Difference{
 				cmp.NewDifference(
+					fieldpath.FromString("uuid"),
+					cmp.DifferenceTypeAdd,
+					string(platform.KindUUID),
+					nil,
+				),
+				cmp.NewDifference(
 					fieldpath.FromString("name"),
 					cmp.DifferenceTypeAdd,
 					string(platform.KindName),
@@ -65,6 +71,12 @@ func TestKind_Diff(t *testing.T) {
 			"",
 			true,
 			[]cmp.Difference{
+				cmp.NewDifference(
+					fieldpath.FromString("uuid"),
+					cmp.DifferenceTypeModify,
+					string(platform.KindUUID),
+					string(application.KindUUID),
+				),
 				cmp.NewDifference(
 					fieldpath.FromString("name"),
 					cmp.DifferenceTypeModify,

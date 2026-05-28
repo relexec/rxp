@@ -16,11 +16,13 @@ import (
 
 const (
 	KindName = api.KindName("service.testing.rxp")
+	KindUUID = "a3534bc0-3300-4a8f-bda1-f46dbf8f3ddd"
 	Scope    = api.ScopeNamespace
 )
 
 var (
 	Kind = kind.New(
+		kind.WithUUID(KindUUID),
 		kind.WithName(KindName),
 		kind.WithScope(Scope),
 	)

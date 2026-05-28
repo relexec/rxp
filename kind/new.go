@@ -24,6 +24,13 @@ func WithSystem(system *system.System) Option {
 	}
 }
 
+// WithUUID sets the Kind's UUID.
+func WithUUID(uuid string) Option {
+	return func(k *Kind) {
+		k.uuid = uuid
+	}
+}
+
 // WithName sets the Kind's name.
 func WithName(name api.KindName) Option {
 	return func(k *Kind) {

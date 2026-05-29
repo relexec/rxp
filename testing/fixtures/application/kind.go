@@ -10,8 +10,8 @@ import (
 
 	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/kind"
-	"github.com/relexec/rxp/meta"
-	"github.com/relexec/rxp/meta/schema"
+	"github.com/relexec/rxp/kind/kindversion"
+	"github.com/relexec/rxp/kind/kindversion/schema"
 )
 
 const (
@@ -39,25 +39,25 @@ var (
 )
 
 var (
-	Meta_V1_0_0       *meta.Meta
-	Schema_V1_0_0     *schema.Schema
-	SchemaJSON_V1_0_0 string
+	KindVersion_V1_0_0 *kindversion.KindVersion
+	Schema_V1_0_0      *schema.Schema
+	SchemaJSON_V1_0_0  string
 
-	Meta_V1_0_1       *meta.Meta
-	Schema_V1_0_1     *schema.Schema
-	SchemaJSON_V1_0_1 string
+	KindVersion_V1_0_1 *kindversion.KindVersion
+	Schema_V1_0_1      *schema.Schema
+	SchemaJSON_V1_0_1  string
 )
 
 var (
-	Metas = map[string]*meta.Meta{
-		Version_V1_0_0: Meta_V1_0_0,
-		Version_V1_0_1: Meta_V1_0_1,
+	KindVersions = map[string]*kindversion.KindVersion{
+		Version_V1_0_0: KindVersion_V1_0_0,
+		Version_V1_0_1: KindVersion_V1_0_1,
 	}
 )
 
-// Meta returns the Meta associated with the supplied version. Version can be
-// either a string or a [semver.Version].
-func Meta(version any) (*meta.Meta, bool) {
+// KindVersion returns the KindVersion associated with the supplied version.
+// Version can be either a string or a [semver.Version].
+func KindVersion(version any) (*kindversion.KindVersion, bool) {
 	var vstr string
 	switch version := version.(type) {
 	case string:
@@ -68,38 +68,38 @@ func Meta(version any) (*meta.Meta, bool) {
 	if !strings.HasPrefix(vstr, "v") {
 		vstr = "v" + vstr
 	}
-	m, ok := Metas[vstr]
+	m, ok := KindVersions[vstr]
 	return m, ok
 }
 
-// FirstMeta returns the [*meta.Meta] representing the first known version of
-// the meta.
-func FirstMeta() *meta.Meta {
-	return Meta_V1_0_0
+// FirstKindVersion returns the [*kindversion.KindVersion] representing the
+// first known version of the kindversion.
+func FirstKindVersion() *kindversion.KindVersion {
+	return KindVersion_V1_0_0
 }
 
 // FirstVersion returns the [semver.Version] representing the first known
-// version of the meta.
+// version of the kindversion.
 func FirstVersion() *semver.Version {
 	return SemVer_V1_0_0
 }
 
-// FirstKindVersion returns the [api.KindVersion] representing the first
-// known version of the Kind.
-func FirstKindVersion() api.KindVersion {
-	return api.NewKindVersion(KindName, *SemVer_V1_0_0)
+// FirstKindVersionName returns the [api.KindVersionName] representing the
+// first known version of the Kind.
+func FirstKindVersionName() api.KindVersionName {
+	return api.NewKindVersionName(KindName, *SemVer_V1_0_0)
 }
 
 var (
 	// firstVersions is a map of major version number (without "v" prefix) to
-	// the first known meta version in that major version series.
+	// the first known kindversion version in that major version series.
 	firstVersions = map[string]*semver.Version{
 		"1": FirstVersion(),
 	}
 )
 
 // FirstVersionIn returns the [semver.Version] representing the first known
-// version of the meta in the supplied major version series.
+// version of the kindversion in the supplied major version series.
 //
 // If the supplied major version string is not known, returns an error.
 func FirstVersionIn(major string) (*semver.Version, error) {
@@ -110,34 +110,34 @@ func FirstVersionIn(major string) (*semver.Version, error) {
 	return v, nil
 }
 
-// LastMeta returns the [*meta.Meta] representing the last known version of the
-// meta.
-func LastMeta() *meta.Meta {
-	return Meta_V1_0_1
+// LastKindVersion returns the [*kindversion.KindVersion] representing the last
+// known version of the kindversion.
+func LastKindVersion() *kindversion.KindVersion {
+	return KindVersion_V1_0_1
 }
 
 // LastVersion returns the [semver.Version] representing the last known version
-// of the meta.
+// of the kindversion.
 func LastVersion() *semver.Version {
 	return SemVer_V1_0_1
 }
 
-// LastKindVersion returns the [api.KindVersion] representing the last known
-// version of the Kind.
-func LastKindVersion() api.KindVersion {
-	return api.NewKindVersion(KindName, *SemVer_V1_0_1)
+// LastKindVersionName returns the [api.KindVersionName] representing the last
+// known version of the Kind.
+func LastKindVersionName() api.KindVersionName {
+	return api.NewKindVersionName(KindName, *SemVer_V1_0_1)
 }
 
 var (
 	// lastVersions is a map of major version number (without "v" prefix) to
-	// the last known meta version in that major version series.
+	// the last known kindversion version in that major version series.
 	lastVersions = map[string]*semver.Version{
 		"1": SemVer_V1_0_1,
 	}
 )
 
 // LastVersionIn returns the [semver.Version] representing the last known
-// version of the meta in the supplied major version series.
+// version of the kindversion in the supplied major version series.
 //
 // If the supplied major version string is not known, returns an error.
 func LastVersionIn(major string) (*semver.Version, error) {
@@ -167,11 +167,11 @@ func init() {
 	}
 	Schema_V1_0_0 = &schema.Schema{Schema: *js}
 	SchemaJSON_V1_0_0 = string(jsonb)
-	Meta_V1_0_0 = meta.New(
-		meta.WithKind(Kind),
-		meta.WithVersion(*SemVer_V1_0_0),
-		meta.WithSchema(Schema_V1_0_0),
-		meta.WithSchemaJSON(SchemaJSON_V1_0_0),
+	KindVersion_V1_0_0 = kindversion.New(
+		kindversion.WithKind(Kind),
+		kindversion.WithVersion(*SemVer_V1_0_0),
+		kindversion.WithSchema(Schema_V1_0_0),
+		kindversion.WithSchemaJSON(SchemaJSON_V1_0_0),
 	)
 
 	js, err = jsonschema.For[Spec_V1_0_1](nil)
@@ -190,10 +190,10 @@ func init() {
 	}
 	Schema_V1_0_1 = &schema.Schema{Schema: *js}
 	SchemaJSON_V1_0_1 = string(jsonb)
-	Meta_V1_0_1 = meta.New(
-		meta.WithKind(Kind),
-		meta.WithVersion(*SemVer_V1_0_1),
-		meta.WithSchema(Schema_V1_0_1),
-		meta.WithSchemaJSON(SchemaJSON_V1_0_1),
+	KindVersion_V1_0_1 = kindversion.New(
+		kindversion.WithKind(Kind),
+		kindversion.WithVersion(*SemVer_V1_0_1),
+		kindversion.WithSchema(Schema_V1_0_1),
+		kindversion.WithSchemaJSON(SchemaJSON_V1_0_1),
 	)
 }

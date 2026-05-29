@@ -4,7 +4,7 @@ import (
 	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/domain"
 	"github.com/relexec/rxp/kind"
-	"github.com/relexec/rxp/meta"
+	"github.com/relexec/rxp/kind/kindversion"
 	"github.com/relexec/rxp/namespace"
 	"github.com/relexec/rxp/object"
 	"github.com/relexec/rxp/system"
@@ -23,7 +23,7 @@ const (
 )
 
 var (
-	UnknownKindVersion = api.NewKindVersion(UnknownKindName, *SemVer_V1_0_0)
+	UnknownKindVersionName = api.NewKindVersionName(UnknownKindName, *SemVer_V1_0_0)
 )
 
 var (
@@ -44,12 +44,12 @@ var (
 		namespace.WithUUID(UnknownNamespaceUUID),
 		namespace.WithName(UnknownNamespaceName),
 	)
-	UnknownMeta = meta.New(
-		meta.WithKind(UnknownKind),
-		meta.WithVersion(*SemVer_V1_0_0),
+	UnknownKindVersion = kindversion.New(
+		kindversion.WithKind(UnknownKind),
+		kindversion.WithVersion(*SemVer_V1_0_0),
 	)
 	UnknownObject = object.New(
-		object.WithKindVersion(UnknownKindVersion),
+		object.WithKindVersionName(UnknownKindVersionName),
 		object.WithUUID(UnknownObjectUUID),
 		object.WithName("unknown"),
 	)

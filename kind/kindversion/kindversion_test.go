@@ -1,20 +1,20 @@
-package meta_test
+package kindversion_test
 
 import (
 	"testing"
 
 	"github.com/relexec/rxp/cmp"
 	"github.com/relexec/rxp/cmp/fieldpath"
-	"github.com/relexec/rxp/meta"
+	"github.com/relexec/rxp/kind/kindversion"
 	"github.com/relexec/rxp/testing/fixtures/application"
 	"github.com/relexec/rxp/testing/fixtures/platform"
 	"github.com/stretchr/testify/require"
 )
 
-func TestMeta_Diff(t *testing.T) {
+func TestKindVersion_Diff(t *testing.T) {
 	cases := []struct {
 		name         string
-		a            *meta.Meta
+		a            *kindversion.KindVersion
 		b            any
 		expError     string
 		expDifferent bool
@@ -22,23 +22,23 @@ func TestMeta_Diff(t *testing.T) {
 	}{
 		{
 			"cannot compare different types",
-			platform.Meta_V1_0_0,
+			platform.KindVersion_V1_0_0,
 			"",
 			"incompatible type comparison",
 			false,
 			nil,
 		},
 		{
-			"same meta no diff",
-			platform.Meta_V1_0_0,
-			platform.Meta_V1_0_0,
+			"same kindversion no diff",
+			platform.KindVersion_V1_0_0,
+			platform.KindVersion_V1_0_0,
 			"",
 			false,
 			nil,
 		},
 		{
-			"new meta",
-			platform.Meta_V1_0_0,
+			"new kindversion",
+			platform.KindVersion_V1_0_0,
 			cmp.Zero,
 			"",
 			true,
@@ -65,8 +65,8 @@ func TestMeta_Diff(t *testing.T) {
 		},
 		{
 			"different kind and schema",
-			platform.Meta_V1_0_0,
-			application.Meta_V1_0_0,
+			platform.KindVersion_V1_0_0,
+			application.KindVersion_V1_0_0,
 			"",
 			true,
 			[]cmp.Difference{
@@ -86,8 +86,8 @@ func TestMeta_Diff(t *testing.T) {
 		},
 		{
 			"different version and schema",
-			platform.Meta_V1_0_0,
-			platform.Meta_V1_0_1,
+			platform.KindVersion_V1_0_0,
+			platform.KindVersion_V1_0_1,
 			"",
 			true,
 			[]cmp.Difference{

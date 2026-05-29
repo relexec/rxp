@@ -10,8 +10,8 @@ Categorization refers to the ways in which things are grouped.
 
 In `rxp`, data is categorized by *Type* and *Scope*.
 
-Type refers to the class of thing. Examples of types include System,
-Domain, Namespace, Kind, Meta and Object.
+Type refers to the class of thing. Types in `rxp` include System, Domain,
+Namespace, Kind and Object.
 
 Scope refers to the *extent to which Names of instances of a Type of thing are
 unique*. There are four scopes, shown here in decreasing order of breadth.

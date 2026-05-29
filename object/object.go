@@ -12,8 +12,9 @@ import (
 // Object is a base struct from which all things that implement [types.Object]
 // derive.
 type Object struct {
-	// kindVersion is the kind and version identifier for the type of Object.
-	kindVersion api.KindVersion
+	// kindVersionName is the kind and version identifier for the type of
+	// Object.
+	kindVersionName api.KindVersionName
 	// system contains the system identifier for the Object.
 	system *system.System
 	// uuid is the globally-unique string identifier.
@@ -32,16 +33,16 @@ type Object struct {
 	spec string
 }
 
-// Kind returns the DNS-formatted name of the Kind of Object, e.g.
+// KindName returns the DNS-formatted name of the Kind of Object, e.g.
 // `flow.temporal.io`.
-func (o Object) Kind() api.KindName {
-	return o.kindVersion.Kind()
+func (o Object) KindName() api.KindName {
+	return o.kindVersionName.Kind()
 }
 
-// KindVersion returns the KindVersion of the Object. This string uniquely
-// identifies the type of an Object.
-func (o Object) KindVersion() api.KindVersion {
-	return o.kindVersion
+// KindVersionName returns the KindVersionName of the Object. This string
+// uniquely identifies the type of an Object.
+func (o Object) KindVersionName() api.KindVersionName {
+	return o.kindVersionName
 }
 
 // System returns the System of the Object.
@@ -129,26 +130,26 @@ func (o *Object) SetSpec(spec string) {
 }
 
 type jsonObject struct {
-	KindVersion string     `json:"kind_version"`
-	System      string     `json:"system"`
-	UUID        string     `json:"uuid"`
-	Domain      string     `json:"domain,omitempty"`
-	Namespace   string     `json:"namespace,omitempty"`
-	Name        string     `json:"name"`
-	Labels      api.Labels `json:"labels,omitempty"`
-	Generation  int        `json:"generation"`
-	Spec        string     `json:"spec"`
+	KindVersionName string     `json:"kind_version_name"`
+	System          string     `json:"system"`
+	UUID            string     `json:"uuid"`
+	Domain          string     `json:"domain,omitempty"`
+	Namespace       string     `json:"namespace,omitempty"`
+	Name            string     `json:"name"`
+	Labels          api.Labels `json:"labels,omitempty"`
+	Generation      int        `json:"generation"`
+	Spec            string     `json:"spec"`
 }
 
 // MarshalJSON serializes the Object to a JSON bytestring.
 func (o Object) MarshalJSON() ([]byte, error) {
 	jo := jsonObject{
-		KindVersion: string(o.kindVersion),
-		UUID:        o.uuid,
-		Name:        o.name,
-		Labels:      o.labels,
-		Generation:  int(o.generation),
-		Spec:        o.spec,
+		KindVersionName: string(o.kindVersionName),
+		UUID:            o.uuid,
+		Name:            o.name,
+		Labels:          o.labels,
+		Generation:      int(o.generation),
+		Spec:            o.spec,
 	}
 	if o.system != nil {
 		jo.System = o.system.UUID()
@@ -168,7 +169,7 @@ func (o *Object) UnmarshalJSON(text []byte) error {
 	if err := json.Unmarshal(text, &jo); err != nil {
 		return err
 	}
-	o.kindVersion = api.KindVersion(jo.KindVersion)
+	o.kindVersionName = api.KindVersionName(jo.KindVersionName)
 	o.uuid = jo.UUID
 	o.name = jo.Name
 	o.labels = jo.Labels

@@ -3,10 +3,10 @@ package api
 type Type string
 
 const (
-	TypeSystem    Type = "system"
-	TypeKind      Type = "kind"
-	TypeDomain    Type = "domain"
-	TypeNamespace Type = "namespace"
-	TypeMeta      Type = "meta"
-	TypeObject    Type = "object"
+	TypeSystem      Type = "system"
+	TypeDomain      Type = "domain"
+	TypeNamespace   Type = "namespace"
+	TypeKind        Type = "kind"
+	TypeKindVersion Type = "kindversion"
+	TypeObject      Type = "object"
 )

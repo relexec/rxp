@@ -1,4 +1,4 @@
-package meta
+package kindversion
 
 import (
 	"github.com/relexec/rxp/api"
@@ -7,41 +7,43 @@ import (
 	"github.com/relexec/rxp/system"
 )
 
-// Selector selects a single Meta.
+// Selector selects a single KindVersion.
 type Selector struct {
-	// uuid is the globally-unique identifier of the Meta being selected.
+	// uuid is the globally-unique identifier of the KindVersion being
+	// selected.
 	uuid string
-	// kindVersion is the KindVersion of the Meta being selected.
-	kindVersion api.KindVersion
-	// system is the System to find the Meta in.
+	// name is the KindVersionName of the KindVersion being selected.
+	name api.KindVersionName
+	// system is the System to find the KindVersion in.
 	system *system.System
-	// domain is the Domain to find the Meta in.
+	// domain is the Domain to find the KindVersion in.
 	domain *domain.Domain
-	// namespace is the Namespace to find the Meta in.
+	// namespace is the Namespace to find the KindVersion in.
 	namespace *namespace.Namespace
 }
 
-// UUID returns the globally-unique identifier of the Meta being selected.
+// UUID returns the globally-unique identifier of the KindVersion being
+// selected.
 func (s Selector) UUID() string {
 	return s.uuid
 }
 
-// KindVersion returns the KindVersion to use when looking up the Meta.
-func (s Selector) KindVersion() api.KindVersion {
-	return s.kindVersion
+// Name returns the KindVersionName to use when looking up the KindVersion.
+func (s Selector) Name() api.KindVersionName {
+	return s.name
 }
 
-// System is the System to search for the Meta in.
+// System is the System to search for the KindVersion in.
 func (s Selector) System() *system.System {
 	return s.system
 }
 
-// Domain is the Domain to search for the Meta in.
+// Domain is the Domain to search for the KindVersion in.
 func (s Selector) Domain() *domain.Domain {
 	return s.domain
 }
 
-// Namespace is the Namespace to search for the Meta in.
+// Namespace is the Namespace to search for the KindVersion in.
 func (s Selector) Namespace() *namespace.Namespace {
 	return s.namespace
 }
@@ -51,7 +53,7 @@ func (s Selector) Validate() error {
 	if s.uuid != "" {
 		return nil
 	}
-	err := s.kindVersion.Validate()
+	err := s.name.Validate()
 	if err != nil {
 		return err
 	}
@@ -104,10 +106,10 @@ func ByNamespace(namespace *namespace.Namespace) SelectOption {
 	}
 }
 
-// ByKindVersion sets the Selector's KindVersion.
-func ByKindVersion(kindVersion api.KindVersion) SelectOption {
+// ByName sets the Selector's Name.
+func ByName(name api.KindVersionName) SelectOption {
 	return func(s *Selector) {
-		s.kindVersion = kindVersion
+		s.name = name
 	}
 }
 

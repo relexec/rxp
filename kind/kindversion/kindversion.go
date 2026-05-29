@@ -1,4 +1,4 @@
-package meta
+package kindversion
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 	"github.com/relexec/rxp/cmp/fieldpath"
 	"github.com/relexec/rxp/errors"
 	"github.com/relexec/rxp/kind"
-	"github.com/relexec/rxp/meta/schema"
+	"github.com/relexec/rxp/kind/kindversion/schema"
 	"github.com/relexec/rxp/system"
 )
 
@@ -20,14 +20,14 @@ var (
 	FieldPathSchema  = fieldpath.FromString("schema")
 )
 
-type Meta struct {
-	// system contains the System containing the Meta.
+type KindVersion struct {
+	// system contains the System containing the KindVersion.
 	system *system.System
 	// kind is the [kind.Kind] that identifies the type of Objects represented
-	// by this Meta.
+	// by this KindVersion.
 	kind *kind.Kind
 	// version is the [semver.Version] that identifies the specific version of
-	// the Kind of Objects represented by this Meta.
+	// the Kind of Objects represented by this KindVersion.
 	version semver.Version
 	// schema is the [jsonschema.Schema] that describes the Spec field
 	// composition of Object with this Kind+Version.
@@ -38,87 +38,87 @@ type Meta struct {
 	schemaJSON string
 }
 
-// Validate returns an error if the Meta is not valid.
-func (m Meta) Validate() error {
-	k := m.kind
+// Validate returns an error if the KindVersion is not valid.
+func (kv KindVersion) Validate() error {
+	k := kv.kind
 	if k == nil {
-		return errors.MetaMissingKind()
+		return errors.KindVersionMissingKind()
 	}
 	err := k.Validate()
 	if err != nil {
 		return err
 	}
-	if m.schema == nil {
-		return errors.MetaMissingSchema(m.KindVersion())
+	if kv.schema == nil {
+		return errors.KindVersionMissingSchema(kv.Name())
 	}
 	return nil
 }
 
-// System returns the System of the Meta.
-func (m Meta) System() *system.System {
-	return m.system
+// System returns the System of the KindVersion.
+func (kv KindVersion) System() *system.System {
+	return kv.system
 }
 
-// SetSystem sets the System of Meta.
-func (m *Meta) SetSystem(system *system.System) {
-	m.system = system
+// SetSystem sets the System of KindVersion.
+func (kv *KindVersion) SetSystem(system *system.System) {
+	kv.system = system
 }
 
-// KindVersion returns the KindVersion of the Meta.
-func (m Meta) KindVersion() api.KindVersion {
-	return api.NewKindVersion(m.kind.Name(), m.version)
+// Name returns the KindVersionName of the KindVersion.
+func (kv KindVersion) Name() api.KindVersionName {
+	return api.NewKindVersionName(kv.kind.Name(), kv.version)
 }
 
-// Kind returns the Kind of the Meta.
-func (m Meta) Kind() *kind.Kind {
-	return m.kind
+// Kind returns the Kind of the KindVersion.
+func (kv KindVersion) Kind() *kind.Kind {
+	return kv.kind
 }
 
-// SetKind sets the Kind of the Meta.
-func (m *Meta) SetKind(k *kind.Kind) {
-	m.kind = k
+// SetKind sets the Kind of the KindVersion.
+func (kv *KindVersion) SetKind(k *kind.Kind) {
+	kv.kind = k
 }
 
-// Version returns the Version of the Meta.
-func (m Meta) Version() semver.Version {
-	return m.version
+// Version returns the Version of the KindVersion.
+func (kv KindVersion) Version() semver.Version {
+	return kv.version
 }
 
-// SetKind sets the Version of the Meta.
-func (m *Meta) SetVersion(ver semver.Version) {
-	m.version = ver
+// SetKind sets the Version of the KindVersion.
+func (kv *KindVersion) SetVersion(ver semver.Version) {
+	kv.version = ver
 }
 
 // Schema returns a [jsonschema.Schema] that describes the desired state fields
 // of Objects with this KindVersion.
-func (m Meta) Schema() *schema.Schema {
-	return m.schema
+func (kv KindVersion) Schema() *schema.Schema {
+	return kv.schema
 }
 
 // SetSchema sets the [jsonschema.Schema] that describes the desired state
 // fields of Objects with this KindVersion.
-func (m *Meta) SetSchema(schema *schema.Schema) {
-	m.schema = schema
+func (kv *KindVersion) SetSchema(schema *schema.Schema) {
+	kv.schema = schema
 }
 
 // SchemaJSON returns a string containing the [jsonschema.Schema] that
 // describes the desired state fields of Objects with this KindVersion.
-func (m *Meta) SchemaJSON() (string, error) {
-	if m.schemaJSON != "" {
-		return m.schemaJSON, nil
+func (kv *KindVersion) SchemaJSON() (string, error) {
+	if kv.schemaJSON != "" {
+		return kv.schemaJSON, nil
 	}
-	if m.schema == nil {
+	if kv.schema == nil {
 		return "", nil
 	}
-	jsonb, err := m.schema.MarshalJSON()
+	jsonb, err := kv.schema.MarshalJSON()
 	if err != nil {
 		return "", fmt.Errorf(
 			"failed to marshal JSON for schema for %q: %w",
-			m.KindVersion(), err,
+			kv.Name(), err,
 		)
 	}
-	m.schemaJSON = string(jsonb)
-	return m.schemaJSON, nil
+	kv.schemaJSON = string(jsonb)
+	return kv.schemaJSON, nil
 }
 
 // Diff returns a [cmp.Delta] representing the difference between itself and
@@ -126,22 +126,22 @@ func (m *Meta) SchemaJSON() (string, error) {
 //
 // If the argument is the [cmp.ZeroGen] sentinel, the returned [cmp.Delta]
 // represents instructions to create the thing.
-func (m Meta) Diff(subject any) (*cmp.Delta, error) {
-	var other *Meta
+func (kv KindVersion) Diff(subject any) (*cmp.Delta, error) {
+	var other *KindVersion
 	switch subject := subject.(type) {
 	case cmp.ZeroGen:
-		return m.diffNew()
-	case Meta:
+		return kv.diffNew()
+	case KindVersion:
 		other = &subject
-	case *Meta:
+	case *KindVersion:
 		other = subject
 	default:
-		return nil, cmp.CannotCompareTypes(m, subject)
+		return nil, cmp.CannotCompareTypes(kv, subject)
 	}
 
 	d := &cmp.Delta{}
 
-	thisKind := string(m.kind.Name())
+	thisKind := string(kv.kind.Name())
 	otherKind := string(other.Kind().Name())
 	if thisKind != otherKind {
 		d.Push(
@@ -153,7 +153,7 @@ func (m Meta) Diff(subject any) (*cmp.Delta, error) {
 			),
 		)
 	}
-	thisVersion := m.version.String()
+	thisVersion := kv.version.String()
 	otherVersion := other.Version().String()
 	if thisVersion != otherVersion {
 		d.Push(
@@ -165,8 +165,8 @@ func (m Meta) Diff(subject any) (*cmp.Delta, error) {
 			),
 		)
 	}
-	if m.schema != nil {
-		thisSchemaBytes, err := m.schema.MarshalJSON()
+	if kv.schema != nil {
+		thisSchemaBytes, err := kv.schema.MarshalJSON()
 		if err != nil {
 			return nil, fmt.Errorf("failed marshaling JSONSchema: %w", err)
 		}
@@ -217,10 +217,10 @@ func (m Meta) Diff(subject any) (*cmp.Delta, error) {
 	return d, nil
 }
 
-// diffNew returns a [cmp.Delta] containing instructions to make the Meta as a
-// new Meta (i.e. for the first generation)
-func (m Meta) diffNew() (*cmp.Delta, error) {
-	schemaJSON, err := m.SchemaJSON()
+// diffNew returns a [cmp.Delta] containing instructions to make the KindVersion as a
+// new KindVersion (i.e. for the first generation)
+func (kv KindVersion) diffNew() (*cmp.Delta, error) {
+	schemaJSON, err := kv.SchemaJSON()
 	if err != nil {
 		return nil, err
 	}
@@ -230,7 +230,7 @@ func (m Meta) diffNew() (*cmp.Delta, error) {
 		cmp.NewDifference(
 			FieldPathKind,
 			cmp.DifferenceTypeAdd,
-			string(m.kind.Name()),
+			string(kv.kind.Name()),
 			nil,
 		),
 	)
@@ -238,7 +238,7 @@ func (m Meta) diffNew() (*cmp.Delta, error) {
 		cmp.NewDifference(
 			FieldPathVersion,
 			cmp.DifferenceTypeAdd,
-			m.version.String(),
+			kv.version.String(),
 			nil,
 		),
 	)

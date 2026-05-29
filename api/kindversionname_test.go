@@ -8,10 +8,10 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestKindVersion(t *testing.T) {
+func TestKindVersionName(t *testing.T) {
 	cases := []struct {
 		name             string
-		subject          api.KindVersion
+		subject          api.KindVersionName
 		expValidateError string
 		expKind          string
 		expVersionString string

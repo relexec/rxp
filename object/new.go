@@ -26,10 +26,10 @@ func WithSystem(system *system.System) Option {
 	}
 }
 
-// WithKindVersion sets the Object's KindVersion.
-func WithKindVersion(kindVersion api.KindVersion) Option {
+// WithKindVersionName sets the Object's KindVersionName.
+func WithKindVersionName(kv api.KindVersionName) Option {
 	return func(o *Object) {
-		o.kindVersion = kindVersion
+		o.kindVersionName = kv
 	}
 }
 

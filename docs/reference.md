@@ -108,30 +108,18 @@ A KindName must be unique within the scope of the `rxp` system installation,
 however for any KindName that is intended to be used across multiple `rxp`
 system installations, the KindName should be globally-unique.
 
-### KindVersion
+## KindVersion
 
-*KindVersion* is a **string** that uniquely identifies a specific version of
-the Kind of an Object.
+*KindVersion* contains the definition for a specific version of a Kind. This
+definition includes a `Schema` that defines the fields that comprise desired
+state for things of that KindVersion.
 
-KindVersion a specialized string that contains the KindName and optionally a
-SemVer version string that uniquely identifies the exact type of an Object.
-
-A KindVersion has the format `<kind>[@<version>]`, where `<kind>` is a valid
-KindName and the optional `<version>` component must be a valid SemVer version
-string.
-
-> Note that a valid SemVer version string does *not* contain a `v` prefix.
-
-## Meta
-
-*Meta* contains the definition for a KindVersion. This definition includes
-a `Schema` that defines the fields that comprise desired state for things of
-that KindVersion.
+KindVersions can be identified by a specialized string type KindVersionName.
 
 ```mermaid
 erDiagram
     System ||--|{ Kind : "knows about"
-    Kind ||--|{ Meta : "has a"
+    Kind ||--|{ KindVersion : "has a"
     System {
         string **uuid**
         string tag
@@ -142,12 +130,22 @@ erDiagram
         string **name**
         int **scope**
     }
-    Meta{
+    KindVersion{
         string **kind**
         string **version**
         string **schema**
     }
 ```
+
+### KindVersionName
+
+*KindVersionName* is a specialized string containing the KindName and SemVer
+version string that uniquely identifies the exact type of an Object.
+
+This string has the format `<kind>@<version>`, where `<kind>` is a valid
+KindName and `<version>` is a valid SemVer version string.
+
+> Note that a valid SemVer version string does *not* contain a `v` prefix.
 
 ## Object
 
@@ -168,11 +166,11 @@ Objects and filter them in query operations.
 
 ```mermaid
 erDiagram
-    System ||--|{ Meta : "knows about"
+    System ||--|{ Kind : "knows about"
     System ||--|{ Domain : "knows about"
     System ||--|{ Object : "knows about"
-    Kind ||--|{ Meta : "has a"
-    Meta ||--|{ Object : "instance of"
+    Kind ||--|{ KindVersion : "has a"
+    KindVersion ||--|{ Object : "instance of"
     Domain ||--|{ Namespace : "may have"
     Domain ||--|{ Object : "may have"
     Namespace ||--|{ Object : "may have"
@@ -186,7 +184,7 @@ erDiagram
         stromg **system**
         int **scope**
     }
-    Meta{
+    KindVersion{
         string **kind**
         string **version**
         string **schema**
@@ -203,7 +201,7 @@ erDiagram
     }
     Object{
         string **system**
-        string **meta**
+        string **kindversion**
         string **uuid**
         string **name**
         string domain

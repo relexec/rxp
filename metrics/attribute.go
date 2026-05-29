@@ -38,7 +38,7 @@ const (
 )
 
 // AttributeKindVersion returns the kindversion attribute KeyValue with the
-// value of the supplied KindVersion.
-func AttributeKindVersion(kv api.KindVersion) attribute.KeyValue {
+// value of the supplied KindVersionName.
+func AttributeKindVersion(kv api.KindVersionName) attribute.KeyValue {
 	return attribute.String(AttributeNameKindVersion, string(kv))
 }

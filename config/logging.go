@@ -1,17 +1,20 @@
 package config
 
 import (
+	"os"
+
 	"github.com/spf13/pflag"
 )
 
 const (
-	DefaultLoggingLevel  = "info"
-	flagLoggingLevel     = "logging-level"
-	flagLoggingLevelDesc = "The log level. The default is info. The options are, in descending order of chattiness: debug, info, error"
+	DefaultLogLevel  = "info"
+	flagLogLevel     = "rxp-logging-level"
+	flagLogLevelDesc = "The log level. The default is info. The options are, in descending order of chattiness: debug, info, error"
+	EnvVarLogLevel   = "RXP_LOG_LEVEL"
 )
 
-// LoggingConfig contains logging configuration options for rxp.
-type LoggingConfig struct {
+// LogConfig contains logging configuration options for rxp.
+type LogConfig struct {
 	// Level is the log level to use.
 	//
 	// The default is "info". The options are, in descending order of
@@ -19,17 +22,27 @@ type LoggingConfig struct {
 	Level string `json:"level"`
 }
 
+func (c *LogConfig) SetDefaults() {
+	if c.Level == "" {
+		lvl := os.Getenv(EnvVarLogLevel)
+		if lvl == "" {
+			lvl = DefaultLogLevel
+		}
+		c.Level = lvl
+	}
+}
+
 // Validate checks for invalid settings.
-func (c *LoggingConfig) Validate() error {
+func (c *LogConfig) Validate() error {
 	return nil
 }
 
-// BindFlags binds the supplied flagset to the LoggingConfig's fields.
-func (c *LoggingConfig) BindFlags(fs *pflag.FlagSet) {
+// BindFlags binds the supplied flagset to the LogConfig's fields.
+func (c *LogConfig) BindFlags(fs *pflag.FlagSet) {
 	pflag.StringVar(
 		&c.Level,
-		flagLoggingLevel,
-		DefaultLoggingLevel,
-		flagLoggingLevelDesc,
+		flagLogLevel,
+		DefaultLogLevel,
+		flagLogLevelDesc,
 	)
 }

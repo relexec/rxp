@@ -40,8 +40,8 @@ type Config struct {
 	SystemUUID string `json:"system_uuid,omitempty"`
 	// SystemTag contains the rxp host system Name, if any.
 	SystemTag string `json:"system_name,omitempty"`
-	// Logging contains options for configuring logging.
-	Logging LoggingConfig `json:"logging"`
+	// Log contains options for configuring logging.
+	Log LogConfig `json:"logging"`
 }
 
 // SetDefaults sets any missing values to their defaults or environs variable
@@ -53,11 +53,12 @@ func (c *Config) SetDefaults() {
 	if c.SystemTag == "" {
 		c.SystemTag = os.Getenv(envVarSystemTag)
 	}
+	c.Log.SetDefaults()
 }
 
 // Validate checks for invalid settings.
 func (c *Config) Validate() error {
-	return c.Logging.Validate()
+	return c.Log.Validate()
 }
 
 // BindFlags bings the supplied flagset to the Config's fields.
@@ -74,5 +75,5 @@ func (c *Config) BindFlags(fs *pflag.FlagSet) {
 		"",
 		flagSystemTagDesc,
 	)
-	c.Logging.BindFlags(fs)
+	c.Log.BindFlags(fs)
 }

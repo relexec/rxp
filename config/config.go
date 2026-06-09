@@ -1,7 +1,18 @@
 package config
 
 import (
+	"os"
+
 	"github.com/spf13/pflag"
+)
+
+const (
+	flagSystemUUID     = "rxp-system-uuid"
+	flagSystemUUIDDesc = "Contains the rxp host system UUID. If empty, the value of RXP_SYSTEM_UUID environs variable is used."
+	envVarSystemUUID   = "RXP_SYSTEM_UUID"
+	flagSystemTag      = "rxp-system-tag"
+	flagSystemTagDesc  = "Contains the rxp host system tag. If empty, the value of RXP_SYSTEM_TAG environs variable is used."
+	envVarSystemTag    = "RXP_SYSTEM_TAG"
 )
 
 // WithOption modifies a Config returned from New.
@@ -23,10 +34,25 @@ func WithFlags(fs *pflag.FlagSet) WithOption {
 	}
 }
 
-// Config contains configuration options for the Temporal Cluster Operator
+// Config contains common configuration options for rxp.
 type Config struct {
+	// SystemUUID contains the rxp host system UUID.
+	SystemUUID string `json:"system_uuid,omitempty"`
+	// SystemTag contains the rxp host system Name, if any.
+	SystemTag string `json:"system_name,omitempty"`
 	// Logging contains options for configuring logging.
 	Logging LoggingConfig `json:"logging"`
+}
+
+// SetDefaults sets any missing values to their defaults or environs variable
+// values.
+func (c *Config) SetDefaults() {
+	if c.SystemUUID == "" {
+		c.SystemUUID = os.Getenv(envVarSystemUUID)
+	}
+	if c.SystemTag == "" {
+		c.SystemTag = os.Getenv(envVarSystemTag)
+	}
 }
 
 // Validate checks for invalid settings.
@@ -36,5 +62,17 @@ func (c *Config) Validate() error {
 
 // BindFlags bings the supplied flagset to the Config's fields.
 func (c *Config) BindFlags(fs *pflag.FlagSet) {
+	pflag.StringVar(
+		&c.SystemUUID,
+		flagSystemUUID,
+		"",
+		flagSystemUUIDDesc,
+	)
+	pflag.StringVar(
+		&c.SystemTag,
+		flagSystemTag,
+		"",
+		flagSystemTagDesc,
+	)
 	c.Logging.BindFlags(fs)
 }

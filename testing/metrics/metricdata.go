@@ -24,6 +24,11 @@ func SumResourceMetrics(
 		m, ok := lo.Find(sm.Metrics, func(subject metricdata.Metrics) bool {
 			return strings.EqualFold(instrument, subject.Name)
 		})
+		if !ok {
+			return -1, fmt.Errorf(
+				"instrument %q not found in metricsdata", instrument,
+			)
+		}
 		sum, ok := m.Data.(metricdata.Sum[int64])
 		if !ok {
 			return -1, fmt.Errorf(

@@ -10,5 +10,5 @@ var (
 	ErrKindNameRepeatedPeriods       = New("repeated periods", WithWrap(ErrKindNameInvalid))
 	ErrKindNameInvalidFirstCharacter = New("first character must be letter or number", WithWrap(ErrKindNameInvalid))
 
-	ErrKindVersionUnknown = New("unknown kind version", WithCode(ErrCodeBadRequest))
+	ErrKindUnknown = New("unknown kind", WithCode(ErrCodeBadRequest))
 )

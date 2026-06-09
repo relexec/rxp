@@ -6,6 +6,7 @@ import (
 
 var (
 	ErrInvalidKindVersion = New("invalid kindversion", WithCode(ErrCodeBadRequest))
+	ErrKindVersionUnknown = New("unknown kind version", WithCode(ErrCodeBadRequest))
 )
 
 // KindVersionMissingKind returns a wrapped ErrKindVersionInvalid indicating the

@@ -1,10 +1,11 @@
 package expression
 
 import (
+	"github.com/samber/lo"
+
 	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/domain"
 	"github.com/relexec/rxp/errors"
-	"github.com/samber/lo"
 )
 
 type DomainNamePredicate struct {

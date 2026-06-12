@@ -19,8 +19,8 @@ func (p KindNamePredicate) Validate() error {
 	v := p.BasePredicate.Value()
 	switch v := v.(type) {
 	case []api.KindName:
-		for _, dn := range v {
-			if err := dn.Validate(); err != nil {
+		for _, kn := range v {
+			if err := kn.Validate(); err != nil {
 				return errors.PredicateInvalid(err.Error())
 			}
 		}
@@ -87,16 +87,24 @@ func KindNameNotIn(names ...api.KindName) Expression {
 }
 
 // ContainsKindPredicate returns true if the supplied [Expression] has a
-// KindNamePredicate. If the supplied expression is an
-// [expression.OrExpression] or [expression.AndExpression], this function
-// recursively checkinds sub-expressions to ensure that a KindNamePredicate is
-// present in all sub-expressions.
+// Predicate that filters on KindName, KindVersionName, KindVersion or Kind. If
+// the supplied expression is an [expression.OrExpression] or
+// [expression.AndExpression], this function recursively checks sub-expressions
+// to ensure that a KindNamePredicate is present in all sub-expressions.
 func ContainsKindPredicate(expr Expression) bool {
 	switch expr := expr.(type) {
 	case UnaryExpression:
 		pred := expr.Predicate
-		_, ok := pred.(KindNamePredicate)
-		return ok
+		switch pred.(type) {
+		case KindNamePredicate,
+			KindUUIDPredicate,
+			KindPredicate,
+			KindVersionNamePredicate,
+			KindVersionPredicate:
+			return true
+		default:
+			return false
+		}
 	case OrExpression:
 		exprs := expr.Expressions()
 		for _, e := range exprs {

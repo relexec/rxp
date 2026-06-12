@@ -4,8 +4,6 @@ go 1.25.0
 
 require (
 	github.com/Masterminds/semver/v3 v3.4.0
-	github.com/go-logr/logr v1.4.3
-	github.com/go-logr/stdr v1.2.2
 	github.com/google/jsonschema-go v0.4.2
 	github.com/samber/lo v1.53.0
 	github.com/spf13/pflag v1.0.10
@@ -19,6 +17,8 @@ require (
 require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/go-logr/logr v1.4.3 // indirect
+	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect

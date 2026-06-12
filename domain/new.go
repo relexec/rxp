@@ -37,3 +37,10 @@ func WithName(name api.DomainName) Option {
 		d.name = name
 	}
 }
+
+// WithParent sets the Domain's Parent.
+func WithParent(parent *Domain) Option {
+	return func(d *Domain) {
+		d.parent = parent
+	}
+}

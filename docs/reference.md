@@ -35,6 +35,8 @@ Domains always have a `Name` which is a specialized string type DomainName.
 
 A Domain's `Name` must be unique within the scope of the Domain's System.
 
+A Domain can have a *parent* Domain.
+
 ### DomainName
 
 A valid DomainName is a DNS-formatted (RFC 1035-compliant) name less than 254
@@ -173,6 +175,7 @@ erDiagram
     KindVersion ||--|{ Object : "instance of"
     Domain ||--|{ Namespace : "may have"
     Domain ||--|{ Object : "may have"
+    Domain ||--|o Domain : "can have a parent"
     Namespace ||--|{ Object : "may have"
     System {
         string **uuid**

@@ -114,9 +114,11 @@ type Driver interface {
 		context.Context,
 		object.Object,
 	) (*object.Object, error)
-	// ObjectQuery queries zero or more Objects from persistent storage.
+	// ObjectQuery queries zero or more Objects of a specified kind or
+	// kindversion from persistent storage.
 	ObjectQuery(
 		context.Context,
+		api.KindVersionName,
 		expression.Expression,
 		...query.Option,
 	) (*query.Result[*object.Object], error)

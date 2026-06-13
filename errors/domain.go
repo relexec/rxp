@@ -3,6 +3,7 @@ package errors
 var (
 	ErrDomainInvalid                   = New("invalid domain", WithCode(ErrCodeBadRequest))
 	ErrDomainParentSystemDifferent     = New("parent system must be same", WithWrap(ErrDomainInvalid))
+	ErrDomainParentNotFound            = New("parent not found", WithWrap(ErrDomainInvalid))
 	ErrDomainUUIDRequired              = New("uuid required", WithWrap(ErrDomainInvalid))
 	ErrDomainNameRequired              = New("name required", WithWrap(ErrDomainInvalid))
 	ErrDomainNameInvalid               = New("invalid domain name", WithWrap(ErrDomainInvalid))

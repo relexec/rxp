@@ -18,50 +18,56 @@ const (
 type Predicate interface {
 	// Validate returns an error if the Predicate is not valid.
 	Validate() error
-	// Operator returns the Predicate's Operator.
-	Operator() PredicateOperator
-	// Negated returns true if the Predicate's Operator should be negated. For
-	// example, if Operator() returns PredicateOperatorEqual and Negated()
-	// returns true, the Predicate will evaluate to true if the target field is
-	// NOT equal to the Values.
-	Negated() bool
-	// Value returns the value that is compared to the target field.
-	Value() any
 }
 
 // BasePredicate is the base struct from which all specialized Predicates
 // derive.
 type BasePredicate struct {
-	// op contains the Predicate's Operator.
-	op PredicateOperator
+	// Op contains the Predicate's Operator.
+	Op PredicateOperator
 	// negated indicates whether the Predicate's Operator should be negated.
-	negated bool
+	Negated bool
 	// value contains the value that is compared to the target field.
-	value any
-}
-
-// Operator returns the Predicate's Operator.
-func (p BasePredicate) Operator() PredicateOperator {
-	return p.op
-}
-
-// Negated returns true if the Predicate's Operator should be negated. For
-// example, if Operator() returns OperatorEqual and Negated() returns true,
-// the Predicate will evaluate to true if the target field is NOT equal to
-// the Values.
-func (p BasePredicate) Negated() bool {
-	return p.negated
-}
-
-// Values returns the value that is compared to the target field.
-func (p BasePredicate) Value() any {
-	return p.value
+	Value any
 }
 
 // Validate returns an error if the Predicate is not valid.
 func (p BasePredicate) Validate() error {
-	if p.value == nil {
+	if p.Value == nil {
 		return errors.ErrPredicateValueRequired
 	}
 	return nil
+}
+
+// ContainsPredicate returns true if the supplied [Expression] has a Predicate
+// whose type is any of a specified list of types. If the supplied expression
+// is an [expression.OrExpression] or [expression.AndExpression], this function
+// recursively checks sub-expressions to ensure that a NamePredicate is present
+// in all sub-expressions.
+func ContainsPredicate(expr Expression, filter func(p Predicate) bool) bool {
+	switch expr := expr.(type) {
+	case UnaryExpression:
+		pred := expr.Predicate
+		return filter(pred)
+	case OrExpression:
+		exprs := expr.Expressions()
+		for _, e := range exprs {
+			if ContainsPredicate(e, filter) {
+				// At least one of the OR'd expressions was a NamePredicate.
+				return true
+			}
+		}
+		return false
+	case AndExpression:
+		exprs := expr.Expressions()
+		for _, e := range exprs {
+			if ContainsPredicate(e, filter) {
+				// At least one of the AND'd expressions was a NamePredicate.
+				return true
+			}
+		}
+		return false
+	default:
+		return false
+	}
 }

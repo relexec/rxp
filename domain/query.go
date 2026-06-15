@@ -5,11 +5,11 @@ import (
 
 	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/errors"
-	"github.com/relexec/rxp/query/expression"
+	"github.com/relexec/rxp/query"
 )
 
 type NamePredicate struct {
-	expression.BasePredicate
+	query.BasePredicate
 }
 
 func (p NamePredicate) Validate() error {
@@ -35,11 +35,11 @@ func (p NamePredicate) Validate() error {
 
 // NameEqual returns an Expression that will match things having a
 // particular DomainName.
-func NameEqual(name api.DomainName) expression.Expression {
-	return expression.UnaryExpression{
+func NameEqual(name api.DomainName) query.Expression {
+	return query.UnaryExpression{
 		Predicate: NamePredicate{
-			expression.BasePredicate{
-				Op:    expression.PredicateOperatorEqual,
+			query.BasePredicate{
+				Op:    query.PredicateOperatorEqual,
 				Value: name,
 			},
 		},
@@ -48,11 +48,11 @@ func NameEqual(name api.DomainName) expression.Expression {
 
 // NameNotEqual returns an Expression that will match things not having a
 // particular DomainName.
-func NameNotEqual(name api.DomainName) expression.Expression {
-	return expression.UnaryExpression{
+func NameNotEqual(name api.DomainName) query.Expression {
+	return query.UnaryExpression{
 		Predicate: NamePredicate{
-			expression.BasePredicate{
-				Op:      expression.PredicateOperatorEqual,
+			query.BasePredicate{
+				Op:      query.PredicateOperatorEqual,
 				Negated: true,
 				Value:   name,
 			},
@@ -62,15 +62,15 @@ func NameNotEqual(name api.DomainName) expression.Expression {
 
 // NameIn returns an Expression that will match things that have any of a
 // set of specified DomainNames.
-func NameIn(names ...api.DomainName) expression.Expression {
+func NameIn(names ...api.DomainName) query.Expression {
 	// flatten IN to = when there's only one value...
 	if len(names) == 1 {
 		return NameEqual(names[0])
 	}
-	return expression.UnaryExpression{
+	return query.UnaryExpression{
 		Predicate: NamePredicate{
-			expression.BasePredicate{
-				Op:    expression.PredicateOperatorIn,
+			query.BasePredicate{
+				Op:    query.PredicateOperatorIn,
 				Value: names,
 			},
 		},
@@ -79,11 +79,11 @@ func NameIn(names ...api.DomainName) expression.Expression {
 
 // NameNotIn returns an Expression that will match things that do not
 // have any of a set of specified DomainNames.
-func NameNotIn(names ...api.DomainName) expression.Expression {
-	return expression.UnaryExpression{
+func NameNotIn(names ...api.DomainName) query.Expression {
+	return query.UnaryExpression{
 		Predicate: NamePredicate{
-			expression.BasePredicate{
-				Op:      expression.PredicateOperatorIn,
+			query.BasePredicate{
+				Op:      query.PredicateOperatorIn,
 				Negated: true,
 				Value:   names,
 			},
@@ -92,7 +92,7 @@ func NameNotIn(names ...api.DomainName) expression.Expression {
 }
 
 type UUIDPredicate struct {
-	expression.BasePredicate
+	query.BasePredicate
 }
 
 func (p UUIDPredicate) Validate() error {
@@ -113,11 +113,11 @@ func (p UUIDPredicate) Validate() error {
 
 // UUIDEqual returns an Expression that will match things having a
 // particular UUID.
-func UUIDEqual(uuid string) expression.Expression {
-	return expression.UnaryExpression{
+func UUIDEqual(uuid string) query.Expression {
+	return query.UnaryExpression{
 		Predicate: UUIDPredicate{
-			expression.BasePredicate{
-				Op:    expression.PredicateOperatorEqual,
+			query.BasePredicate{
+				Op:    query.PredicateOperatorEqual,
 				Value: uuid,
 			},
 		},
@@ -126,11 +126,11 @@ func UUIDEqual(uuid string) expression.Expression {
 
 // UUIDNotEqual returns an Expression that will match things not having a
 // particular UUID.
-func UUIDNotEqual(uuid string) expression.Expression {
-	return expression.UnaryExpression{
+func UUIDNotEqual(uuid string) query.Expression {
+	return query.UnaryExpression{
 		Predicate: UUIDPredicate{
-			expression.BasePredicate{
-				Op:      expression.PredicateOperatorEqual,
+			query.BasePredicate{
+				Op:      query.PredicateOperatorEqual,
 				Negated: true,
 				Value:   uuid,
 			},
@@ -140,15 +140,15 @@ func UUIDNotEqual(uuid string) expression.Expression {
 
 // UUIDIn returns an Expression that will match things that have any of a
 // set of specified UUIDs.
-func UUIDIn(uuids ...string) expression.Expression {
+func UUIDIn(uuids ...string) query.Expression {
 	// flatten IN to = when there's only one value...
 	if len(uuids) == 1 {
 		return UUIDEqual(uuids[0])
 	}
-	return expression.UnaryExpression{
+	return query.UnaryExpression{
 		Predicate: UUIDPredicate{
-			expression.BasePredicate{
-				Op:    expression.PredicateOperatorIn,
+			query.BasePredicate{
+				Op:    query.PredicateOperatorIn,
 				Value: uuids,
 			},
 		},
@@ -157,11 +157,11 @@ func UUIDIn(uuids ...string) expression.Expression {
 
 // UUIDNotIn returns an Expression that will match things that do not
 // have any of a set of specified UUIDs.
-func UUIDNotIn(uuids ...string) expression.Expression {
-	return expression.UnaryExpression{
+func UUIDNotIn(uuids ...string) query.Expression {
+	return query.UnaryExpression{
 		Predicate: UUIDPredicate{
-			expression.BasePredicate{
-				Op:      expression.PredicateOperatorIn,
+			query.BasePredicate{
+				Op:      query.PredicateOperatorIn,
 				Negated: true,
 				Value:   uuids,
 			},
@@ -170,22 +170,22 @@ func UUIDNotIn(uuids ...string) expression.Expression {
 }
 
 type DomainPredicate struct {
-	expression.BasePredicate
+	query.BasePredicate
 }
 
 // Equal returns an Expression that will match things having a particular
 // Domain.
-func Equal(dom *Domain) expression.Expression {
+func Equal(dom *Domain) query.Expression {
 	if dom.UUID() != "" {
 		return UUIDEqual(dom.UUID())
 	}
 	if dom.System() == nil {
 		return NameEqual(dom.Name())
 	}
-	return expression.UnaryExpression{
+	return query.UnaryExpression{
 		Predicate: DomainPredicate{
-			expression.BasePredicate{
-				Op:    expression.PredicateOperatorEqual,
+			query.BasePredicate{
+				Op:    query.PredicateOperatorEqual,
 				Value: dom,
 			},
 		},
@@ -194,17 +194,17 @@ func Equal(dom *Domain) expression.Expression {
 
 // NotEqual returns an Expression that will match things not having a
 // particular Domain.
-func NotEqual(dom *Domain) expression.Expression {
+func NotEqual(dom *Domain) query.Expression {
 	if dom.UUID() != "" {
 		return UUIDNotEqual(dom.UUID())
 	}
 	if dom.System() == nil {
 		return NameNotEqual(dom.Name())
 	}
-	return expression.UnaryExpression{
+	return query.UnaryExpression{
 		Predicate: DomainPredicate{
-			expression.BasePredicate{
-				Op:      expression.PredicateOperatorEqual,
+			query.BasePredicate{
+				Op:      query.PredicateOperatorEqual,
 				Negated: true,
 				Value:   dom,
 			},
@@ -214,32 +214,32 @@ func NotEqual(dom *Domain) expression.Expression {
 
 // In returns an Expression that will match things that have any of a set
 // of specified Domain.
-func In(doms ...*Domain) expression.Expression {
+func In(doms ...*Domain) query.Expression {
 	uuids := lo.Map(doms, func(dom *Domain, _ int) string {
 		return dom.UUID()
 	})
 	if !lo.Contains(uuids, "") {
 		return UUIDIn(uuids...)
 	}
-	exprs := make([]expression.Expression, 0, len(doms))
+	exprs := make([]query.Expression, 0, len(doms))
 	for _, dom := range doms {
 		exprs = append(exprs, Equal(dom))
 	}
-	return expression.Or(exprs...)
+	return query.Or(exprs...)
 }
 
 // NotIn returns an Expression that will match things that do not
 // have any of a set of specified Domain.
-func NotIn(doms ...*Domain) expression.Expression {
+func NotIn(doms ...*Domain) query.Expression {
 	uuids := lo.Map(doms, func(dom *Domain, _ int) string {
 		return dom.UUID()
 	})
 	if !lo.Contains(uuids, "") {
 		return UUIDNotIn(uuids...)
 	}
-	exprs := make([]expression.Expression, 0, len(doms))
+	exprs := make([]query.Expression, 0, len(doms))
 	for _, dom := range doms {
 		exprs = append(exprs, NotEqual(dom))
 	}
-	return expression.And(exprs...)
+	return query.And(exprs...)
 }

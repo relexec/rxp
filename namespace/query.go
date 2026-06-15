@@ -5,11 +5,11 @@ import (
 
 	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/errors"
-	"github.com/relexec/rxp/query/expression"
+	"github.com/relexec/rxp/query"
 )
 
 type NamePredicate struct {
-	expression.BasePredicate
+	query.BasePredicate
 }
 
 func (p NamePredicate) Validate() error {
@@ -35,11 +35,11 @@ func (p NamePredicate) Validate() error {
 
 // NameEqual returns an Expression that will match things having a
 // particular NamespaceName.
-func NameEqual(name api.NamespaceName) expression.Expression {
-	return expression.UnaryExpression{
+func NameEqual(name api.NamespaceName) query.Expression {
+	return query.UnaryExpression{
 		Predicate: NamePredicate{
-			expression.BasePredicate{
-				Op:    expression.PredicateOperatorEqual,
+			query.BasePredicate{
+				Op:    query.PredicateOperatorEqual,
 				Value: name,
 			},
 		},
@@ -48,11 +48,11 @@ func NameEqual(name api.NamespaceName) expression.Expression {
 
 // NameNotEqual returns an Expression that will match things not having a
 // particular NamespaceName.
-func NameNotEqual(name api.NamespaceName) expression.Expression {
-	return expression.UnaryExpression{
+func NameNotEqual(name api.NamespaceName) query.Expression {
+	return query.UnaryExpression{
 		Predicate: NamePredicate{
-			expression.BasePredicate{
-				Op:      expression.PredicateOperatorEqual,
+			query.BasePredicate{
+				Op:      query.PredicateOperatorEqual,
 				Negated: true,
 				Value:   name,
 			},
@@ -62,15 +62,15 @@ func NameNotEqual(name api.NamespaceName) expression.Expression {
 
 // NameIn returns an Expression that will match things that have any of a
 // set of specified NamespaceNames.
-func NameIn(names ...api.NamespaceName) expression.Expression {
+func NameIn(names ...api.NamespaceName) query.Expression {
 	// flatten IN to = when there's only one value...
 	if len(names) == 1 {
 		return NameEqual(names[0])
 	}
-	return expression.UnaryExpression{
+	return query.UnaryExpression{
 		Predicate: NamePredicate{
-			expression.BasePredicate{
-				Op:    expression.PredicateOperatorIn,
+			query.BasePredicate{
+				Op:    query.PredicateOperatorIn,
 				Value: names,
 			},
 		},
@@ -79,11 +79,11 @@ func NameIn(names ...api.NamespaceName) expression.Expression {
 
 // NameNotIn returns an Expression that will match things that do not
 // have any of a set of specified NamespaceNames.
-func NameNotIn(names ...api.NamespaceName) expression.Expression {
-	return expression.UnaryExpression{
+func NameNotIn(names ...api.NamespaceName) query.Expression {
+	return query.UnaryExpression{
 		Predicate: NamePredicate{
-			expression.BasePredicate{
-				Op:      expression.PredicateOperatorIn,
+			query.BasePredicate{
+				Op:      query.PredicateOperatorIn,
 				Negated: true,
 				Value:   names,
 			},
@@ -92,16 +92,16 @@ func NameNotIn(names ...api.NamespaceName) expression.Expression {
 }
 
 type UUIDPredicate struct {
-	expression.BasePredicate
+	query.BasePredicate
 }
 
 // UUIDEqual returns an Expression that will match things having a
 // particular UUID.
-func UUIDEqual(uuid string) expression.Expression {
-	return expression.UnaryExpression{
+func UUIDEqual(uuid string) query.Expression {
+	return query.UnaryExpression{
 		Predicate: UUIDPredicate{
-			expression.BasePredicate{
-				Op:    expression.PredicateOperatorEqual,
+			query.BasePredicate{
+				Op:    query.PredicateOperatorEqual,
 				Value: uuid,
 			},
 		},
@@ -110,11 +110,11 @@ func UUIDEqual(uuid string) expression.Expression {
 
 // UUIDNotEqual returns an Expression that will match things not having a
 // particular UUID.
-func UUIDNotEqual(uuid string) expression.Expression {
-	return expression.UnaryExpression{
+func UUIDNotEqual(uuid string) query.Expression {
+	return query.UnaryExpression{
 		Predicate: UUIDPredicate{
-			expression.BasePredicate{
-				Op:      expression.PredicateOperatorEqual,
+			query.BasePredicate{
+				Op:      query.PredicateOperatorEqual,
 				Negated: true,
 				Value:   uuid,
 			},
@@ -124,15 +124,15 @@ func UUIDNotEqual(uuid string) expression.Expression {
 
 // UUIDIn returns an Expression that will match things that have any of a
 // set of specified UUIDs.
-func UUIDIn(uuids ...string) expression.Expression {
+func UUIDIn(uuids ...string) query.Expression {
 	// flatten IN to = when there's only one value...
 	if len(uuids) == 1 {
 		return UUIDEqual(uuids[0])
 	}
-	return expression.UnaryExpression{
+	return query.UnaryExpression{
 		Predicate: UUIDPredicate{
-			expression.BasePredicate{
-				Op:    expression.PredicateOperatorIn,
+			query.BasePredicate{
+				Op:    query.PredicateOperatorIn,
 				Value: uuids,
 			},
 		},
@@ -141,11 +141,11 @@ func UUIDIn(uuids ...string) expression.Expression {
 
 // UUIDNotIn returns an Expression that will match things that do not
 // have any of a set of specified UUIDs.
-func UUIDNotIn(uuids ...string) expression.Expression {
-	return expression.UnaryExpression{
+func UUIDNotIn(uuids ...string) query.Expression {
+	return query.UnaryExpression{
 		Predicate: UUIDPredicate{
-			expression.BasePredicate{
-				Op:      expression.PredicateOperatorIn,
+			query.BasePredicate{
+				Op:      query.PredicateOperatorIn,
 				Negated: true,
 				Value:   uuids,
 			},
@@ -154,19 +154,19 @@ func UUIDNotIn(uuids ...string) expression.Expression {
 }
 
 type NamespacePredicate struct {
-	expression.BasePredicate
+	query.BasePredicate
 }
 
 // Equal returns an Expression that will match things having a particular
 // Namespace.
-func Equal(ns *Namespace) expression.Expression {
+func Equal(ns *Namespace) query.Expression {
 	if ns.UUID() != "" {
 		return UUIDEqual(ns.UUID())
 	}
-	return expression.UnaryExpression{
+	return query.UnaryExpression{
 		Predicate: NamespacePredicate{
-			expression.BasePredicate{
-				Op:    expression.PredicateOperatorEqual,
+			query.BasePredicate{
+				Op:    query.PredicateOperatorEqual,
 				Value: ns,
 			},
 		},
@@ -175,14 +175,14 @@ func Equal(ns *Namespace) expression.Expression {
 
 // NotEqual returns an Expression that will match things not having a
 // particular Namespace.
-func NotEqual(ns *Namespace) expression.Expression {
+func NotEqual(ns *Namespace) query.Expression {
 	if ns.UUID() != "" {
 		return UUIDNotEqual(ns.UUID())
 	}
-	return expression.UnaryExpression{
+	return query.UnaryExpression{
 		Predicate: NamespacePredicate{
-			expression.BasePredicate{
-				Op:      expression.PredicateOperatorEqual,
+			query.BasePredicate{
+				Op:      query.PredicateOperatorEqual,
 				Negated: true,
 				Value:   ns,
 			},
@@ -192,32 +192,32 @@ func NotEqual(ns *Namespace) expression.Expression {
 
 // In returns an Expression that will match things that have any of a set
 // of specified Namespace.
-func In(nss ...*Namespace) expression.Expression {
+func In(nss ...*Namespace) query.Expression {
 	uuids := lo.Map(nss, func(ns *Namespace, _ int) string {
 		return ns.UUID()
 	})
 	if !lo.Contains(uuids, "") {
 		return UUIDIn(uuids...)
 	}
-	exprs := make([]expression.Expression, 0, len(nss))
+	exprs := make([]query.Expression, 0, len(nss))
 	for _, ns := range nss {
 		exprs = append(exprs, Equal(ns))
 	}
-	return expression.Or(exprs...)
+	return query.Or(exprs...)
 }
 
 // NotIn returns an Expression that will match things that do not have
 // any of a set of specified Namespace.
-func NotIn(nss ...*Namespace) expression.Expression {
+func NotIn(nss ...*Namespace) query.Expression {
 	uuids := lo.Map(nss, func(ns *Namespace, _ int) string {
 		return ns.UUID()
 	})
 	if !lo.Contains(uuids, "") {
 		return UUIDNotIn(uuids...)
 	}
-	exprs := make([]expression.Expression, 0, len(nss))
+	exprs := make([]query.Expression, 0, len(nss))
 	for _, ns := range nss {
 		exprs = append(exprs, NotEqual(ns))
 	}
-	return expression.And(exprs...)
+	return query.And(exprs...)
 }

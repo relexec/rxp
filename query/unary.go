@@ -1,4 +1,4 @@
-package expression
+package query
 
 // UnaryExpression is a filtering expression that contains a single Predicate.
 type UnaryExpression struct {

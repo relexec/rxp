@@ -1,4 +1,4 @@
-package expression
+package query
 
 // AndExpression is a filtering expression that evaluates multiple expressions
 // using AND logic.

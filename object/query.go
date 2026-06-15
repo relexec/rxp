@@ -3,11 +3,11 @@ package object
 import (
 	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/errors"
-	"github.com/relexec/rxp/query/expression"
+	"github.com/relexec/rxp/query"
 )
 
 type NamePredicate struct {
-	expression.BasePredicate
+	query.BasePredicate
 }
 
 func (p NamePredicate) Validate() error {
@@ -26,11 +26,11 @@ func (p NamePredicate) Validate() error {
 
 // NameEqual returns an Expression that will match things having a
 // particular Name.
-func NameEqual(name string) expression.Expression {
-	return expression.UnaryExpression{
+func NameEqual(name string) query.Expression {
+	return query.UnaryExpression{
 		NamePredicate{
-			expression.BasePredicate{
-				Op:    expression.PredicateOperatorEqual,
+			query.BasePredicate{
+				Op:    query.PredicateOperatorEqual,
 				Value: name,
 			},
 		},
@@ -39,11 +39,11 @@ func NameEqual(name string) expression.Expression {
 
 // NameNotEqual returns an Expression that will match things not having a
 // particular Name.
-func NameNotEqual(name string) expression.Expression {
-	return expression.UnaryExpression{
+func NameNotEqual(name string) query.Expression {
+	return query.UnaryExpression{
 		NamePredicate{
-			expression.BasePredicate{
-				Op:      expression.PredicateOperatorEqual,
+			query.BasePredicate{
+				Op:      query.PredicateOperatorEqual,
 				Negated: true,
 				Value:   name,
 			},
@@ -53,15 +53,15 @@ func NameNotEqual(name string) expression.Expression {
 
 // NameIn returns an Expression that will match things that have any of a
 // set of specified Names.
-func NameIn(names ...string) expression.Expression {
+func NameIn(names ...string) query.Expression {
 	// flatten IN to = when there's only one value...
 	if len(names) == 1 {
 		return NameEqual(names[0])
 	}
-	return expression.UnaryExpression{
+	return query.UnaryExpression{
 		NamePredicate{
-			expression.BasePredicate{
-				Op:    expression.PredicateOperatorIn,
+			query.BasePredicate{
+				Op:    query.PredicateOperatorIn,
 				Value: names,
 			},
 		},
@@ -70,11 +70,11 @@ func NameIn(names ...string) expression.Expression {
 
 // NameNotIn returns an Expression that will match things that do not
 // have any of a set of specified Names.
-func NameNotIn(names ...string) expression.Expression {
-	return expression.UnaryExpression{
+func NameNotIn(names ...string) query.Expression {
+	return query.UnaryExpression{
 		NamePredicate{
-			expression.BasePredicate{
-				Op:      expression.PredicateOperatorIn,
+			query.BasePredicate{
+				Op:      query.PredicateOperatorIn,
 				Negated: true,
 				Value:   names,
 			},
@@ -83,7 +83,7 @@ func NameNotIn(names ...string) expression.Expression {
 }
 
 type UUIDPredicate struct {
-	expression.BasePredicate
+	query.BasePredicate
 }
 
 func (p UUIDPredicate) Validate() error {
@@ -92,11 +92,11 @@ func (p UUIDPredicate) Validate() error {
 
 // UUIDEqual returns an Expression that will match things having a particular
 // UUID.
-func UUIDEqual(uuid string) expression.Expression {
-	return expression.UnaryExpression{
+func UUIDEqual(uuid string) query.Expression {
+	return query.UnaryExpression{
 		UUIDPredicate{
-			expression.BasePredicate{
-				Op:    expression.PredicateOperatorEqual,
+			query.BasePredicate{
+				Op:    query.PredicateOperatorEqual,
 				Value: uuid,
 			},
 		},
@@ -105,11 +105,11 @@ func UUIDEqual(uuid string) expression.Expression {
 
 // UUIDNotEqual returns an Expression that will match things not having a
 // particular UUID.
-func UUIDNotEqual(uuid string) expression.Expression {
-	return expression.UnaryExpression{
+func UUIDNotEqual(uuid string) query.Expression {
+	return query.UnaryExpression{
 		UUIDPredicate{
-			expression.BasePredicate{
-				Op:      expression.PredicateOperatorEqual,
+			query.BasePredicate{
+				Op:      query.PredicateOperatorEqual,
 				Negated: true,
 				Value:   uuid,
 			},
@@ -119,11 +119,11 @@ func UUIDNotEqual(uuid string) expression.Expression {
 
 // UUIDIn returns an Expression that will match things that have any of a set
 // of specified UUIDs.
-func UUIDIn(uuids ...string) expression.Expression {
-	return expression.UnaryExpression{
+func UUIDIn(uuids ...string) query.Expression {
+	return query.UnaryExpression{
 		UUIDPredicate{
-			expression.BasePredicate{
-				Op:    expression.PredicateOperatorIn,
+			query.BasePredicate{
+				Op:    query.PredicateOperatorIn,
 				Value: uuids,
 			},
 		},
@@ -132,11 +132,11 @@ func UUIDIn(uuids ...string) expression.Expression {
 
 // UUIDNotIn returns an Expression that will match things that do not have any
 // of a set of specified UUIDs.
-func UUIDNotIn(uuids ...string) expression.Expression {
-	return expression.UnaryExpression{
+func UUIDNotIn(uuids ...string) query.Expression {
+	return query.UnaryExpression{
 		UUIDPredicate{
-			expression.BasePredicate{
-				Op:      expression.PredicateOperatorIn,
+			query.BasePredicate{
+				Op:      query.PredicateOperatorIn,
 				Negated: true,
 				Value:   uuids,
 			},
@@ -145,7 +145,7 @@ func UUIDNotIn(uuids ...string) expression.Expression {
 }
 
 type GenerationPredicate struct {
-	expression.BasePredicate
+	query.BasePredicate
 }
 
 func (p GenerationPredicate) Validate() error {
@@ -166,11 +166,11 @@ func (p GenerationPredicate) Validate() error {
 
 // GenerationEqual returns an Expression that will match things having a
 // particular Generation.
-func GenerationEqual(generation api.Generation) expression.Expression {
-	return expression.UnaryExpression{
+func GenerationEqual(generation api.Generation) query.Expression {
+	return query.UnaryExpression{
 		GenerationPredicate{
-			expression.BasePredicate{
-				Op:    expression.PredicateOperatorEqual,
+			query.BasePredicate{
+				Op:    query.PredicateOperatorEqual,
 				Value: generation,
 			},
 		},
@@ -179,11 +179,11 @@ func GenerationEqual(generation api.Generation) expression.Expression {
 
 // GenerationNotEqual returns an Expression that will match things not having a
 // particular Generation.
-func GenerationNotEqual(generation api.Generation) expression.Expression {
-	return expression.UnaryExpression{
+func GenerationNotEqual(generation api.Generation) query.Expression {
+	return query.UnaryExpression{
 		GenerationPredicate{
-			expression.BasePredicate{
-				Op:      expression.PredicateOperatorEqual,
+			query.BasePredicate{
+				Op:      query.PredicateOperatorEqual,
 				Negated: true,
 				Value:   generation,
 			},
@@ -193,15 +193,15 @@ func GenerationNotEqual(generation api.Generation) expression.Expression {
 
 // GenerationIn returns an Expression that will match things that have any of a
 // set of specified Generations.
-func GenerationIn(generations ...api.Generation) expression.Expression {
+func GenerationIn(generations ...api.Generation) query.Expression {
 	// flatten IN to = when there's only one value...
 	if len(generations) == 1 {
 		return GenerationEqual(generations[0])
 	}
-	return expression.UnaryExpression{
+	return query.UnaryExpression{
 		GenerationPredicate{
-			expression.BasePredicate{
-				Op:    expression.PredicateOperatorIn,
+			query.BasePredicate{
+				Op:    query.PredicateOperatorIn,
 				Value: generations,
 			},
 		},
@@ -210,11 +210,11 @@ func GenerationIn(generations ...api.Generation) expression.Expression {
 
 // GenerationNotIn returns an Expression that will match things that do not
 // have any of a set of specified Generations.
-func GenerationNotIn(generations ...api.Generation) expression.Expression {
-	return expression.UnaryExpression{
+func GenerationNotIn(generations ...api.Generation) query.Expression {
+	return query.UnaryExpression{
 		GenerationPredicate{
-			expression.BasePredicate{
-				Op:      expression.PredicateOperatorIn,
+			query.BasePredicate{
+				Op:      query.PredicateOperatorIn,
 				Negated: true,
 				Value:   generations,
 			},

@@ -5,11 +5,11 @@ import (
 
 	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/errors"
-	"github.com/relexec/rxp/query/expression"
+	"github.com/relexec/rxp/query"
 )
 
 type NamePredicate struct {
-	expression.BasePredicate
+	query.BasePredicate
 }
 
 func (p NamePredicate) Validate() error {
@@ -35,11 +35,11 @@ func (p NamePredicate) Validate() error {
 
 // NameEqual returns an Expression that will match Objects of a particular
 // KindVersionName.
-func NameEqual(name api.KindVersionName) expression.Expression {
-	return expression.UnaryExpression{
+func NameEqual(name api.KindVersionName) query.Expression {
+	return query.UnaryExpression{
 		Predicate: NamePredicate{
-			expression.BasePredicate{
-				Op:    expression.PredicateOperatorEqual,
+			query.BasePredicate{
+				Op:    query.PredicateOperatorEqual,
 				Value: name,
 			},
 		},
@@ -48,11 +48,11 @@ func NameEqual(name api.KindVersionName) expression.Expression {
 
 // NameNotEqual returns an Expression that will match Objects not of a
 // particular KindVersionName.
-func NameNotEqual(name api.KindVersionName) expression.Expression {
-	return expression.UnaryExpression{
+func NameNotEqual(name api.KindVersionName) query.Expression {
+	return query.UnaryExpression{
 		Predicate: NamePredicate{
-			expression.BasePredicate{
-				Op:      expression.PredicateOperatorEqual,
+			query.BasePredicate{
+				Op:      query.PredicateOperatorEqual,
 				Negated: true,
 				Value:   name,
 			},
@@ -62,11 +62,11 @@ func NameNotEqual(name api.KindVersionName) expression.Expression {
 
 // NameIn returns an Expression that will match Objects that are any of a
 // set of specified KindVersionNames.
-func NameIn(names ...api.KindVersionName) expression.Expression {
-	return expression.UnaryExpression{
+func NameIn(names ...api.KindVersionName) query.Expression {
+	return query.UnaryExpression{
 		Predicate: NamePredicate{
-			expression.BasePredicate{
-				Op:    expression.PredicateOperatorIn,
+			query.BasePredicate{
+				Op:    query.PredicateOperatorIn,
 				Value: names,
 			},
 		},
@@ -75,11 +75,11 @@ func NameIn(names ...api.KindVersionName) expression.Expression {
 
 // NameNotIn returns an Expression that will match Objects that are not any
 // of a set of specified KindVersionNames.
-func NameNotIn(names ...api.KindVersionName) expression.Expression {
-	return expression.UnaryExpression{
+func NameNotIn(names ...api.KindVersionName) query.Expression {
+	return query.UnaryExpression{
 		Predicate: NamePredicate{
-			expression.BasePredicate{
-				Op:      expression.PredicateOperatorIn,
+			query.BasePredicate{
+				Op:      query.PredicateOperatorIn,
 				Negated: true,
 				Value:   names,
 			},
@@ -88,24 +88,24 @@ func NameNotIn(names ...api.KindVersionName) expression.Expression {
 }
 
 type KindVersionPredicate struct {
-	expression.BasePredicate
+	query.BasePredicate
 }
 
 // Equal returns an Expression that will match things having a
 // particular KindVersion.
-func Equal(kv *KindVersion) expression.Expression {
+func Equal(kv *KindVersion) query.Expression {
 	return NameEqual(kv.Name())
 }
 
 // NotEqual returns an Expression that will match things not having
 // a particular KindVersion.
-func NotEqual(kv *KindVersion) expression.Expression {
+func NotEqual(kv *KindVersion) query.Expression {
 	return NameNotEqual(kv.Name())
 }
 
 // In returns an Expression that will match things that have any of
 // a set of specified KindVersion.
-func In(kvs ...*KindVersion) expression.Expression {
+func In(kvs ...*KindVersion) query.Expression {
 	names := lo.Map(
 		kvs,
 		func(kv *KindVersion, _ int) api.KindVersionName {
@@ -117,7 +117,7 @@ func In(kvs ...*KindVersion) expression.Expression {
 
 // NotIn returns an Expression that will match things that do not
 // have any of a set of specified KindVersion.
-func NotIn(kvs ...*KindVersion) expression.Expression {
+func NotIn(kvs ...*KindVersion) query.Expression {
 	names := lo.Map(
 		kvs,
 		func(kv *KindVersion, _ int) api.KindVersionName {

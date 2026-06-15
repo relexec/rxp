@@ -1,4 +1,4 @@
-package expression
+package query
 
 // OrExpression is a filtering expression that evaluates multiple expressions
 // using OR logic.

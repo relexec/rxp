@@ -10,7 +10,6 @@ import (
 	"github.com/relexec/rxp/namespace"
 	"github.com/relexec/rxp/object"
 	"github.com/relexec/rxp/query"
-	"github.com/relexec/rxp/query/expression"
 	"github.com/relexec/rxp/system"
 )
 
@@ -29,7 +28,7 @@ type Driver interface {
 	// SystemQuery queries zero or more Systems from persistent storage.
 	SystemQuery(
 		context.Context,
-		expression.Expression,
+		query.Expression,
 		...query.Option,
 	) (*query.Result[*system.System], error)
 	// DomainRead reads a Domain from persistent storage.
@@ -45,7 +44,7 @@ type Driver interface {
 	// DomainQuery queries zero or more Domains from persistent storage.
 	DomainQuery(
 		context.Context,
-		expression.Expression,
+		query.Expression,
 		...query.Option,
 	) (*query.Result[*domain.Domain], error)
 	// NamespaceRead reads a Namespace from persistent storage.
@@ -62,7 +61,7 @@ type Driver interface {
 	// NamespaceQuery queries zero or more Namespaces from persistent storage.
 	NamespaceQuery(
 		context.Context,
-		expression.Expression,
+		query.Expression,
 		...query.Option,
 	) (*query.Result[*namespace.Namespace], error)
 
@@ -79,7 +78,7 @@ type Driver interface {
 	// KindQuery queries zero or more Kinds from persistent storage.
 	KindQuery(
 		context.Context,
-		expression.Expression,
+		query.Expression,
 		...query.Option,
 	) (*query.Result[*kind.Kind], error)
 	// KindVersionRead reads a KindVersion from persistent storage.
@@ -97,7 +96,7 @@ type Driver interface {
 	// storage.
 	KindVersionQuery(
 		context.Context,
-		expression.Expression,
+		query.Expression,
 		...query.Option,
 	) (*query.Result[*kindversion.KindVersion], error)
 
@@ -119,7 +118,7 @@ type Driver interface {
 	ObjectQuery(
 		context.Context,
 		api.KindVersionName,
-		expression.Expression,
+		query.Expression,
 		...query.Option,
 	) (*query.Result[*object.Object], error)
 }

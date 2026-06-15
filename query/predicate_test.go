@@ -1,4 +1,4 @@
-package expression_test
+package query_test
 
 import (
 	"testing"
@@ -7,13 +7,13 @@ import (
 	"github.com/relexec/rxp/domain"
 	"github.com/relexec/rxp/kind"
 	"github.com/relexec/rxp/kind/kindversion"
-	"github.com/relexec/rxp/query/expression"
+	"github.com/relexec/rxp/query"
 	"github.com/relexec/rxp/testing/fixtures/platform"
 	"github.com/stretchr/testify/require"
 )
 
 func TestContainsPredicate(t *testing.T) {
-	isKindish := func(p expression.Predicate) bool {
+	isKindish := func(p query.Predicate) bool {
 		switch p.(type) {
 		case
 			kind.NamePredicate,
@@ -28,7 +28,7 @@ func TestContainsPredicate(t *testing.T) {
 	}
 	cases := []struct {
 		name    string
-		subject expression.Expression
+		subject query.Expression
 		exp     bool
 	}{
 		{
@@ -43,7 +43,7 @@ func TestContainsPredicate(t *testing.T) {
 		},
 		{
 			"Or with two DomainNameEquals",
-			expression.Or(
+			query.Or(
 				domain.NameEqual(rxp.DomainName("some.domain")),
 				domain.NameEqual(rxp.DomainName("other.domain")),
 			),
@@ -51,7 +51,7 @@ func TestContainsPredicate(t *testing.T) {
 		},
 		{
 			"And with two DomainNameEquals",
-			expression.And(
+			query.And(
 				domain.NameEqual(rxp.DomainName("some.domain")),
 				domain.NameEqual(rxp.DomainName("other.domain")),
 			),
@@ -69,7 +69,7 @@ func TestContainsPredicate(t *testing.T) {
 		},
 		{
 			"Or with KindNameEqual and DomainNameEqual",
-			expression.Or(
+			query.Or(
 				kind.NameEqual(rxp.KindName("some.kind")),
 				domain.NameEqual(rxp.DomainName("other.domain")),
 			),
@@ -77,7 +77,7 @@ func TestContainsPredicate(t *testing.T) {
 		},
 		{
 			"And with KindNameEqual and DomainNameEqual",
-			expression.And(
+			query.And(
 				kind.NameEqual(rxp.KindName("some.kind")),
 				domain.NameEqual(rxp.DomainName("other.domain")),
 			),
@@ -102,7 +102,7 @@ func TestContainsPredicate(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
 			require := require.New(t)
-			got := expression.ContainsPredicate(c.subject, isKindish)
+			got := query.ContainsPredicate(c.subject, isKindish)
 			require.Equal(c.exp, got)
 		})
 	}

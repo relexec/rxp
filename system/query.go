@@ -4,11 +4,11 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/relexec/rxp/errors"
-	"github.com/relexec/rxp/query/expression"
+	"github.com/relexec/rxp/query"
 )
 
 type UUIDPredicate struct {
-	expression.BasePredicate
+	query.BasePredicate
 }
 
 func (p UUIDPredicate) Validate() error {
@@ -29,11 +29,11 @@ func (p UUIDPredicate) Validate() error {
 
 // UUIDEqual returns an Expression that will match things having a
 // particular UUID.
-func UUIDEqual(uuid string) expression.Expression {
-	return expression.UnaryExpression{
+func UUIDEqual(uuid string) query.Expression {
+	return query.UnaryExpression{
 		Predicate: UUIDPredicate{
-			expression.BasePredicate{
-				Op:    expression.PredicateOperatorEqual,
+			query.BasePredicate{
+				Op:    query.PredicateOperatorEqual,
 				Value: uuid,
 			},
 		},
@@ -42,11 +42,11 @@ func UUIDEqual(uuid string) expression.Expression {
 
 // UUIDNotEqual returns an Expression that will match things not having a
 // particular UUID.
-func UUIDNotEqual(uuid string) expression.Expression {
-	return expression.UnaryExpression{
+func UUIDNotEqual(uuid string) query.Expression {
+	return query.UnaryExpression{
 		Predicate: UUIDPredicate{
-			expression.BasePredicate{
-				Op:      expression.PredicateOperatorEqual,
+			query.BasePredicate{
+				Op:      query.PredicateOperatorEqual,
 				Negated: true,
 				Value:   uuid,
 			},
@@ -56,15 +56,15 @@ func UUIDNotEqual(uuid string) expression.Expression {
 
 // UUIDIn returns an Expression that will match things that have any of a
 // set of specified UUIDs.
-func UUIDIn(uuids ...string) expression.Expression {
+func UUIDIn(uuids ...string) query.Expression {
 	// flatten IN to = when there's only one value...
 	if len(uuids) == 1 {
 		return UUIDEqual(uuids[0])
 	}
-	return expression.UnaryExpression{
+	return query.UnaryExpression{
 		Predicate: UUIDPredicate{
-			expression.BasePredicate{
-				Op:    expression.PredicateOperatorIn,
+			query.BasePredicate{
+				Op:    query.PredicateOperatorIn,
 				Value: uuids,
 			},
 		},
@@ -73,11 +73,11 @@ func UUIDIn(uuids ...string) expression.Expression {
 
 // UUIDNotIn returns an Expression that will match things that do not
 // have any of a set of specified UUIDs.
-func UUIDNotIn(uuids ...string) expression.Expression {
-	return expression.UnaryExpression{
+func UUIDNotIn(uuids ...string) query.Expression {
+	return query.UnaryExpression{
 		Predicate: UUIDPredicate{
-			expression.BasePredicate{
-				Op:      expression.PredicateOperatorIn,
+			query.BasePredicate{
+				Op:      query.PredicateOperatorIn,
 				Negated: true,
 				Value:   uuids,
 			},
@@ -87,19 +87,19 @@ func UUIDNotIn(uuids ...string) expression.Expression {
 
 // Equal returns an Expression that will match things having a particular
 // System.
-func Equal(s *System) expression.Expression {
+func Equal(s *System) query.Expression {
 	return UUIDEqual(s.UUID())
 }
 
 // NotEqual returns an Expression that will match things not having a
 // particular System.
-func NotEqual(s *System) expression.Expression {
+func NotEqual(s *System) query.Expression {
 	return UUIDNotEqual(s.UUID())
 }
 
 // In returns an Expression that will match things that have any of a set
 // of specified System.
-func In(ss ...*System) expression.Expression {
+func In(ss ...*System) query.Expression {
 	uuids := lo.Map(ss, func(s *System, _ int) string {
 		return s.UUID()
 	})
@@ -108,7 +108,7 @@ func In(ss ...*System) expression.Expression {
 
 // NotIn returns an Expression that will match things that do not
 // have any of a set of specified System.
-func NotIn(ss ...*System) expression.Expression {
+func NotIn(ss ...*System) query.Expression {
 	uuids := lo.Map(ss, func(s *System, _ int) string {
 		return s.UUID()
 	})

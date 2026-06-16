@@ -243,3 +243,186 @@ func NotIn(doms ...*Domain) query.Expression {
 	}
 	return query.And(exprs...)
 }
+
+type RootNamePredicate struct {
+	query.BasePredicate
+}
+
+func (p RootNamePredicate) Validate() error {
+	err := p.BasePredicate.Validate()
+	if err != nil {
+		return err
+	}
+	v := p.BasePredicate.Value
+	switch v := v.(type) {
+	case []api.DomainName:
+		for _, dn := range v {
+			if err := dn.Validate(); err != nil {
+				return errors.PredicateInvalid(err.Error())
+			}
+		}
+	case api.DomainName:
+		return v.Validate()
+	default:
+		return errors.PredicateUnsupportedValueType(v)
+	}
+	return nil
+}
+
+// RootNameEqual returns an Expression that will match domains having a
+// particular DomainName as their root Domain.
+func RootNameEqual(name api.DomainName) query.Expression {
+	return query.UnaryExpression{
+		Predicate: RootNamePredicate{
+			query.BasePredicate{
+				Op:    query.PredicateOperatorEqual,
+				Value: name,
+			},
+		},
+	}
+}
+
+type RootUUIDPredicate struct {
+	query.BasePredicate
+}
+
+func (p RootUUIDPredicate) Validate() error {
+	err := p.BasePredicate.Validate()
+	if err != nil {
+		return err
+	}
+	v := p.BasePredicate.Value
+	switch v := v.(type) {
+	case []string:
+		return nil
+	case string:
+		return nil
+	default:
+		return errors.PredicateUnsupportedValueType(v)
+	}
+}
+
+// RootUUIDEqual returns an Expression that will match domains having a root
+// domain with a particular UUID.
+func RootUUIDEqual(uuid string) query.Expression {
+	return query.UnaryExpression{
+		Predicate: RootUUIDPredicate{
+			query.BasePredicate{
+				Op:    query.PredicateOperatorEqual,
+				Value: uuid,
+			},
+		},
+	}
+}
+
+type RootDomainPredicate struct {
+	query.BasePredicate
+}
+
+// RootEqual returns an Expression that will match domains having a particular
+// root Domain.
+func RootEqual(dom *Domain) query.Expression {
+	if dom.UUID() != "" {
+		return RootUUIDEqual(dom.UUID())
+	}
+	if dom.System() == nil {
+		return RootNameEqual(dom.Name())
+	}
+	return query.UnaryExpression{
+		Predicate: RootDomainPredicate{
+			query.BasePredicate{
+				Op:    query.PredicateOperatorEqual,
+				Value: dom,
+			},
+		},
+	}
+}
+
+type ParentNamePredicate struct {
+	query.BasePredicate
+}
+
+func (p ParentNamePredicate) Validate() error {
+	err := p.BasePredicate.Validate()
+	if err != nil {
+		return err
+	}
+	v := p.BasePredicate.Value
+	switch v := v.(type) {
+	case []api.DomainName:
+		for _, dn := range v {
+			if err := dn.Validate(); err != nil {
+				return errors.PredicateInvalid(err.Error())
+			}
+		}
+	case api.DomainName:
+		return v.Validate()
+	default:
+		return errors.PredicateUnsupportedValueType(v)
+	}
+	return nil
+}
+
+// ParentNameEqual returns an Expression that will match domains having a
+// particular DomainName as their parent Domain and any of that Domain's child
+// domains.
+func ParentNameEqual(name api.DomainName) query.Expression {
+	return query.UnaryExpression{
+		Predicate: ParentNamePredicate{
+			query.BasePredicate{
+				Op:    query.PredicateOperatorEqual,
+				Value: name,
+			},
+		},
+	}
+}
+
+type ParentUUIDPredicate struct {
+	query.BasePredicate
+}
+
+func (p ParentUUIDPredicate) Validate() error {
+	err := p.BasePredicate.Validate()
+	if err != nil {
+		return err
+	}
+	v := p.BasePredicate.Value
+	switch v := v.(type) {
+	case []string:
+		return nil
+	case string:
+		return nil
+	default:
+		return errors.PredicateUnsupportedValueType(v)
+	}
+}
+
+// ParentUUIDEqual returns an Expression that will match domains having a
+// parent domain with a particular UUID or any of that Domain's child domains.
+func ParentUUIDEqual(uuid string) query.Expression {
+	return query.UnaryExpression{
+		Predicate: ParentUUIDPredicate{
+			query.BasePredicate{
+				Op:    query.PredicateOperatorEqual,
+				Value: uuid,
+			},
+		},
+	}
+}
+
+type ParentDomainPredicate struct {
+	query.BasePredicate
+}
+
+// ParentEqual returns an Expression that will match domains that are in the
+// supplied Domain and any of that Domain's child domains.
+func ParentEqual(dom *Domain) query.Expression {
+	return query.UnaryExpression{
+		Predicate: ParentDomainPredicate{
+			query.BasePredicate{
+				Op:    query.PredicateOperatorEqual,
+				Value: dom,
+			},
+		},
+	}
+}

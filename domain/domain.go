@@ -12,6 +12,7 @@ var (
 	FieldPathSystem = fieldpath.FromString("system")
 	FieldPathUUID   = fieldpath.FromString("uuid")
 	FieldPathName   = fieldpath.FromString("name")
+	FieldPathRoot   = fieldpath.FromString("root")
 	FieldPathParent = fieldpath.FromString("parent")
 )
 
@@ -29,6 +30,9 @@ type Domain struct {
 	// A Domain's Name must be unique within the scope of the `rxp` system
 	// installation.
 	name api.DomainName
+	// root contains a pointer to the root Domain, if any. If empty, the Domain
+	// is itself the root Domain.
+	root *Domain
 	// parent contains a pointer to the parent Domain, if any.
 	parent *Domain
 }
@@ -38,7 +42,18 @@ func (d Domain) Validate() error {
 	if d.uuid == "" {
 		return errors.ErrDomainUUIDRequired
 	}
+	if d.root != nil {
+		rootSystem := d.root.System()
+		if d.system != nil && rootSystem != nil {
+			if rootSystem.UUID() != d.system.UUID() {
+				return errors.ErrDomainRootSystemDifferent
+			}
+		}
+	}
 	if d.parent != nil {
+		if d.root == nil {
+			return errors.ErrDomainParentRootRequired
+		}
 		parentSystem := d.parent.System()
 		if d.system != nil && parentSystem != nil {
 			if parentSystem.UUID() != d.system.UUID() {
@@ -89,9 +104,20 @@ func (d *Domain) SetParent(parent *Domain) {
 	d.parent = parent
 }
 
-// IsRoot returns true if the Domain has no parent.
+// Root returns the Root of the Domain. If nil, the Domain itself is the root
+// Domain.
+func (d Domain) Root() *Domain {
+	return d.root
+}
+
+// SetRoot sets the Root of Domain.
+func (d *Domain) SetRoot(root *Domain) {
+	d.root = root
+}
+
+// IsRoot returns true if the Domain is itself the root domain.
 func (d *Domain) IsRoot() bool {
-	return d.parent == nil
+	return d.root == nil
 }
 
 // Diff returns a [cmp.Delta] representing the difference between itself and
@@ -178,6 +204,44 @@ func (d Domain) Diff(subject any) (*cmp.Delta, error) {
 		)
 	}
 
+	thisRoot := d.parent
+	otherRoot := other.Root()
+	if thisRoot != nil {
+		thisRootUUID := thisRoot.UUID()
+		if otherRoot == nil {
+			delta.Push(
+				cmp.NewDifference(
+					FieldPathRoot,
+					cmp.DifferenceTypeRemove,
+					thisRootUUID,
+					nil,
+				),
+			)
+		} else {
+			otherRootUUID := otherRoot.UUID()
+			if thisRootUUID != otherRoot.UUID() {
+				delta.Push(
+					cmp.NewDifference(
+						FieldPathRoot,
+						cmp.DifferenceTypeModify,
+						thisRootUUID,
+						otherRootUUID,
+					),
+				)
+			}
+		}
+	} else if otherRoot != nil {
+		otherRootUUID := otherRoot.UUID()
+		delta.Push(
+			cmp.NewDifference(
+				FieldPathRoot,
+				cmp.DifferenceTypeAdd,
+				nil,
+				otherRootUUID,
+			),
+		)
+	}
+
 	thisParent := d.parent
 	otherParent := other.Parent()
 	if thisParent != nil {
@@ -249,6 +313,16 @@ func (d Domain) diffNew() (*cmp.Delta, error) {
 			nil,
 		),
 	)
+	if d.root != nil {
+		delta.Push(
+			cmp.NewDifference(
+				FieldPathRoot,
+				cmp.DifferenceTypeAdd,
+				d.root.UUID(),
+				nil,
+			),
+		)
+	}
 	if d.parent != nil {
 		delta.Push(
 			cmp.NewDifference(

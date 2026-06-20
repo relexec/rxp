@@ -26,6 +26,7 @@ func TestDomain_Diff(t *testing.T) {
 	domWithParent := domain.New(
 		domain.WithUUID(domWithParentUUID),
 		domain.WithParent(domWithSystem),
+		domain.WithRoot(domWithSystem),
 		domain.WithName(domWithParentName),
 	)
 
@@ -121,6 +122,12 @@ func TestDomain_Diff(t *testing.T) {
 					nil,
 				),
 				cmp.NewDifference(
+					fieldpath.FromString("root"),
+					cmp.DifferenceTypeAdd,
+					domWithSystemUUID,
+					nil,
+				),
+				cmp.NewDifference(
 					fieldpath.FromString("parent"),
 					cmp.DifferenceTypeAdd,
 					domWithSystemUUID,
@@ -152,6 +159,12 @@ func TestDomain_Diff(t *testing.T) {
 					cmp.DifferenceTypeModify,
 					string(domWithParentName),
 					string(domWithSystemName),
+				),
+				cmp.NewDifference(
+					fieldpath.FromString("root"),
+					cmp.DifferenceTypeRemove,
+					domWithSystemUUID,
+					nil,
 				),
 				cmp.NewDifference(
 					fieldpath.FromString("parent"),
@@ -187,10 +200,17 @@ func TestDomain_Validate(t *testing.T) {
 		domain.WithSystem(fixtures.System),
 		domain.WithName(domWithSystemName),
 	)
+	domWithParentNoRootName := rxp.DomainName("dom.with.parent.no.root")
+	domWithParentNoRoot := domain.New(
+		domain.WithUUID(uuid.NewString()),
+		domain.WithParent(domWithSystem),
+		domain.WithName(domWithParentNoRootName),
+	)
 	domWithParentName := rxp.DomainName("dom.with.parent")
 	domWithParent := domain.New(
 		domain.WithUUID(uuid.NewString()),
 		domain.WithParent(domWithSystem),
+		domain.WithRoot(domWithSystem),
 		domain.WithName(domWithParentName),
 	)
 	secondSystem := system.New(system.WithUUID(uuid.NewString()))
@@ -199,6 +219,7 @@ func TestDomain_Validate(t *testing.T) {
 		domain.WithSystem(secondSystem),
 		domain.WithUUID(uuid.NewString()),
 		domain.WithParent(domWithSystem),
+		domain.WithRoot(domWithSystem),
 		domain.WithName(domWithParentDiffSystemName),
 	)
 
@@ -218,9 +239,14 @@ func TestDomain_Validate(t *testing.T) {
 			"",
 		},
 		{
-			"different system uuid in parent",
+			"specify parent but no root",
+			domWithParentNoRoot,
+			"root required when parent specified",
+		},
+		{
+			"different system uuid in root",
 			domWithParentDiffSystem,
-			"parent system must be same",
+			"root system must be same",
 		},
 	}
 	for _, c := range cases {

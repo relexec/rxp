@@ -7,7 +7,6 @@ import (
 	"github.com/relexec/rxp/domain"
 	"github.com/relexec/rxp/kind"
 	"github.com/relexec/rxp/kind/kindversion"
-	"github.com/relexec/rxp/namespace"
 	"github.com/relexec/rxp/object"
 	"github.com/relexec/rxp/query"
 	"github.com/relexec/rxp/system"
@@ -47,23 +46,6 @@ type Driver interface {
 		query.Expression,
 		...query.Option,
 	) (*query.Result[*domain.Domain], error)
-	// NamespaceRead reads a Namespace from persistent storage.
-	NamespaceRead(
-		context.Context,
-		namespace.Selector,
-	) (*namespace.Namespace, error)
-	// NamespaceWrite atomically writes the supplied Namespace to persistent
-	// storage.
-	NamespaceWrite(
-		context.Context,
-		*namespace.Namespace,
-	) error
-	// NamespaceQuery queries zero or more Namespaces from persistent storage.
-	NamespaceQuery(
-		context.Context,
-		query.Expression,
-		...query.Option,
-	) (*query.Result[*namespace.Namespace], error)
 
 	// KindRead reads a Kind from persistent storage.
 	KindRead(

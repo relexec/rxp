@@ -5,12 +5,9 @@ package api
 type Scope int
 
 const (
-	// ScopeNamespace means instances of a thing of this Type have a Name that
-	// is unique within its Namespace.
-	ScopeNamespace Scope = iota
 	// ScopeDomain means instances of a thing of this Type have a Name that
 	// is unique within its Domain.
-	ScopeDomain
+	ScopeDomain Scope = iota
 	// ScopeSystem means instances of a thing of this Type have a Name that
 	// is unique within its System.
 	ScopeSystem
@@ -21,8 +18,6 @@ const (
 
 func (s Scope) String() string {
 	switch s {
-	case ScopeNamespace:
-		return "namespace"
 	case ScopeDomain:
 		return "domain"
 	case ScopeSystem:

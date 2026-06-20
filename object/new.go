@@ -3,7 +3,6 @@ package object
 import (
 	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/domain"
-	"github.com/relexec/rxp/namespace"
 	"github.com/relexec/rxp/system"
 )
 
@@ -44,13 +43,6 @@ func WithUUID(uuid string) Option {
 func WithDomain(domain *domain.Domain) Option {
 	return func(o *Object) {
 		o.domain = domain
-	}
-}
-
-// WithNamespace sets the Object's Namespace.
-func WithNamespace(namespace *namespace.Namespace) Option {
-	return func(o *Object) {
-		o.namespace = namespace
 	}
 }
 

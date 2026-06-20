@@ -4,7 +4,6 @@ import (
 	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/domain"
 	"github.com/relexec/rxp/errors"
-	"github.com/relexec/rxp/namespace"
 	"github.com/relexec/rxp/system"
 )
 
@@ -16,8 +15,6 @@ type Selector struct {
 	system *system.System
 	// domain is the Domain to use when looking up the Object via name.
 	domain *domain.Domain
-	// namespace is the Namespace to use when looking up the Object via name.
-	namespace *namespace.Namespace
 	// name is the Name to use when looking up the Object via name.
 	name string
 	// generation is the specific generation of the Object to select.
@@ -38,11 +35,6 @@ func (s Selector) UUID() string {
 // Domain returns the Domain to use when looking up the Object via name.
 func (s Selector) Domain() *domain.Domain {
 	return s.domain
-}
-
-// Namespace returns the Namespace to use when looking up the Object via name.
-func (s Selector) Namespace() *namespace.Namespace {
-	return s.namespace
 }
 
 // Name returns the Name to use when looking up the Object via name.
@@ -74,11 +66,6 @@ func (s Selector) Validate() error {
 			return err
 		}
 	}
-	if s.namespace != nil {
-		if err := s.namespace.Validate(); err != nil {
-			return err
-		}
-	}
 	return nil
 }
 
@@ -103,13 +90,6 @@ func BySystem(system *system.System) SelectOption {
 func ByDomain(domain *domain.Domain) SelectOption {
 	return func(s *Selector) {
 		s.domain = domain
-	}
-}
-
-// ByNamespace sets the Selector's Namespace.
-func ByNamespace(namespace *namespace.Namespace) SelectOption {
-	return func(s *Selector) {
-		s.namespace = namespace
 	}
 }
 

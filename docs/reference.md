@@ -12,14 +12,14 @@ flowchart TD
     subgraph Global
         subgraph System
             subgraph Domain
-                subgraph Namespace
 ```
 
-All data managed by `rxp` is *scoped* to a System, Domain or Namespace.
+All data managed by `rxp` is *scoped* to a System or a Domain.
 
 A System represents the universe of known data for an installation of `rxp`.
-A Domain is a logical division of a System. Likewise, a Namespace is a
-logical division of a Domain.
+
+A Domain is a logical division of a System. A Domain can have a parent Domain
+allowing hierarchical relationships for these divisions.
 
 ## System
 
@@ -33,7 +33,7 @@ Each Domain has a UUID globally-unique identifier.
 
 Domains always have a `Name` which is a specialized string type DomainName.
 
-A Domain's `Name` must be unique within the scope of the Domain's System.
+A DomainName` must be unique within the scope of the Domain's System.
 
 A Domain can have a *parent* Domain.
 
@@ -41,24 +41,6 @@ A Domain can have a *parent* Domain.
 
 A valid DomainName is a DNS-formatted (RFC 1035-compliant) name less than 254
 characters.
-
-## Namespace
-
-*Namespace* describes a logical division within a Domain.
-
-A Namespace is typically used to segregate data by tenancy boundaries.
-
-Each Namespace has a UUID globally-unique identifier.
-
-Namespaces always have a `Name` which is a specialized string type
-`NamespaceName`.
-
-A valid `NamespaceName` is a DNS-formatted (RFC 1035-compliant) name.
-
-Note that unlike RFC 1035, there is no 253 character size limit on
-`NamespaceName` string length.
-
-A Namespace's `Name` must be unique within its containing Domain.
 
 ## Kind
 
@@ -158,9 +140,8 @@ Each Object has a UUID globally-unique identifier.
 Objects have a `Name`. An Object's `Name` is unique within the
 Scope associated with the Object's Kind.
 
-If that Scope is `ScopeNamespace` or `ScopeDomain`, the Object is guaranteed to
-have a [Domain](#domain). If that Scope is `ScopeNamespace`, the `Object` is
-guaranteed to have a [Namespace](#namespace).
+If that Scope is `ScopeDomain`, the Object is guaranteed to have a
+[Domain](#domain).
 
 Objects may have zero or more `Labels` associated with them. `Labels` are
 structures with a `Key` and optional `Value` that can be used to categorize
@@ -173,10 +154,8 @@ erDiagram
     System ||--|{ Object : "knows about"
     Kind ||--|{ KindVersion : "has a"
     KindVersion ||--|{ Object : "instance of"
-    Domain ||--|{ Namespace : "may have"
     Domain ||--|{ Object : "may have"
     Domain ||--|o Domain : "can have a parent"
-    Namespace ||--|{ Object : "may have"
     System {
         string **uuid**
         string tag
@@ -197,17 +176,11 @@ erDiagram
         string **system**
         string **name**
     }
-    Namespace{
-        string **uuid**
-        string **domain**
-        string **name**
-    }
     Object{
         string **system**
         string **kindversion**
         string **uuid**
         string **name**
         string domain
-        string namespace
     }
 ```

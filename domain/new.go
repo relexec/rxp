@@ -38,6 +38,13 @@ func WithName(name api.DomainName) Option {
 	}
 }
 
+// WithRoot sets the Domain's Root.
+func WithRoot(root *Domain) Option {
+	return func(d *Domain) {
+		d.root = root
+	}
+}
+
 // WithParent sets the Domain's Parent.
 func WithParent(parent *Domain) Option {
 	return func(d *Domain) {

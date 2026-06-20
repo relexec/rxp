@@ -11,17 +11,16 @@ Categorization refers to the ways in which things are grouped.
 In `rxp`, data is categorized by *Type* and *Scope*.
 
 Type refers to the class of thing. Types in `rxp` include System, Domain,
-Namespace, Kind and Object.
+Kind and Object.
 
 Scope refers to the *extent to which Names of instances of a Type of thing are
-unique*. There are four scopes, shown here in decreasing order of breadth.
+unique*. There are three scopes, shown here in decreasing order of breadth.
 
 ```mermaid
 flowchart TD
     subgraph Global
         subgraph System
             subgraph Domain
-                subgraph Namespace
 ```
 
 Instances of a Type that is *globally*-scoped can *only* be identified by UUID
@@ -32,9 +31,6 @@ System.
 
 Instances of a Type that is *domain-scoped* can be identified by Name and
 Domain.
-
-Instances of a Type that is *namespaced*-scoped can be identified by Name and
-Namespace.
 
 ## Identification
 
@@ -47,8 +43,8 @@ When selecting something by UUID, you supply a UUID value which is guaranteed
 to be globally unique.
 
 When selecting something by Name, you supply a human-readable string name along
-with a System, Domain or Namespace, depending on the thing's Scope.
+with a System or Domain, depending on the thing's Scope.
 
 For instance, if looking up a Domain by Name, you would supply the System in
 which the Domain is found. If looking up an Object having a Kind that is scoped
-to a Namespace, you would supply the Namespace.
+to a Domain, you would supply the Domain.

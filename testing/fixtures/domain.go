@@ -30,6 +30,7 @@ var (
 	DomainTree_Group1     = domain.New(
 		domain.WithUUID(DomainTree_Group1UUID),
 		domain.WithName(DomainTree_Group1Name),
+		domain.WithRoot(DomainTree_Root),
 		domain.WithParent(DomainTree_Root),
 	)
 	DomainTree_Group1Leaf1UUID = "61f52f2a-dd60-42a0-ae5f-1b07f52374bc"
@@ -37,6 +38,7 @@ var (
 	DomainTree_Group1Leaf1     = domain.New(
 		domain.WithUUID(DomainTree_Group1Leaf1UUID),
 		domain.WithName(DomainTree_Group1Leaf1Name),
+		domain.WithRoot(DomainTree_Root),
 		domain.WithParent(DomainTree_Group1),
 	)
 	DomainTree_Group1Leaf2UUID = "6f6a202b-c040-4696-9867-4d51555c17aa"
@@ -44,6 +46,7 @@ var (
 	DomainTree_Group1Leaf2     = domain.New(
 		domain.WithUUID(DomainTree_Group1Leaf2UUID),
 		domain.WithName(DomainTree_Group1Leaf2Name),
+		domain.WithRoot(DomainTree_Root),
 		domain.WithParent(DomainTree_Group1),
 	)
 	DomainTree_Group2UUID = "fcc59ed2-0faa-4004-a2af-441492625440"
@@ -51,6 +54,7 @@ var (
 	DomainTree_Group2     = domain.New(
 		domain.WithUUID(DomainTree_Group2UUID),
 		domain.WithName(DomainTree_Group2Name),
+		domain.WithRoot(DomainTree_Root),
 		domain.WithParent(DomainTree_Root),
 	)
 	DomainTree_Group2Leaf1UUID = "daa82768-f08f-4775-80ca-734166101729"
@@ -58,6 +62,7 @@ var (
 	DomainTree_Group2Leaf1     = domain.New(
 		domain.WithUUID(DomainTree_Group2Leaf1UUID),
 		domain.WithName(DomainTree_Group2Leaf1Name),
+		domain.WithRoot(DomainTree_Root),
 		domain.WithParent(DomainTree_Group2),
 	)
 	DomainTree_Group2Leaf2UUID = "a6846a47-590d-455f-b359-a4a8a0b3d236"
@@ -65,6 +70,7 @@ var (
 	DomainTree_Group2Leaf2     = domain.New(
 		domain.WithUUID(DomainTree_Group2Leaf2UUID),
 		domain.WithName(DomainTree_Group2Leaf2Name),
+		domain.WithRoot(DomainTree_Root),
 		domain.WithParent(DomainTree_Group2),
 	)
 )

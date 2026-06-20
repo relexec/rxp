@@ -5,21 +5,18 @@ import (
 	"github.com/relexec/rxp/domain"
 	"github.com/relexec/rxp/kind"
 	"github.com/relexec/rxp/kind/kindversion"
-	"github.com/relexec/rxp/namespace"
 	"github.com/relexec/rxp/object"
 	"github.com/relexec/rxp/system"
 )
 
 const (
-	UnknownSystemUUID    = "8ccf20f6-df19-45e1-9086-8eff1283fef5"
-	UnknownSystemTag     = "unknown system"
-	UnknownDomainUUID    = "0a081c96-3f30-41aa-b635-30501fe5ef2e"
-	UnknownDomainName    = api.DomainName("unknown.domain.testing.dxp")
-	UnknownNamespaceUUID = "8c12b8d9-eada-4c57-aa93-fc2984aea2c0"
-	UnknownNamespaceName = api.NamespaceName("unknown.ns")
-	UnknownKindName      = api.KindName("unknown.testing.rxp")
-	UnknownKindUUID      = "2a6fc010-7c4b-4aef-bff4-e4ce98ad15df"
-	UnknownObjectUUID    = "2f959fc4-e885-4946-ae7b-dc015c185a62"
+	UnknownSystemUUID = "8ccf20f6-df19-45e1-9086-8eff1283fef5"
+	UnknownSystemTag  = "unknown system"
+	UnknownDomainUUID = "0a081c96-3f30-41aa-b635-30501fe5ef2e"
+	UnknownDomainName = api.DomainName("unknown.domain.testing.dxp")
+	UnknownKindName   = api.KindName("unknown.testing.rxp")
+	UnknownKindUUID   = "2a6fc010-7c4b-4aef-bff4-e4ce98ad15df"
+	UnknownObjectUUID = "2f959fc4-e885-4946-ae7b-dc015c185a62"
 )
 
 var (
@@ -38,11 +35,6 @@ var (
 	UnknownDomain = domain.New(
 		domain.WithUUID(UnknownDomainUUID),
 		domain.WithName(UnknownDomainName),
-	)
-	UnknownNamespace = namespace.New(
-		namespace.WithDomain(Domain),
-		namespace.WithUUID(UnknownNamespaceUUID),
-		namespace.WithName(UnknownNamespaceName),
 	)
 	UnknownKindVersion = kindversion.New(
 		kindversion.WithKind(UnknownKind),

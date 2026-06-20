@@ -7,5 +7,4 @@ var (
 	ErrObjectNameRequired        = New("name required", WithWrap(ErrInvalidObject))
 	ErrObjectUUIDRequired        = New("uuid required", WithWrap(ErrInvalidObject))
 	ErrObjectDomainRequired      = New("domain required", WithWrap(ErrInvalidObject))
-	ErrObjectNamespaceRequired   = New("namespace required", WithWrap(ErrInvalidObject))
 )

@@ -5,12 +5,21 @@ import (
 
 	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/domain"
-	"github.com/relexec/rxp/namespace"
 	"github.com/relexec/rxp/system"
 )
 
-// Object is a base struct from which all things that implement [types.Object]
-// derive.
+// Object is an *instance* of a KindVersion.
+//
+// Each Object has a UUID globally-unique identifier.
+//
+// Objects have a `Name`. An Object's `Name` is unique within the
+// Scope associated with the Object's Kind.
+//
+// If that Scope is `ScopeDomain`, the Object will have a Domain.
+//
+// Objects may have zero or more `Labels` associated with them. `Labels` are
+// structures with a `Key` and optional `Value` that can be used to categorize
+// Objects and filter them in query operations.
 type Object struct {
 	// kindVersionName is the kind and version identifier for the type of
 	// Object.
@@ -21,8 +30,6 @@ type Object struct {
 	uuid string
 	// domain is the optional Domain.
 	domain *domain.Domain
-	// namespace is the optional Namespace.
-	namespace *namespace.Namespace
 	// name is the Name.
 	name string
 	// labels is the collection of Labels.
@@ -75,19 +82,9 @@ func (o *Object) SetDomain(domain *domain.Domain) {
 	o.domain = domain
 }
 
-// Namespace returns optional Namespace.
-func (o Object) Namespace() *namespace.Namespace {
-	return o.namespace
-}
-
-// SetNamespace sets the Namespace.
-func (o *Object) SetNamespace(ns *namespace.Namespace) {
-	o.namespace = ns
-}
-
-// Name returns the name. NameScope can be used to determine whether the name
-// is unique globally, or within a Kind + Domain or within a Kind + Domain +
-// Namespace.
+// Name returns the name. The Scope of the Object's Kind is used to determine
+// whether the name is unique globally, within a Kind + System or within a Kind
+// + Domain.
 func (o Object) Name() string {
 	return o.name
 }
@@ -134,7 +131,6 @@ type jsonObject struct {
 	System          string     `json:"system"`
 	UUID            string     `json:"uuid"`
 	Domain          string     `json:"domain,omitempty"`
-	Namespace       string     `json:"namespace,omitempty"`
 	Name            string     `json:"name"`
 	Labels          api.Labels `json:"labels,omitempty"`
 	Generation      int        `json:"generation"`
@@ -156,9 +152,6 @@ func (o Object) MarshalJSON() ([]byte, error) {
 	}
 	if o.domain != nil {
 		jo.Domain = string(o.domain.Name())
-	}
-	if o.namespace != nil {
-		jo.Namespace = string(o.namespace.Name())
 	}
 	return json.Marshal(&jo)
 }
@@ -184,12 +177,6 @@ func (o *Object) UnmarshalJSON(text []byte) error {
 		o.domain = domain.New(
 			domain.WithSystem(o.system),
 			domain.WithName(api.DomainName(jo.Domain)),
-		)
-	}
-	if jo.Namespace != "" {
-		o.namespace = namespace.New(
-			namespace.WithDomain(o.domain),
-			namespace.WithName(api.NamespaceName(jo.Namespace)),
 		)
 	}
 	return nil

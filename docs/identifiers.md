@@ -37,9 +37,6 @@ globally-unique and conventionally are valid DNS domain names (e.g.
 A `Domain`'s `Name` is guaranteed to be unique within the scope of the
 `Domain`'s `System`.
 
-A `Namespace`'s `Name` is guaranteed to be unique within the scope of the
-`Namespace`'s `Domain`.
-
 ## Object names
 
 An `Object`'s `Name` is guaranteed to be unique within the `Namescope`
@@ -60,11 +57,3 @@ If the `Namescope` associated with an `Object`'s `Kind` is
 `Object`'s `System`, `Kind` and `Domain`.
 
 Names for these Objects are called *domain-qualified names*.
-
-### Namespace-qualified names
-
-If the `Namescope` associated with an `Object`'s `Kind` is
-`NamescopeNamescope`, `rxp` guarantees the Object's `Name` is unique within the
-`Object`'s `System`, `Kind`, `Domain` and `Namespace`.
-
-Names for these Objects are called *namespace-qualified names*.

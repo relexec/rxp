@@ -8,7 +8,6 @@ on:
 
 permissions:
   contents: read
-  pull-requests: read # needed for only-new-issues option below
 
 jobs:
   lint:
@@ -42,9 +41,17 @@ jobs:
          cache-dependency-path: |
            go.work.sum
            **/go.sum
-     - name: lint
+     - name: golangci-lint
+       env:
+         GOEXPERIMENT: jsonv2
        uses: golangci/golangci-lint-action@1e7e51e771db61008b38414a730f564565cf7c20 # v9.2.0
        with:
-         version: v2.11
-         args: --timeout=5m0s --verbose
+         version: v2.12
+         args: --timeout=2m0s --verbose
          only-new-issues: true
+     - name: check go mod updates
+       run: |
+         go mod tidy -e
+         git diff --exit-code go.mod go.sum
+     - name: check go fmt differences
+       run: 'bash -c "diff -u <(echo -n) <(gofmt -d .)"'

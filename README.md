@@ -1,8 +1,7 @@
 # `rxp` - Reliable eXecution Primitives
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/relexec/rxp.svg)](https://pkg.go.dev/github.com/relexec/rxp)
-[![Go Report Card](https://goreportcard.com/badge/github.com/relexec/rxp)](https://goreportcard.com/report/github.com/relexec/rxp)
-[![Build Status](https://github.com/relexec/rxp/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/relexec/rxp/actions)
+[![Test Status](https://github.com/relexec/rxp/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/relexec/rxp/actions)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
 `rxp` provides building blocks used to construct a Reliable Execution platform.

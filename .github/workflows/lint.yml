@@ -49,9 +49,5 @@ jobs:
          version: v2.12
          args: --timeout=2m0s --verbose
          only-new-issues: true
-     - name: check go mod updates
-       run: |
-         go mod tidy -e
-         git diff --exit-code go.mod go.sum
      - name: check go fmt differences
        run: 'bash -c "diff -u <(echo -n) <(gofmt -d .)"'

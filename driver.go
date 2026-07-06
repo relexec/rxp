@@ -9,6 +9,7 @@ import (
 	"github.com/relexec/rxp/kind/kindversion"
 	"github.com/relexec/rxp/object"
 	"github.com/relexec/rxp/query"
+	"github.com/relexec/rxp/run"
 	"github.com/relexec/rxp/system"
 )
 
@@ -82,7 +83,7 @@ type Driver interface {
 		...query.Option,
 	) (*query.Result[*kindversion.KindVersion], error)
 
-	// ObjectRead reads a single object from persistent storage.
+	// ObjectRead reads a single Object from persistent storage.
 	ObjectRead(
 		context.Context,
 		api.KindVersionName,
@@ -103,4 +104,23 @@ type Driver interface {
 		query.Expression,
 		...query.Option,
 	) (*query.Result[*object.Object], error)
+
+	// RunRead reads a single Run from persistent storage.
+	RunRead(
+		context.Context,
+		api.KindVersionName,
+		run.Selector,
+	) (*run.Run, error)
+	// RunWrite persists a single supplied Run to backend storage, Note that on
+	// successful write, the newly-created or updated Run is returned.
+	RunWrite(
+		context.Context,
+		run.Run,
+	) (*run.Run, error)
+	// RunQuery queries zero or more Runs from persistent storage.
+	RunQuery(
+		context.Context,
+		query.Expression,
+		...query.Option,
+	) (*query.Result[*run.Run], error)
 }

@@ -9,5 +9,7 @@ var (
 	ErrSelectorUUIDOrNameRequired  = New("uuid or name required", WithWrap(ErrInvalidSelector))
 	ErrSelectorDomainRequired      = New("domain required", WithWrap(ErrInvalidSelector))
 	ErrSelectorNameRequired        = New("name required", WithWrap(ErrInvalidSelector))
+	ErrSelectorEventSetRequired    = New("eventset required", WithWrap(ErrInvalidSelector))
+	ErrSelectorSequenceInvalid     = New("sequence must be non-negative", WithWrap(ErrInvalidSelector))
 	ErrSelectorSystemMismatched    = New("selector system does not match domain system", WithWrap(ErrInvalidSelector))
 )

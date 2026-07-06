@@ -10,14 +10,14 @@ type Option func(*Kind)
 
 // New returns a new [Kind].
 func New(opts ...Option) *Kind {
-	m := &Kind{}
+	k := &Kind{}
 	for _, opt := range opts {
-		opt(m)
+		opt(k)
 	}
-	return m
+	return k
 }
 
-// WithSystem sets the Kind's Systek.
+// WithSystem sets the Kind's System.
 func WithSystem(system *system.System) Option {
 	return func(k *Kind) {
 		k.system = system

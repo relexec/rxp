@@ -28,7 +28,7 @@ func (p NamePredicate) Validate() error {
 // particular Name.
 func NameEqual(name string) query.Expression {
 	return query.UnaryExpression{
-		NamePredicate{
+		Predicate: NamePredicate{
 			query.BasePredicate{
 				Op:    query.PredicateOperatorEqual,
 				Value: name,
@@ -41,7 +41,7 @@ func NameEqual(name string) query.Expression {
 // particular Name.
 func NameNotEqual(name string) query.Expression {
 	return query.UnaryExpression{
-		NamePredicate{
+		Predicate: NamePredicate{
 			query.BasePredicate{
 				Op:      query.PredicateOperatorEqual,
 				Negated: true,
@@ -59,7 +59,7 @@ func NameIn(names ...string) query.Expression {
 		return NameEqual(names[0])
 	}
 	return query.UnaryExpression{
-		NamePredicate{
+		Predicate: NamePredicate{
 			query.BasePredicate{
 				Op:    query.PredicateOperatorIn,
 				Value: names,
@@ -72,7 +72,7 @@ func NameIn(names ...string) query.Expression {
 // have any of a set of specified Names.
 func NameNotIn(names ...string) query.Expression {
 	return query.UnaryExpression{
-		NamePredicate{
+		Predicate: NamePredicate{
 			query.BasePredicate{
 				Op:      query.PredicateOperatorIn,
 				Negated: true,
@@ -94,7 +94,7 @@ func (p UUIDPredicate) Validate() error {
 // UUID.
 func UUIDEqual(uuid string) query.Expression {
 	return query.UnaryExpression{
-		UUIDPredicate{
+		Predicate: UUIDPredicate{
 			query.BasePredicate{
 				Op:    query.PredicateOperatorEqual,
 				Value: uuid,
@@ -107,7 +107,7 @@ func UUIDEqual(uuid string) query.Expression {
 // particular UUID.
 func UUIDNotEqual(uuid string) query.Expression {
 	return query.UnaryExpression{
-		UUIDPredicate{
+		Predicate: UUIDPredicate{
 			query.BasePredicate{
 				Op:      query.PredicateOperatorEqual,
 				Negated: true,
@@ -121,7 +121,7 @@ func UUIDNotEqual(uuid string) query.Expression {
 // of specified UUIDs.
 func UUIDIn(uuids ...string) query.Expression {
 	return query.UnaryExpression{
-		UUIDPredicate{
+		Predicate: UUIDPredicate{
 			query.BasePredicate{
 				Op:    query.PredicateOperatorIn,
 				Value: uuids,
@@ -134,7 +134,7 @@ func UUIDIn(uuids ...string) query.Expression {
 // of a set of specified UUIDs.
 func UUIDNotIn(uuids ...string) query.Expression {
 	return query.UnaryExpression{
-		UUIDPredicate{
+		Predicate: UUIDPredicate{
 			query.BasePredicate{
 				Op:      query.PredicateOperatorIn,
 				Negated: true,
@@ -168,7 +168,7 @@ func (p GenerationPredicate) Validate() error {
 // particular Generation.
 func GenerationEqual(generation api.Generation) query.Expression {
 	return query.UnaryExpression{
-		GenerationPredicate{
+		Predicate: GenerationPredicate{
 			query.BasePredicate{
 				Op:    query.PredicateOperatorEqual,
 				Value: generation,
@@ -181,7 +181,7 @@ func GenerationEqual(generation api.Generation) query.Expression {
 // particular Generation.
 func GenerationNotEqual(generation api.Generation) query.Expression {
 	return query.UnaryExpression{
-		GenerationPredicate{
+		Predicate: GenerationPredicate{
 			query.BasePredicate{
 				Op:      query.PredicateOperatorEqual,
 				Negated: true,
@@ -199,7 +199,7 @@ func GenerationIn(generations ...api.Generation) query.Expression {
 		return GenerationEqual(generations[0])
 	}
 	return query.UnaryExpression{
-		GenerationPredicate{
+		Predicate: GenerationPredicate{
 			query.BasePredicate{
 				Op:    query.PredicateOperatorIn,
 				Value: generations,
@@ -212,7 +212,7 @@ func GenerationIn(generations ...api.Generation) query.Expression {
 // have any of a set of specified Generations.
 func GenerationNotIn(generations ...api.Generation) query.Expression {
 	return query.UnaryExpression{
-		GenerationPredicate{
+		Predicate: GenerationPredicate{
 			query.BasePredicate{
 				Op:      query.PredicateOperatorIn,
 				Negated: true,

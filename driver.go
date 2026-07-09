@@ -9,7 +9,6 @@ import (
 	"github.com/relexec/rxp/kind/kindversion"
 	"github.com/relexec/rxp/object"
 	"github.com/relexec/rxp/query"
-	"github.com/relexec/rxp/run"
 	"github.com/relexec/rxp/system"
 )
 
@@ -23,7 +22,7 @@ type Driver interface {
 	// SystemWrite atomically writes the supplied System to persistent storage.
 	SystemWrite(
 		context.Context,
-		*system.System,
+		system.System,
 	) error
 	// SystemQuery queries zero or more Systems from persistent storage.
 	SystemQuery(
@@ -39,7 +38,7 @@ type Driver interface {
 	// DomainWrite atomically writes the supplied Domain to persistent storage.
 	DomainWrite(
 		context.Context,
-		*domain.Domain,
+		domain.Domain,
 	) error
 	// DomainQuery queries zero or more Domains from persistent storage.
 	DomainQuery(
@@ -56,7 +55,7 @@ type Driver interface {
 	// KindWrite atomically writes the supplied Kind to persistent storage.
 	KindWrite(
 		context.Context,
-		*kind.Kind,
+		kind.Kind,
 	) error
 	// KindQuery queries zero or more Kinds from persistent storage.
 	KindQuery(
@@ -73,7 +72,7 @@ type Driver interface {
 	// persistent storage.
 	KindVersionWrite(
 		context.Context,
-		*kindversion.KindVersion,
+		kindversion.KindVersion,
 	) error
 	// KindVersionQuery queries zero or more KindVersions from persistent
 	// storage.
@@ -104,23 +103,4 @@ type Driver interface {
 		query.Expression,
 		...query.Option,
 	) (*query.Result[*object.Object], error)
-
-	// RunRead reads a single Run from persistent storage.
-	RunRead(
-		context.Context,
-		api.KindVersionName,
-		run.Selector,
-	) (*run.Run, error)
-	// RunWrite persists a single supplied Run to backend storage, Note that on
-	// successful write, the newly-created or updated Run is returned.
-	RunWrite(
-		context.Context,
-		run.Run,
-	) (*run.Run, error)
-	// RunQuery queries zero or more Runs from persistent storage.
-	RunQuery(
-		context.Context,
-		query.Expression,
-		...query.Option,
-	) (*query.Result[*run.Run], error)
 }

@@ -1,9 +1,9 @@
 package kind
 
 import (
+	"github.com/relexec/delta"
+	"github.com/relexec/delta/fieldpath"
 	"github.com/relexec/rxp/api"
-	"github.com/relexec/rxp/cmp"
-	"github.com/relexec/rxp/cmp/fieldpath"
 	"github.com/relexec/rxp/errors"
 	"github.com/relexec/rxp/system"
 )
@@ -84,25 +84,25 @@ func (k *Kind) SetScope(scope api.Scope) {
 	k.scope = scope
 }
 
-// Diff returns a [cmp.Delta] representing the difference between itself and
+// Diff returns a [delta.Delta] representing the difference between itself and
 // something else of the same type.
 //
-// If the argument is the [cmp.ZeroGen] sentinel, the returned [cmp.Delta]
+// If the argument is the [delta.ZeroGen] sentinel, the returned [delta.Delta]
 // represents instructions to create the thing.
-func (k Kind) Diff(subject any) (*cmp.Delta, error) {
+func (k Kind) Diff(subject any) (*delta.Delta, error) {
 	var other *Kind
 	switch subject := subject.(type) {
-	case cmp.ZeroGen:
+	case delta.ZeroGen:
 		return k.diffNew()
 	case Kind:
 		other = &subject
 	case *Kind:
 		other = subject
 	default:
-		return nil, cmp.CannotCompareTypes(k, subject)
+		return nil, delta.CannotCompareTypes(k, subject)
 	}
 
-	d := &cmp.Delta{}
+	d := &delta.Delta{}
 
 	thisSystem := k.system
 	otherSystem := other.System()
@@ -110,35 +110,35 @@ func (k Kind) Diff(subject any) (*cmp.Delta, error) {
 		thisSystemUUID := k.system.UUID()
 		if otherSystem == nil {
 			d.Push(
-				cmp.NewDifference(
-					FieldPathSystem,
-					cmp.DifferenceTypeRemove,
-					thisSystemUUID,
-					nil,
-				),
+				delta.Difference{
+					FieldPath: FieldPathSystem,
+					Type:      delta.DifferenceTypeRemove,
+					From:      thisSystemUUID,
+					To:        nil,
+				},
 			)
 		} else {
 			otherSystemUUID := otherSystem.UUID()
 			if thisSystemUUID != otherSystem.UUID() {
 				d.Push(
-					cmp.NewDifference(
-						FieldPathSystem,
-						cmp.DifferenceTypeModify,
-						thisSystemUUID,
-						otherSystemUUID,
-					),
+					delta.Difference{
+						FieldPath: FieldPathSystem,
+						Type:      delta.DifferenceTypeModify,
+						From:      thisSystemUUID,
+						To:        otherSystemUUID,
+					},
 				)
 			}
 		}
 	} else if otherSystem != nil {
 		otherSystemUUID := otherSystem.UUID()
 		d.Push(
-			cmp.NewDifference(
-				FieldPathSystem,
-				cmp.DifferenceTypeAdd,
-				nil,
-				otherSystemUUID,
-			),
+			delta.Difference{
+				FieldPath: FieldPathSystem,
+				Type:      delta.DifferenceTypeAdd,
+				From:      nil,
+				To:        otherSystemUUID,
+			},
 		)
 	}
 
@@ -146,12 +146,12 @@ func (k Kind) Diff(subject any) (*cmp.Delta, error) {
 	otherUUID := other.UUID()
 	if thisUUID != otherUUID {
 		d.Push(
-			cmp.NewDifference(
-				FieldPathUUID,
-				cmp.DifferenceTypeModify,
-				string(thisUUID),
-				string(otherUUID),
-			),
+			delta.Difference{
+				FieldPath: FieldPathUUID,
+				Type:      delta.DifferenceTypeModify,
+				From:      string(thisUUID),
+				To:        string(otherUUID),
+			},
 		)
 	}
 
@@ -159,64 +159,64 @@ func (k Kind) Diff(subject any) (*cmp.Delta, error) {
 	otherName := string(other.Name())
 	if thisName != otherName {
 		d.Push(
-			cmp.NewDifference(
-				FieldPathName,
-				cmp.DifferenceTypeModify,
-				thisName,
-				otherName,
-			),
+			delta.Difference{
+				FieldPath: FieldPathName,
+				Type:      delta.DifferenceTypeModify,
+				From:      thisName,
+				To:        otherName,
+			},
 		)
 	}
 	if k.scope != other.Scope() {
 		d.Push(
-			cmp.NewDifference(
-				FieldPathScope,
-				cmp.DifferenceTypeModify,
-				k.scope,
-				other.Scope(),
-			),
+			delta.Difference{
+				FieldPath: FieldPathScope,
+				Type:      delta.DifferenceTypeModify,
+				From:      k.scope,
+				To:        other.Scope(),
+			},
 		)
 	}
 	return d, nil
 }
 
-// diffNew returns a [cmp.Delta] containing instructions to make the Kind as a
+// diffNew returns a [delta.Delta] containing instructions to make the Kind as a
 // new Kind (i.e. for the first generation)
-func (k Kind) diffNew() (*cmp.Delta, error) {
-	d := &cmp.Delta{}
+func (k Kind) diffNew() (*delta.Delta, error) {
+	d := &delta.Delta{}
 	if k.system != nil {
 		d.Push(
-			cmp.NewDifference(
-				FieldPathSystem,
-				cmp.DifferenceTypeAdd,
-				k.system.UUID(),
-				nil,
-			),
+			delta.Difference{
+				FieldPath: FieldPathSystem,
+				Type:      delta.DifferenceTypeAdd,
+				From:      nil,
+				To:        k.system.UUID(),
+			},
 		)
 	}
 	d.Push(
-		cmp.NewDifference(
-			FieldPathUUID,
-			cmp.DifferenceTypeAdd,
-			k.uuid,
-			nil,
-		),
+		delta.Difference{
+			FieldPath: FieldPathUUID,
+			Type:      delta.DifferenceTypeAdd,
+			From:      nil,
+			To:        k.uuid,
+		},
 	)
 	d.Push(
-		cmp.NewDifference(
-			FieldPathName,
-			cmp.DifferenceTypeAdd,
-			string(k.name),
-			nil,
-		),
+		delta.Difference{
+			FieldPath: FieldPathName,
+			Type:      delta.DifferenceTypeAdd,
+			From:      nil,
+			To:        string(k.name),
+		},
 	)
 	d.Push(
-		cmp.NewDifference(
-			FieldPathScope,
-			cmp.DifferenceTypeAdd,
-			k.scope,
-			nil,
-		),
+		delta.Difference{
+			FieldPath: FieldPathScope,
+			Type:      delta.DifferenceTypeAdd,
+			From:      nil,
+			To:        k.scope,
+		},
 	)
 	return d, nil
 }

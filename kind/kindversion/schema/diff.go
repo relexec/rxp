@@ -6,8 +6,8 @@ import (
 	"github.com/google/jsonschema-go/jsonschema"
 	"github.com/samber/lo"
 
-	"github.com/relexec/rxp/cmp"
-	"github.com/relexec/rxp/cmp/fieldpath"
+	"github.com/relexec/delta"
+	"github.com/relexec/delta/fieldpath"
 )
 
 var (
@@ -20,15 +20,15 @@ var (
 	FieldPathProperties = fieldpath.FromString("properties")
 )
 
-// Diff returns a [cmp.Delta] representing the difference between itself and
+// Diff returns a [delta.Delta] representing the difference between itself and
 // something else of the same type.
 //
-// If the argument is the [cmp.ZeroGen] sentinel, the returned [cmp.Delta]
+// If the argument is the [delta.ZeroGen] sentinel, the returned [delta.Delta]
 // represents instructions to create the thing.
-func (s Schema) Diff(subject any) (*cmp.Delta, error) {
+func (s Schema) Diff(subject any) (*delta.Delta, error) {
 	var other Schema
 	switch subject := subject.(type) {
-	case cmp.ZeroGen:
+	case delta.ZeroGen:
 		return s.diffNew()
 	case Schema:
 		other = subject
@@ -39,32 +39,32 @@ func (s Schema) Diff(subject any) (*cmp.Delta, error) {
 	case *jsonschema.Schema:
 		other = Schema{*subject}
 	default:
-		return nil, cmp.CannotCompareTypes(s, subject)
+		return nil, delta.CannotCompareTypes(s, subject)
 	}
 
-	d := &cmp.Delta{}
+	d := &delta.Delta{}
 
 	thisJS := s.Schema
 	otherJS := other.Schema
 
 	if thisJS.ID != otherJS.ID {
 		d.Push(
-			cmp.NewDifference(
-				FieldPathID,
-				cmp.DifferenceTypeModify,
-				thisJS.ID,
-				otherJS.ID,
-			),
+			delta.Difference{
+				FieldPath: FieldPathID,
+				Type:      delta.DifferenceTypeModify,
+				From:      thisJS.ID,
+				To:        otherJS.ID,
+			},
 		)
 	}
 	if thisJS.Schema != otherJS.Schema {
 		d.Push(
-			cmp.NewDifference(
-				FieldPathSchema,
-				cmp.DifferenceTypeModify,
-				thisJS.Schema,
-				otherJS.Schema,
-			),
+			delta.Difference{
+				FieldPath: FieldPathSchema,
+				Type:      delta.DifferenceTypeModify,
+				From:      thisJS.Schema,
+				To:        otherJS.Schema,
+			},
 		)
 	}
 	// TODO(jaypipes): Handle $defs
@@ -74,22 +74,22 @@ func (s Schema) Diff(subject any) (*cmp.Delta, error) {
 
 	if thisJS.Title != otherJS.Title {
 		d.Push(
-			cmp.NewDifference(
-				FieldPathTitle,
-				cmp.DifferenceTypeModify,
-				thisJS.Title,
-				otherJS.Title,
-			),
+			delta.Difference{
+				FieldPath: FieldPathTitle,
+				Type:      delta.DifferenceTypeModify,
+				From:      thisJS.Title,
+				To:        otherJS.Title,
+			},
 		)
 	}
 	if thisJS.Description != otherJS.Description {
 		d.Push(
-			cmp.NewDifference(
-				FieldPathDescription,
-				cmp.DifferenceTypeModify,
-				thisJS.Description,
-				otherJS.Description,
-			),
+			delta.Difference{
+				FieldPath: FieldPathDescription,
+				Type:      delta.DifferenceTypeModify,
+				From:      thisJS.Description,
+				To:        otherJS.Description,
+			},
 		)
 	}
 
@@ -104,69 +104,69 @@ func (s Schema) Diff(subject any) (*cmp.Delta, error) {
 
 	if len(thisPropKeys) != len(otherPropKeys) || !slices.Equal(thisPropKeys, otherPropKeys) {
 		d.Push(
-			cmp.NewDifference(
-				FieldPathProperties,
-				cmp.DifferenceTypeModify,
-				thisProps,
-				otherProps,
-			),
+			delta.Difference{
+				FieldPath: FieldPathProperties,
+				Type:      delta.DifferenceTypeModify,
+				From:      thisProps,
+				To:        otherProps,
+			},
 		)
 	}
 
 	return d, nil
 }
 
-// diffNew returns a [cmp.Delta] containing instructions to make the Schema as
+// diffNew returns a [delta.Delta] containing instructions to make the Schema as
 // a new Schema (i.e. for the first generation)
-func (s Schema) diffNew() (*cmp.Delta, error) {
-	d := &cmp.Delta{}
+func (s Schema) diffNew() (*delta.Delta, error) {
+	d := &delta.Delta{}
 	if s.Schema.ID != "" {
 		d.Push(
-			cmp.NewDifference(
-				FieldPathID,
-				cmp.DifferenceTypeAdd,
-				s.Schema.ID,
-				nil,
-			),
+			delta.Difference{
+				FieldPath: FieldPathID,
+				Type:      delta.DifferenceTypeAdd,
+				From:      nil,
+				To:        s.Schema.ID,
+			},
 		)
 	}
 	if s.Schema.Schema != "" {
 		d.Push(
-			cmp.NewDifference(
-				FieldPathSchema,
-				cmp.DifferenceTypeAdd,
-				s.Schema.Schema,
-				nil,
-			),
+			delta.Difference{
+				FieldPath: FieldPathSchema,
+				Type:      delta.DifferenceTypeAdd,
+				To:        s.Schema.Schema,
+				From:      nil,
+			},
 		)
 	}
 	if s.Schema.Title != "" {
 		d.Push(
-			cmp.NewDifference(
-				FieldPathTitle,
-				cmp.DifferenceTypeAdd,
-				s.Schema.Title,
-				nil,
-			),
+			delta.Difference{
+				FieldPath: FieldPathTitle,
+				Type:      delta.DifferenceTypeAdd,
+				From:      nil,
+				To:        s.Schema.Title,
+			},
 		)
 	}
 	if s.Schema.Description != "" {
 		d.Push(
-			cmp.NewDifference(
-				FieldPathDescription,
-				cmp.DifferenceTypeAdd,
-				s.Schema.Description,
-				nil,
-			),
+			delta.Difference{
+				FieldPath: FieldPathDescription,
+				Type:      delta.DifferenceTypeAdd,
+				From:      nil,
+				To:        s.Schema.Description,
+			},
 		)
 	}
 	d.Push(
-		cmp.NewDifference(
-			FieldPathProperties,
-			cmp.DifferenceTypeAdd,
-			s.Schema.Properties,
-			nil,
-		),
+		delta.Difference{
+			FieldPath: FieldPathProperties,
+			Type:      delta.DifferenceTypeAdd,
+			From:      nil,
+			To:        s.Schema.Properties,
+		},
 	)
 	return d, nil
 }

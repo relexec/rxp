@@ -1,9 +1,9 @@
 package domain
 
 import (
+	"github.com/relexec/delta"
+	"github.com/relexec/delta/fieldpath"
 	"github.com/relexec/rxp/api"
-	"github.com/relexec/rxp/cmp"
-	"github.com/relexec/rxp/cmp/fieldpath"
 	"github.com/relexec/rxp/errors"
 	"github.com/relexec/rxp/system"
 )
@@ -120,87 +120,87 @@ func (d *Domain) IsRoot() bool {
 	return d.root == nil
 }
 
-// Diff returns a [cmp.Delta] representing the difference between itself and
+// Diff returns a [delta.Delta] representing the difference between itself and
 // something else of the same type.
 //
-// If the argument is the [cmp.ZeroGen] sentinel, the returned [cmp.Delta]
+// If the argument is the [delta.ZeroGen] sentinel, the returned [delta.Delta]
 // represents instructions to create the thing.
-func (d Domain) Diff(subject any) (*cmp.Delta, error) {
+func (d Domain) Diff(subject any) (*delta.Delta, error) {
 	var other *Domain
 	switch subject := subject.(type) {
-	case cmp.ZeroGen:
+	case delta.ZeroGen:
 		return d.diffNew()
 	case Domain:
 		other = &subject
 	case *Domain:
 		other = subject
 	default:
-		return nil, cmp.CannotCompareTypes(d, subject)
+		return nil, delta.CannotCompareTypes(d, subject)
 	}
 
-	delta := &cmp.Delta{}
+	del := &delta.Delta{}
 
 	thisSystem := d.system
 	otherSystem := other.System()
 	if thisSystem != nil {
 		thisSystemUUID := thisSystem.UUID()
 		if otherSystem == nil {
-			delta.Push(
-				cmp.NewDifference(
-					FieldPathSystem,
-					cmp.DifferenceTypeRemove,
-					thisSystemUUID,
-					nil,
-				),
+			del.Push(
+				delta.Difference{
+					FieldPath: FieldPathSystem,
+					Type:      delta.DifferenceTypeRemove,
+					From:      thisSystemUUID,
+					To:        nil,
+				},
 			)
 		} else {
 			otherSystemUUID := otherSystem.UUID()
 			if thisSystemUUID != otherSystem.UUID() {
-				delta.Push(
-					cmp.NewDifference(
-						FieldPathSystem,
-						cmp.DifferenceTypeModify,
-						thisSystemUUID,
-						otherSystemUUID,
-					),
+				del.Push(
+					delta.Difference{
+						FieldPath: FieldPathSystem,
+						Type:      delta.DifferenceTypeModify,
+						From:      thisSystemUUID,
+						To:        otherSystemUUID,
+					},
 				)
 			}
 		}
 	} else if otherSystem != nil {
 		otherSystemUUID := otherSystem.UUID()
-		delta.Push(
-			cmp.NewDifference(
-				FieldPathSystem,
-				cmp.DifferenceTypeAdd,
-				nil,
-				otherSystemUUID,
-			),
+		del.Push(
+			delta.Difference{
+				FieldPath: FieldPathSystem,
+				Type:      delta.DifferenceTypeAdd,
+				From:      nil,
+				To:        otherSystemUUID,
+			},
 		)
 	}
 
 	thisUUID := d.uuid
 	otherUUID := other.UUID()
 	if thisUUID != otherUUID {
-		delta.Push(
-			cmp.NewDifference(
-				FieldPathUUID,
-				cmp.DifferenceTypeModify,
-				string(thisUUID),
-				string(otherUUID),
-			),
+		del.Push(
+			delta.Difference{
+				FieldPath: FieldPathUUID,
+				Type:      delta.DifferenceTypeModify,
+				From:      string(thisUUID),
+				To:        string(otherUUID),
+			},
 		)
 	}
 
 	thisName := d.name
 	otherName := other.Name()
 	if thisName != otherName {
-		delta.Push(
-			cmp.NewDifference(
-				FieldPathName,
-				cmp.DifferenceTypeModify,
-				string(thisName),
-				string(otherName),
-			),
+		del.Push(
+			delta.Difference{
+				FieldPath: FieldPathName,
+				Type:      delta.DifferenceTypeModify,
+				From:      string(thisName),
+				To:        string(otherName),
+			},
 		)
 	}
 
@@ -209,36 +209,36 @@ func (d Domain) Diff(subject any) (*cmp.Delta, error) {
 	if thisRoot != nil {
 		thisRootUUID := thisRoot.UUID()
 		if otherRoot == nil {
-			delta.Push(
-				cmp.NewDifference(
-					FieldPathRoot,
-					cmp.DifferenceTypeRemove,
-					thisRootUUID,
-					nil,
-				),
+			del.Push(
+				delta.Difference{
+					FieldPath: FieldPathRoot,
+					Type:      delta.DifferenceTypeRemove,
+					From:      thisRootUUID,
+					To:        nil,
+				},
 			)
 		} else {
 			otherRootUUID := otherRoot.UUID()
 			if thisRootUUID != otherRoot.UUID() {
-				delta.Push(
-					cmp.NewDifference(
-						FieldPathRoot,
-						cmp.DifferenceTypeModify,
-						thisRootUUID,
-						otherRootUUID,
-					),
+				del.Push(
+					delta.Difference{
+						FieldPath: FieldPathRoot,
+						Type:      delta.DifferenceTypeModify,
+						From:      thisRootUUID,
+						To:        otherRootUUID,
+					},
 				)
 			}
 		}
 	} else if otherRoot != nil {
 		otherRootUUID := otherRoot.UUID()
-		delta.Push(
-			cmp.NewDifference(
-				FieldPathRoot,
-				cmp.DifferenceTypeAdd,
-				nil,
-				otherRootUUID,
-			),
+		del.Push(
+			delta.Difference{
+				FieldPath: FieldPathRoot,
+				Type:      delta.DifferenceTypeAdd,
+				From:      nil,
+				To:        otherRootUUID,
+			},
 		)
 	}
 
@@ -247,91 +247,91 @@ func (d Domain) Diff(subject any) (*cmp.Delta, error) {
 	if thisParent != nil {
 		thisParentUUID := thisParent.UUID()
 		if otherParent == nil {
-			delta.Push(
-				cmp.NewDifference(
-					FieldPathParent,
-					cmp.DifferenceTypeRemove,
-					thisParentUUID,
-					nil,
-				),
+			del.Push(
+				delta.Difference{
+					FieldPath: FieldPathParent,
+					Type:      delta.DifferenceTypeRemove,
+					From:      thisParentUUID,
+					To:        nil,
+				},
 			)
 		} else {
 			otherParentUUID := otherParent.UUID()
 			if thisParentUUID != otherParent.UUID() {
-				delta.Push(
-					cmp.NewDifference(
-						FieldPathParent,
-						cmp.DifferenceTypeModify,
-						thisParentUUID,
-						otherParentUUID,
-					),
+				del.Push(
+					delta.Difference{
+						FieldPath: FieldPathParent,
+						Type:      delta.DifferenceTypeModify,
+						From:      thisParentUUID,
+						To:        otherParentUUID,
+					},
 				)
 			}
 		}
 	} else if otherParent != nil {
 		otherParentUUID := otherParent.UUID()
-		delta.Push(
-			cmp.NewDifference(
-				FieldPathParent,
-				cmp.DifferenceTypeAdd,
-				nil,
-				otherParentUUID,
-			),
+		del.Push(
+			delta.Difference{
+				FieldPath: FieldPathParent,
+				Type:      delta.DifferenceTypeAdd,
+				From:      nil,
+				To:        otherParentUUID,
+			},
 		)
 	}
-	return delta, nil
+	return del, nil
 }
 
-// diffNew returns a [cmp.Delta] containing instructions to make the Domain as a
+// diffNew returns a [delta.Delta] containing instructions to make the Domain as a
 // new Domain (i.e. for the first generation)
-func (d Domain) diffNew() (*cmp.Delta, error) {
-	delta := &cmp.Delta{}
+func (d Domain) diffNew() (*delta.Delta, error) {
+	del := &delta.Delta{}
 
 	if d.system != nil {
-		delta.Push(
-			cmp.NewDifference(
-				FieldPathSystem,
-				cmp.DifferenceTypeAdd,
-				d.system.UUID(),
-				nil,
-			),
+		del.Push(
+			delta.Difference{
+				FieldPath: FieldPathSystem,
+				Type:      delta.DifferenceTypeAdd,
+				From:      nil,
+				To:        d.system.UUID(),
+			},
 		)
 	}
-	delta.Push(
-		cmp.NewDifference(
-			FieldPathUUID,
-			cmp.DifferenceTypeAdd,
-			d.uuid,
-			nil,
-		),
+	del.Push(
+		delta.Difference{
+			FieldPath: FieldPathUUID,
+			Type:      delta.DifferenceTypeAdd,
+			From:      nil,
+			To:        d.uuid,
+		},
 	)
-	delta.Push(
-		cmp.NewDifference(
-			FieldPathName,
-			cmp.DifferenceTypeAdd,
-			string(d.name),
-			nil,
-		),
+	del.Push(
+		delta.Difference{
+			FieldPath: FieldPathName,
+			Type:      delta.DifferenceTypeAdd,
+			From:      nil,
+			To:        string(d.name),
+		},
 	)
 	if d.root != nil {
-		delta.Push(
-			cmp.NewDifference(
-				FieldPathRoot,
-				cmp.DifferenceTypeAdd,
-				d.root.UUID(),
-				nil,
-			),
+		del.Push(
+			delta.Difference{
+				FieldPath: FieldPathRoot,
+				Type:      delta.DifferenceTypeAdd,
+				From:      nil,
+				To:        d.root.UUID(),
+			},
 		)
 	}
 	if d.parent != nil {
-		delta.Push(
-			cmp.NewDifference(
-				FieldPathParent,
-				cmp.DifferenceTypeAdd,
-				d.parent.UUID(),
-				nil,
-			),
+		del.Push(
+			delta.Difference{
+				FieldPath: FieldPathParent,
+				Type:      delta.DifferenceTypeAdd,
+				From:      nil,
+				To:        d.parent.UUID(),
+			},
 		)
 	}
-	return delta, nil
+	return del, nil
 }

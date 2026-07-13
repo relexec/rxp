@@ -3,12 +3,14 @@ package query_test
 import (
 	"testing"
 
+	"github.com/Masterminds/semver/v3"
+	"github.com/google/uuid"
 	"github.com/relexec/rxp"
+	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/domain"
 	"github.com/relexec/rxp/kind"
 	"github.com/relexec/rxp/kind/kindversion"
 	"github.com/relexec/rxp/query"
-	"github.com/relexec/rxp/testing/fixtures/platform"
 	"github.com/stretchr/testify/require"
 )
 
@@ -26,6 +28,19 @@ func TestContainsPredicate(t *testing.T) {
 			return false
 		}
 	}
+	ku := uuid.NewString()
+	kn := api.KindName("SomeKind")
+	k := kind.New(
+		kind.WithUUID(ku),
+		kind.WithName(kn),
+	)
+	v, err := semver.NewVersion("v0.0.1")
+	require.Nil(t, err)
+	kvn := api.NewKindVersionName(kn, *v)
+	kv := kindversion.New(
+		kindversion.WithKind(k),
+		kindversion.WithVersion(*v),
+	)
 	cases := []struct {
 		name    string
 		subject query.Expression
@@ -59,18 +74,18 @@ func TestContainsPredicate(t *testing.T) {
 		},
 		{
 			"KindNameEqual",
-			kind.NameEqual(rxp.KindName("some.kind")),
+			kind.NameEqual(kn),
 			true,
 		},
 		{
 			"KindUUIDEqual",
-			kind.UUIDEqual(platform.KindUUID),
+			kind.UUIDEqual(ku),
 			true,
 		},
 		{
 			"Or with KindNameEqual and DomainNameEqual",
 			query.Or(
-				kind.NameEqual(rxp.KindName("some.kind")),
+				kind.NameEqual(kn),
 				domain.NameEqual(rxp.DomainName("other.domain")),
 			),
 			true,
@@ -78,24 +93,24 @@ func TestContainsPredicate(t *testing.T) {
 		{
 			"And with KindNameEqual and DomainNameEqual",
 			query.And(
-				kind.NameEqual(rxp.KindName("some.kind")),
+				kind.NameEqual(kn),
 				domain.NameEqual(rxp.DomainName("other.domain")),
 			),
 			true,
 		},
 		{
 			"KindEqual",
-			kind.Equal(platform.Kind),
+			kind.Equal(k),
 			true,
 		},
 		{
 			"KindVersionEqual",
-			kindversion.Equal(platform.LastKindVersion()),
+			kindversion.Equal(kv),
 			true,
 		},
 		{
 			"KindVersionNameEqual",
-			kindversion.NameEqual(platform.LastKindVersionName()),
+			kindversion.NameEqual(kvn),
 			true,
 		},
 	}

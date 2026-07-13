@@ -14,10 +14,11 @@ PostgreSQL as the primary persistence store.
 At its core, a Reliable Execution platform must be able to:
 
 * Guarantee uniqueness of names within some scope
-* Safely evolve the definition of a thing
-* Safely mutate desired state of a thing
-* Safely archive managed things
-* Provide auditability for managed things
+* Safely evolve the *definition* of a thing
+* Safely mutate the *desired state* of a thing
+* Execute arbitrary code reliably
+* Safely *archive* managed things
+* Provide *auditability* for managed things
 
 [rxp-pg]: https://github.com/relexec/rxp-pg
 
@@ -57,7 +58,33 @@ to potentially run over very long periods of time. `rxp` understands when the
 definition of something changes and provides guardrails that prevent unsafe
 changes to that definition from potentially breaking application clients.
 
+When the definition of something managed by `rxp` changes, a new version of
+that definition is persisted. Objects managed by `rxp` are always associated
+with a specific version of a type definition. This ensures that the
+representation of an object can always be constructed to match its definition
+at the time of creation.
+
 ## Safe desired state mutation
+
+Similar to changes to type definitions, users of a Reliable Execution platform
+need guarantees that changes to the desired state of an object are safe for
+concurrent writers.
+
+Attempts by multiple writers to simultaneously change the same object's desired
+state to two different representations should be guarded to ensure only one
+writer succeeds and the other writers will need to reverify any conditions that
+led to their original desired state change.
+
+## Execute arbitrary code reliably
+
+Developers should be able to tell the Reliable Execution platform that some
+arbitrary code should be *executed reliably*.
+
+Reliable execution of code means that `rxp` wraps the execution of the
+arbitrary code in a safety envelope that tracks important events and
+checkpoints in the code execution so that if the execution of the code fails
+due to a runtime error -- network partitioning, out-of-memory errors, etc --
+that the code can start executing again elsewhere.
 
 ## Safe archival
 
@@ -72,3 +99,14 @@ longer be returned from Read operations unless the caller indicates `rxp`
 should include archived items in its lookup actions.
 
 ## Auditability
+
+Every change to a thing managed by `rxp` is tracked.
+
+For objects managed by `rxp`, a user can see every generation of the object and
+see exactly what changed from one generation to the next.
+
+An execution of a runnable thing is persisted as an event history.
+
+Objects managed by `rxp` that have status fields associated with the execution
+of a runnable thing can see the history of how that status field changed in
+response to the executions of those runnable things.

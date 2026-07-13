@@ -52,6 +52,12 @@ func (o Object) KindVersionName() api.KindVersionName {
 	return o.kindVersionName
 }
 
+// SetKindVersionName sets the Object's kind version name which uniquely
+// identifies the type of an Object.
+func (o *Object) SetKindVersionName(kvn api.KindVersionName) {
+	o.kindVersionName = kvn
+}
+
 // System returns the System of the Object.
 func (o Object) System() *system.System {
 	return o.system

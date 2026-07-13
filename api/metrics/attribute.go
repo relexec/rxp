@@ -1,8 +1,9 @@
 package metrics
 
 import (
-	"github.com/relexec/rxp/api"
 	"go.opentelemetry.io/otel/attribute"
+
+	"github.com/relexec/rxp/api"
 )
 
 const (

@@ -4,8 +4,8 @@ import (
 	"go.opentelemetry.io/otel/sdk/metric"
 )
 
-// Metrics handles OTEL Meters for the rxp store
-type Metrics struct {
+// Handler handles OTEL Meters for the rxp store
+type Handler struct {
 	// mp is the OTEL metric.MeterProvider
 	mp *metric.MeterProvider
 	// exporter is the OTEL sdkmetric.Exporter
@@ -15,16 +15,16 @@ type Metrics struct {
 }
 
 // MeterProvider returns the OTEL metric.MeterProvider
-func (m Metrics) MeterProvider() *metric.MeterProvider {
-	return m.mp
+func (h Handler) MeterProvider() *metric.MeterProvider {
+	return h.mp
 }
 
 // Exporter returns the OTEL sdkmetric.Exporter.
-func (m Metrics) Exporter() metric.Exporter {
-	return m.exporter
+func (h Handler) Exporter() metric.Exporter {
+	return h.exporter
 }
 
 // Reader returns the OTEL sdkmetric.Reader.
-func (m Metrics) Reader() metric.Reader {
-	return m.reader
+func (h Handler) Reader() metric.Reader {
+	return h.reader
 }

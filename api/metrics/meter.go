@@ -35,10 +35,10 @@ var (
 	InstrumentQueryDuration metric.Float64Histogram
 )
 
-// Init initializes the rxp metrics for the supplied Metrics handler.
-func Init(metrics *Metrics) error {
+// init initializes the rxp metrics handler.
+func (h *Handler) init() error {
 	var err error
-	p := metrics.MeterProvider()
+	p := h.MeterProvider()
 	m := p.Meter(ProviderName)
 
 	InstrumentReadRequest, err = m.Int64Counter(

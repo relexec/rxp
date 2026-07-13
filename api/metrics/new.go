@@ -7,14 +7,14 @@ import (
 	"go.opentelemetry.io/otel/sdk/metric"
 )
 
-type WithOption func(*Metrics)
+type WithOption func(*Handler)
 
-// New returns a new Metrics handler.
+// New returns a new metrics handler.
 func New(
 	ctx context.Context,
 	opts ...WithOption,
-) (*Metrics, error) {
-	metrics := &Metrics{}
+) (*Handler, error) {
+	metrics := &Handler{}
 	for _, opt := range opts {
 		opt(metrics)
 	}
@@ -36,26 +36,29 @@ func New(
 		)
 		metrics.mp = mp
 	}
+	if err := metrics.init(); err != nil {
+		return nil, err
+	}
 	return metrics, nil
 }
 
-// WithMeterProvider sets the Metrics handler's MeterProvider.
+// WithMeterProvider sets the Handler handler's MeterProvider.
 func WithMeterProvider(mp *metric.MeterProvider) WithOption {
-	return func(m *Metrics) {
+	return func(m *Handler) {
 		m.mp = mp
 	}
 }
 
-// WithExporter sets the Metrics handler's Exporter.
+// WithExporter sets the Handler handler's Exporter.
 func WithExporter(exp metric.Exporter) WithOption {
-	return func(m *Metrics) {
+	return func(m *Handler) {
 		m.exporter = exp
 	}
 }
 
-// WithReader sets the Metrics handler's Reader.
+// WithReader sets the Handler handler's Reader.
 func WithReader(reader metric.Reader) WithOption {
-	return func(m *Metrics) {
+	return func(m *Handler) {
 		m.reader = reader
 	}
 }

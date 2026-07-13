@@ -17,7 +17,7 @@ func (p NamePredicate) Validate() error {
 	if err != nil {
 		return err
 	}
-	v := p.BasePredicate.Value
+	v := p.Value
 	switch v := v.(type) {
 	case []api.KindName:
 		for _, kn := range v {
@@ -96,7 +96,7 @@ func (p UUIDPredicate) Validate() error {
 	if err != nil {
 		return err
 	}
-	v := p.BasePredicate.Value
+	v := p.Value
 	switch v := v.(type) {
 	case []string:
 		return nil

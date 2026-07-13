@@ -5,7 +5,7 @@ import "context"
 type contextKey string
 
 const (
-	contextKeyIdentity = "rxp.identity"
+	contextKeyIdentity contextKey = "rxp.identity"
 )
 
 // SetIdentity sets the supplied Identity into the supplied context.

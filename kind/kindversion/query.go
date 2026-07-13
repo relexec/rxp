@@ -17,7 +17,7 @@ func (p NamePredicate) Validate() error {
 	if err != nil {
 		return err
 	}
-	v := p.BasePredicate.Value
+	v := p.Value
 	switch v := v.(type) {
 	case []api.KindVersionName:
 		for _, dn := range v {

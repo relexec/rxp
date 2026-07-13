@@ -165,7 +165,7 @@ func (p TargetUUIDPredicate) Validate() error {
 	if err != nil {
 		return err
 	}
-	v := p.BasePredicate.Value
+	v := p.Value
 	switch v := v.(type) {
 	case []string:
 		return nil
@@ -215,7 +215,7 @@ func (p TargetPredicate) Validate() error {
 	if err != nil {
 		return err
 	}
-	v := p.BasePredicate.Value
+	v := p.Value
 	switch v := v.(type) {
 	case []string:
 		return nil

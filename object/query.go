@@ -15,7 +15,7 @@ func (p NamePredicate) Validate() error {
 	if err != nil {
 		return err
 	}
-	v := p.BasePredicate.Value
+	v := p.Value
 	switch v.(type) {
 	case []string, string:
 		return nil
@@ -153,7 +153,7 @@ func (p GenerationPredicate) Validate() error {
 	if err != nil {
 		return err
 	}
-	v := p.BasePredicate.Value
+	v := p.Value
 	switch v := v.(type) {
 	case []api.Generation:
 		return nil

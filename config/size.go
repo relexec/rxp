@@ -113,33 +113,6 @@ const (
 	Pebibyte      = 1024 * Tebibyte
 )
 
-func unitSuffix(unit Size) string {
-	switch unit {
-	default:
-		return "B"
-	case Petabyte:
-		return "PB"
-	case Pebibyte:
-		return "PiB"
-	case Terabyte:
-		return "TB"
-	case Tebibyte:
-		return "TiB"
-	case Gigabyte:
-		return "GB"
-	case Gibibyte:
-		return "GiB"
-	case Megabyte:
-		return "MB"
-	case Mebibyte:
-		return "MiB"
-	case Kilobyte:
-		return "kB"
-	case Kibibyte:
-		return "KiB"
-	}
-}
-
 // Floor returns a Size nearest to a whole unit less than or equal to itself.
 func (s Size) Floor() Size {
 	for _, unit := range allUnits {

@@ -17,7 +17,7 @@ func (p NamePredicate) Validate() error {
 	if err != nil {
 		return err
 	}
-	v := p.BasePredicate.Value
+	v := p.Value
 	switch v := v.(type) {
 	case []api.DomainName:
 		for _, dn := range v {
@@ -100,7 +100,7 @@ func (p UUIDPredicate) Validate() error {
 	if err != nil {
 		return err
 	}
-	v := p.BasePredicate.Value
+	v := p.Value
 	switch v := v.(type) {
 	case []string:
 		return nil
@@ -253,7 +253,7 @@ func (p RootNamePredicate) Validate() error {
 	if err != nil {
 		return err
 	}
-	v := p.BasePredicate.Value
+	v := p.Value
 	switch v := v.(type) {
 	case []api.DomainName:
 		for _, dn := range v {
@@ -291,7 +291,7 @@ func (p RootUUIDPredicate) Validate() error {
 	if err != nil {
 		return err
 	}
-	v := p.BasePredicate.Value
+	v := p.Value
 	switch v := v.(type) {
 	case []string:
 		return nil
@@ -347,7 +347,7 @@ func (p ParentNamePredicate) Validate() error {
 	if err != nil {
 		return err
 	}
-	v := p.BasePredicate.Value
+	v := p.Value
 	switch v := v.(type) {
 	case []api.DomainName:
 		for _, dn := range v {
@@ -386,7 +386,7 @@ func (p ParentUUIDPredicate) Validate() error {
 	if err != nil {
 		return err
 	}
-	v := p.BasePredicate.Value
+	v := p.Value
 	switch v := v.(type) {
 	case []string:
 		return nil

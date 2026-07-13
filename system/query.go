@@ -16,7 +16,7 @@ func (p UUIDPredicate) Validate() error {
 	if err != nil {
 		return err
 	}
-	v := p.BasePredicate.Value
+	v := p.Value
 	switch v := v.(type) {
 	case []string:
 		return nil

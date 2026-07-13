@@ -14,7 +14,7 @@ func (p SequencePredicate) Validate() error {
 	if err != nil {
 		return err
 	}
-	v := p.BasePredicate.Value
+	v := p.Value
 	switch v := v.(type) {
 	case []int:
 		return nil
@@ -92,7 +92,7 @@ func (p TypePredicate) Validate() error {
 	if err != nil {
 		return err
 	}
-	v := p.BasePredicate.Value
+	v := p.Value
 	switch v := v.(type) {
 	case []Type:
 		return nil

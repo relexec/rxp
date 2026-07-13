@@ -120,43 +120,43 @@ func (s Schema) Diff(subject any) (*delta.Delta, error) {
 // a new Schema (i.e. for the first generation)
 func (s Schema) diffNew() (*delta.Delta, error) {
 	d := &delta.Delta{}
-	if s.Schema.ID != "" {
+	if s.Schema.ID != "" { //nolint:staticcheck
 		d.Push(
 			delta.Difference{
 				FieldPath: FieldPathID,
 				Type:      delta.DifferenceTypeAdd,
 				From:      nil,
-				To:        s.Schema.ID,
+				To:        s.Schema.ID, //nolint:staticcheck
 			},
 		)
 	}
-	if s.Schema.Schema != "" {
+	if s.Schema.Schema != "" { //nolint:staticcheck
 		d.Push(
 			delta.Difference{
 				FieldPath: FieldPathSchema,
 				Type:      delta.DifferenceTypeAdd,
-				To:        s.Schema.Schema,
+				To:        s.Schema.Schema, //nolint:staticcheck
 				From:      nil,
 			},
 		)
 	}
-	if s.Schema.Title != "" {
+	if s.Schema.Title != "" { //nolint:staticcheck
 		d.Push(
 			delta.Difference{
 				FieldPath: FieldPathTitle,
 				Type:      delta.DifferenceTypeAdd,
 				From:      nil,
-				To:        s.Schema.Title,
+				To:        s.Schema.Title, //nolint:staticcheck
 			},
 		)
 	}
-	if s.Schema.Description != "" {
+	if s.Schema.Description != "" { //nolint:staticcheck
 		d.Push(
 			delta.Difference{
 				FieldPath: FieldPathDescription,
 				Type:      delta.DifferenceTypeAdd,
 				From:      nil,
-				To:        s.Schema.Description,
+				To:        s.Schema.Description, //nolint:staticcheck
 			},
 		)
 	}
@@ -165,7 +165,7 @@ func (s Schema) diffNew() (*delta.Delta, error) {
 			FieldPath: FieldPathProperties,
 			Type:      delta.DifferenceTypeAdd,
 			From:      nil,
-			To:        s.Schema.Properties,
+			To:        s.Schema.Properties, //nolint:staticcheck
 		},
 	)
 	return d, nil

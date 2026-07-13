@@ -8,7 +8,6 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/relexec/delta v0.1.0
 	github.com/samber/lo v1.53.0
-	github.com/spf13/pflag v1.0.10
 	github.com/stretchr/testify v1.11.1
 	go.opentelemetry.io/otel v1.44.0
 	go.opentelemetry.io/otel/exporters/stdout/stdoutmetric v1.44.0

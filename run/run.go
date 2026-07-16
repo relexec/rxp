@@ -6,7 +6,7 @@ import (
 	"github.com/relexec/rxp/run/request"
 )
 
-// Run describes the status of a single execution of some piece of work.
+// Run describes a thread of execution of some piece of work.
 type Run struct {
 	// req contains information about the request to execute some piece of
 	// work.

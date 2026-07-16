@@ -16,7 +16,8 @@ type Request struct {
 	On time.Time
 	// Options contains per-request settings.
 	Options Options
-	// Target identifies the thing that will be executed by Run.
+	// Target contains the *definition* of the thing that will be executed by
+	// Run.
 	Target *object.Object
 	// Caller contains information about the calling identity.
 	Caller Caller

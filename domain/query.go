@@ -175,7 +175,7 @@ type DomainPredicate struct {
 
 // Equal returns an Expression that will match things having a particular
 // Domain.
-func Equal(dom *Domain) query.Expression {
+func Equal(dom *api.Domain) query.Expression {
 	if dom.UUID() != "" {
 		return UUIDEqual(dom.UUID())
 	}
@@ -194,7 +194,7 @@ func Equal(dom *Domain) query.Expression {
 
 // NotEqual returns an Expression that will match things not having a
 // particular Domain.
-func NotEqual(dom *Domain) query.Expression {
+func NotEqual(dom *api.Domain) query.Expression {
 	if dom.UUID() != "" {
 		return UUIDNotEqual(dom.UUID())
 	}
@@ -214,8 +214,8 @@ func NotEqual(dom *Domain) query.Expression {
 
 // In returns an Expression that will match things that have any of a set
 // of specified Domain.
-func In(doms ...*Domain) query.Expression {
-	uuids := lo.Map(doms, func(dom *Domain, _ int) string {
+func In(doms ...*api.Domain) query.Expression {
+	uuids := lo.Map(doms, func(dom *api.Domain, _ int) string {
 		return dom.UUID()
 	})
 	if !lo.Contains(uuids, "") {
@@ -230,8 +230,8 @@ func In(doms ...*Domain) query.Expression {
 
 // NotIn returns an Expression that will match things that do not
 // have any of a set of specified Domain.
-func NotIn(doms ...*Domain) query.Expression {
-	uuids := lo.Map(doms, func(dom *Domain, _ int) string {
+func NotIn(doms ...*api.Domain) query.Expression {
+	uuids := lo.Map(doms, func(dom *api.Domain, _ int) string {
 		return dom.UUID()
 	})
 	if !lo.Contains(uuids, "") {
@@ -321,7 +321,7 @@ type RootDomainPredicate struct {
 
 // RootEqual returns an Expression that will match domains having a particular
 // root Domain.
-func RootEqual(dom *Domain) query.Expression {
+func RootEqual(dom *api.Domain) query.Expression {
 	if dom.UUID() != "" {
 		return RootUUIDEqual(dom.UUID())
 	}
@@ -416,7 +416,7 @@ type ParentDomainPredicate struct {
 
 // ParentEqual returns an Expression that will match domains that are in the
 // supplied Domain and any of that Domain's child domains.
-func ParentEqual(dom *Domain) query.Expression {
+func ParentEqual(dom *api.Domain) query.Expression {
 	return query.UnaryExpression{
 		Predicate: ParentDomainPredicate{
 			query.BasePredicate{

@@ -171,7 +171,7 @@ type KindPredicate struct {
 
 // Equal returns an Expression that will match things having a particular
 // Kind.
-func Equal(k *Kind) query.Expression {
+func Equal(k *api.Kind) query.Expression {
 	if k.UUID() != "" {
 		return UUIDEqual(k.UUID())
 	}
@@ -190,7 +190,7 @@ func Equal(k *Kind) query.Expression {
 
 // NotEqual returns an Expression that will match things not having a
 // particular Kind.
-func NotEqual(k *Kind) query.Expression {
+func NotEqual(k *api.Kind) query.Expression {
 	if k.UUID() != "" {
 		return UUIDNotEqual(k.UUID())
 	}
@@ -210,8 +210,8 @@ func NotEqual(k *Kind) query.Expression {
 
 // In returns an Expression that will match things that have any of a set
 // of specified Kind.
-func In(kinds ...*Kind) query.Expression {
-	uuids := lo.Map(kinds, func(k *Kind, _ int) string {
+func In(kinds ...*api.Kind) query.Expression {
+	uuids := lo.Map(kinds, func(k *api.Kind, _ int) string {
 		return k.UUID()
 	})
 	if !lo.Contains(uuids, "") {
@@ -226,8 +226,8 @@ func In(kinds ...*Kind) query.Expression {
 
 // NotIn returns an Expression that will match things that do not
 // have any of a set of specified Kind.
-func NotIn(kinds ...*Kind) query.Expression {
-	uuids := lo.Map(kinds, func(k *Kind, _ int) string {
+func NotIn(kinds ...*api.Kind) query.Expression {
+	uuids := lo.Map(kinds, func(k *api.Kind, _ int) string {
 		return k.UUID()
 	})
 	if !lo.Contains(uuids, "") {

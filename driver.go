@@ -18,61 +18,61 @@ type Driver interface {
 	SystemRead(
 		context.Context,
 		system.Selector,
-	) (*system.System, error)
+	) (*api.System, error)
 	// SystemWrite atomically writes the supplied System to persistent storage.
 	SystemWrite(
 		context.Context,
-		system.System,
+		api.System,
 	) error
 	// SystemQuery queries zero or more Systems from persistent storage.
 	SystemQuery(
 		context.Context,
 		query.Expression,
 		...query.Option,
-	) (*query.Result[*system.System], error)
+	) (*query.Result[*api.System], error)
 	// DomainRead reads a Domain from persistent storage.
 	DomainRead(
 		context.Context,
 		domain.Selector,
-	) (*domain.Domain, error)
+	) (*api.Domain, error)
 	// DomainWrite atomically writes the supplied Domain to persistent storage.
 	DomainWrite(
 		context.Context,
-		domain.Domain,
+		api.Domain,
 	) error
 	// DomainQuery queries zero or more Domains from persistent storage.
 	DomainQuery(
 		context.Context,
 		query.Expression,
 		...query.Option,
-	) (*query.Result[*domain.Domain], error)
+	) (*query.Result[*api.Domain], error)
 
 	// KindRead reads a Kind from persistent storage.
 	KindRead(
 		context.Context,
 		kind.Selector,
-	) (*kind.Kind, error)
+	) (*api.Kind, error)
 	// KindWrite atomically writes the supplied Kind to persistent storage.
 	KindWrite(
 		context.Context,
-		kind.Kind,
+		api.Kind,
 	) error
 	// KindQuery queries zero or more Kinds from persistent storage.
 	KindQuery(
 		context.Context,
 		query.Expression,
 		...query.Option,
-	) (*query.Result[*kind.Kind], error)
+	) (*query.Result[*api.Kind], error)
 	// KindVersionRead reads a KindVersion from persistent storage.
 	KindVersionRead(
 		context.Context,
 		kindversion.Selector,
-	) (*kindversion.KindVersion, error)
+	) (*api.KindVersion, error)
 	// KindVersionWrite atomically writes the supplied KindVersion to
 	// persistent storage.
 	KindVersionWrite(
 		context.Context,
-		kindversion.KindVersion,
+		api.KindVersion,
 	) error
 	// KindVersionQuery queries zero or more KindVersions from persistent
 	// storage.
@@ -80,7 +80,7 @@ type Driver interface {
 		context.Context,
 		query.Expression,
 		...query.Option,
-	) (*query.Result[*kindversion.KindVersion], error)
+	) (*query.Result[*api.KindVersion], error)
 
 	// ObjectRead reads a single Object from persistent storage.
 	ObjectRead(

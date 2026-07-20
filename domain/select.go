@@ -3,7 +3,6 @@ package domain
 import (
 	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/errors"
-	"github.com/relexec/rxp/system"
 )
 
 // Selector selects a single Domain.
@@ -11,7 +10,7 @@ type Selector struct {
 	// uuid is the globally-unique identifier of the Domain being selected.
 	uuid string
 	// system is the System to find the Domain in.
-	system *system.System
+	system *api.System
 	// name is the name to look up the Domain for.
 	name api.DomainName
 }
@@ -22,7 +21,7 @@ func (s Selector) UUID() string {
 }
 
 // System is the rxp system identifier to search for the Domain in.
-func (s Selector) System() *system.System {
+func (s Selector) System() *api.System {
 	return s.system
 }
 
@@ -60,7 +59,7 @@ func ByUUID(uuid string) SelectOption {
 }
 
 // BySystem sets the Selector's System.
-func BySystem(system *system.System) SelectOption {
+func BySystem(system *api.System) SelectOption {
 	return func(s *Selector) {
 		s.system = system
 	}

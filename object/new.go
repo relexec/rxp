@@ -2,8 +2,6 @@ package object
 
 import (
 	"github.com/relexec/rxp/api"
-	"github.com/relexec/rxp/domain"
-	"github.com/relexec/rxp/system"
 )
 
 // Option modifies an Object returned from New.
@@ -19,7 +17,7 @@ func New(opts ...Option) *Object {
 }
 
 // WithSystem sets the Object's System.
-func WithSystem(system *system.System) Option {
+func WithSystem(system *api.System) Option {
 	return func(o *Object) {
 		o.system = system
 	}
@@ -40,7 +38,7 @@ func WithUUID(uuid string) Option {
 }
 
 // WithDomain sets the Object's Domain.
-func WithDomain(domain *domain.Domain) Option {
+func WithDomain(domain *api.Domain) Option {
 	return func(o *Object) {
 		o.domain = domain
 	}

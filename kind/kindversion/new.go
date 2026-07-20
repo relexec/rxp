@@ -1,61 +1,48 @@
 package kindversion
 
 import (
-	"encoding/json"
-
 	"github.com/Masterminds/semver/v3"
 
-	"github.com/relexec/rxp/kind"
+	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/kind/kindversion/schema"
-	"github.com/relexec/rxp/system"
 )
 
-// Option modifies a KindVersion returned from New.
-type Option func(*KindVersion)
+// Option modifies a api.KindVersion returned from New.
+type Option func(*api.KindVersion)
 
-// New returns a new [KindVersion].
-func New(opts ...Option) *KindVersion {
-	kv := &KindVersion{}
+// New returns a new [api.KindVersion].
+func New(opts ...Option) *api.KindVersion {
+	kv := &api.KindVersion{}
 	for _, opt := range opts {
 		opt(kv)
 	}
 	return kv
 }
 
-// WithSystem sets the KindVersion's System.
-func WithSystem(system *system.System) Option {
-	return func(kv *KindVersion) {
-		kv.system = system
+// WithSystem sets the api.KindVersion's System.
+func WithSystem(system *api.System) Option {
+	return func(kv *api.KindVersion) {
+		kv.SetSystem(system)
 	}
 }
 
-// WithKind sets the KindVersion's Kind.
-func WithKind(k *kind.Kind) Option {
-	return func(kv *KindVersion) {
-		kv.kind = k
+// WithKind sets the api.KindVersion's Kind.
+func WithKind(k *api.Kind) Option {
+	return func(kv *api.KindVersion) {
+		kv.SetKind(k)
 	}
 }
 
-// WithVersion sets the KindVersion's Version.
+// WithVersion sets the api.KindVersion's Version.
 func WithVersion(ver semver.Version) Option {
-	return func(kv *KindVersion) {
-		kv.version = ver
+	return func(kv *api.KindVersion) {
+		kv.SetVersion(ver)
 	}
 }
 
-// WithSchema sets the KindVersion's Schema.
+// WithSchema sets the api.KindVersion's Schema.
 func WithSchema(schema *schema.Schema) Option {
-	return func(kv *KindVersion) {
-		kv.schema = schema
-	}
-}
-
-// WithSchemaJSON sets the KindVersion's Schema JSON string.
-func WithSchemaJSON(schemaJSON string) Option {
-	return func(kv *KindVersion) {
-		kv.schemaJSON = schemaJSON
-		if kv.schema == nil {
-			_ = json.Unmarshal([]byte(schemaJSON), kv.schema)
-		}
+	return func(kv *api.KindVersion) {
+		kv.SetSchema(schema)
 	}
 }

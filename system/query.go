@@ -3,6 +3,7 @@ package system
 import (
 	"github.com/samber/lo"
 
+	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/errors"
 	"github.com/relexec/rxp/query"
 )
@@ -87,20 +88,20 @@ func UUIDNotIn(uuids ...string) query.Expression {
 
 // Equal returns an Expression that will match things having a particular
 // System.
-func Equal(s *System) query.Expression {
+func Equal(s *api.System) query.Expression {
 	return UUIDEqual(s.UUID())
 }
 
 // NotEqual returns an Expression that will match things not having a
 // particular System.
-func NotEqual(s *System) query.Expression {
+func NotEqual(s *api.System) query.Expression {
 	return UUIDNotEqual(s.UUID())
 }
 
 // In returns an Expression that will match things that have any of a set
 // of specified System.
-func In(ss ...*System) query.Expression {
-	uuids := lo.Map(ss, func(s *System, _ int) string {
+func In(ss ...*api.System) query.Expression {
+	uuids := lo.Map(ss, func(s *api.System, _ int) string {
 		return s.UUID()
 	})
 	return UUIDIn(uuids...)
@@ -108,8 +109,8 @@ func In(ss ...*System) query.Expression {
 
 // NotIn returns an Expression that will match things that do not
 // have any of a set of specified System.
-func NotIn(ss ...*System) query.Expression {
-	uuids := lo.Map(ss, func(s *System, _ int) string {
+func NotIn(ss ...*api.System) query.Expression {
+	uuids := lo.Map(ss, func(s *api.System, _ int) string {
 		return s.UUID()
 	})
 	return UUIDNotIn(uuids...)

@@ -2,9 +2,7 @@ package object
 
 import (
 	"github.com/relexec/rxp/api"
-	"github.com/relexec/rxp/domain"
 	"github.com/relexec/rxp/errors"
-	"github.com/relexec/rxp/system"
 )
 
 // Selector selects a single Object.
@@ -12,9 +10,9 @@ type Selector struct {
 	// uuid is the globally-unique string identifier to look up the Object for.
 	uuid string
 	// system is the System to find the Object in.
-	system *system.System
+	system *api.System
 	// domain is the Domain to use when looking up the Object via name.
-	domain *domain.Domain
+	domain *api.Domain
 	// name is the Name to use when looking up the Object via name.
 	name string
 	// generation is the specific generation of the Object to select.
@@ -22,7 +20,7 @@ type Selector struct {
 }
 
 // System is the System to search for the Object in.
-func (s Selector) System() *system.System {
+func (s Selector) System() *api.System {
 	return s.system
 }
 
@@ -33,7 +31,7 @@ func (s Selector) UUID() string {
 }
 
 // Domain returns the Domain to use when looking up the Object via name.
-func (s Selector) Domain() *domain.Domain {
+func (s Selector) Domain() *api.Domain {
 	return s.domain
 }
 
@@ -80,14 +78,14 @@ func ByUUID(uuid string) SelectOption {
 }
 
 // BySystem sets the Selector's System.
-func BySystem(system *system.System) SelectOption {
+func BySystem(system *api.System) SelectOption {
 	return func(s *Selector) {
 		s.system = system
 	}
 }
 
 // ByDomain sets the Selector's Domain.
-func ByDomain(domain *domain.Domain) SelectOption {
+func ByDomain(domain *api.Domain) SelectOption {
 	return func(s *Selector) {
 		s.domain = domain
 	}

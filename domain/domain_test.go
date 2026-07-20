@@ -43,7 +43,7 @@ func TestDomain_Validate(t *testing.T) {
 
 	cases := []struct {
 		name     string
-		subject  *domain.Domain
+		subject  *api.Domain
 		expError string
 	}{
 		{

@@ -1,11 +1,13 @@
 package system
 
+import "github.com/relexec/rxp/api"
+
 // Option modifies a System returned from New.
-type Option func(*System)
+type Option func(*api.System)
 
 // New returns a new [System].
-func New(opts ...Option) *System {
-	s := &System{}
+func New(opts ...Option) *api.System {
+	s := &api.System{}
 	for _, opt := range opts {
 		opt(s)
 	}
@@ -14,8 +16,8 @@ func New(opts ...Option) *System {
 
 // WithUUID sets the System's globally-unique identifier.
 func WithUUID(uuid string) Option {
-	return func(s *System) {
-		s.uuid = uuid
+	return func(s *api.System) {
+		s.SetUUID(uuid)
 	}
 }
 
@@ -24,7 +26,7 @@ func WithUUID(uuid string) Option {
 // the uniqueness constraint its value. Tags have no such uniqueness
 // constraint.
 func WithTag(tag string) Option {
-	return func(s *System) {
-		s.tag = tag
+	return func(s *api.System) {
+		s.SetTag(tag)
 	}
 }

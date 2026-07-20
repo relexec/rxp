@@ -25,11 +25,11 @@ type Object struct {
 	// Object.
 	kindVersionName api.KindVersionName
 	// system contains the system identifier for the Object.
-	system *system.System
+	system *api.System
 	// uuid is the globally-unique string identifier.
 	uuid string
 	// domain is the optional Domain.
-	domain *domain.Domain
+	domain *api.Domain
 	// name is the Name.
 	name string
 	// labels is the collection of Labels.
@@ -59,12 +59,12 @@ func (o *Object) SetKindVersionName(kvn api.KindVersionName) {
 }
 
 // System returns the System of the Object.
-func (o Object) System() *system.System {
+func (o Object) System() *api.System {
 	return o.system
 }
 
 // SetSystem sets the System of Object.
-func (o *Object) SetSystem(system *system.System) {
+func (o *Object) SetSystem(system *api.System) {
 	o.system = system
 }
 
@@ -79,12 +79,12 @@ func (o *Object) SetUUID(uuid string) {
 }
 
 // Domain returns the optional Domain.
-func (o Object) Domain() *domain.Domain {
+func (o Object) Domain() *api.Domain {
 	return o.domain
 }
 
 // SetDomain sets the Domain.
-func (o *Object) SetDomain(domain *domain.Domain) {
+func (o *Object) SetDomain(domain *api.Domain) {
 	o.domain = domain
 }
 

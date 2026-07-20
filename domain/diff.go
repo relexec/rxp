@@ -3,9 +3,8 @@ package domain
 import (
 	"github.com/relexec/delta"
 	"github.com/relexec/delta/fieldpath"
+
 	"github.com/relexec/rxp/api"
-	"github.com/relexec/rxp/errors"
-	"github.com/relexec/rxp/system"
 )
 
 var (
@@ -16,123 +15,19 @@ var (
 	FieldPathParent = fieldpath.FromString("parent")
 )
 
-// Domain describes a division or partition of a System.
-type Domain struct {
-	// system contains the System containing the Domain.
-	system *system.System
-	// uuid stores the Domain's globally-unique identifier.
-	uuid string
-	// name contains the Domain name.
-	//
-	// A valid Domain Name is a DNS-formatted (RFC 1035-compliant) name less than
-	// 254 characters.
-	//
-	// A Domain's Name must be unique within the scope of the `rxp` system
-	// installation.
-	name api.DomainName
-	// root contains a pointer to the root Domain, if any. If empty, the Domain
-	// is itself the root Domain.
-	root *Domain
-	// parent contains a pointer to the parent Domain, if any.
-	parent *Domain
-}
-
-// Validate returns an error if the Domain is invalid.
-func (d Domain) Validate() error {
-	if d.uuid == "" {
-		return errors.ErrDomainUUIDRequired
-	}
-	if d.root != nil {
-		rootSystem := d.root.System()
-		if d.system != nil && rootSystem != nil {
-			if rootSystem.UUID() != d.system.UUID() {
-				return errors.ErrDomainRootSystemDifferent
-			}
-		}
-	}
-	if d.parent != nil {
-		if d.root == nil {
-			return errors.ErrDomainParentRootRequired
-		}
-		parentSystem := d.parent.System()
-		if d.system != nil && parentSystem != nil {
-			if parentSystem.UUID() != d.system.UUID() {
-				return errors.ErrDomainParentSystemDifferent
-			}
-		}
-	}
-	return d.name.Validate()
-}
-
-// System returns the System of the Domain.
-func (d Domain) System() *system.System {
-	return d.system
-}
-
-// SetSystem sets the System of Domain.
-func (d *Domain) SetSystem(system *system.System) {
-	d.system = system
-}
-
-// UUID returns the globally-unique identifier of the Domain.
-func (d Domain) UUID() string {
-	return d.uuid
-}
-
-// SetUUID sets the globally-unique identifier of the Domain.
-func (d *Domain) SetUUID(uuid string) {
-	d.uuid = uuid
-}
-
-// Name returns the Name of the Domain.
-func (d Domain) Name() api.DomainName {
-	return d.name
-}
-
-// SetName sets the Name of Domain.
-func (d *Domain) SetName(name api.DomainName) {
-	d.name = name
-}
-
-// Parent returns the Parent of the Domain.
-func (d Domain) Parent() *Domain {
-	return d.parent
-}
-
-// SetParent sets the Parent of Domain.
-func (d *Domain) SetParent(parent *Domain) {
-	d.parent = parent
-}
-
-// Root returns the Root of the Domain. If nil, the Domain itself is the root
-// Domain.
-func (d Domain) Root() *Domain {
-	return d.root
-}
-
-// SetRoot sets the Root of Domain.
-func (d *Domain) SetRoot(root *Domain) {
-	d.root = root
-}
-
-// IsRoot returns true if the Domain is itself the root domain.
-func (d *Domain) IsRoot() bool {
-	return d.root == nil
-}
-
 // Diff returns a [delta.Delta] representing the difference between itself and
 // something else of the same type.
 //
 // If the argument is the [delta.ZeroGen] sentinel, the returned [delta.Delta]
 // represents instructions to create the thing.
-func (d Domain) Diff(subject any) (*delta.Delta, error) {
-	var other *Domain
+func Diff(d api.Domain, subject any) (*delta.Delta, error) {
+	var other *api.Domain
 	switch subject := subject.(type) {
 	case delta.ZeroGen:
-		return d.diffNew()
-	case Domain:
+		return diffNew(d)
+	case api.Domain:
 		other = &subject
-	case *Domain:
+	case *api.Domain:
 		other = subject
 	default:
 		return nil, delta.CannotCompareTypes(d, subject)
@@ -140,7 +35,7 @@ func (d Domain) Diff(subject any) (*delta.Delta, error) {
 
 	del := &delta.Delta{}
 
-	thisSystem := d.system
+	thisSystem := d.System()
 	otherSystem := other.System()
 	if thisSystem != nil {
 		thisSystemUUID := thisSystem.UUID()
@@ -178,7 +73,7 @@ func (d Domain) Diff(subject any) (*delta.Delta, error) {
 		)
 	}
 
-	thisUUID := d.uuid
+	thisUUID := d.UUID()
 	otherUUID := other.UUID()
 	if thisUUID != otherUUID {
 		del.Push(
@@ -191,7 +86,7 @@ func (d Domain) Diff(subject any) (*delta.Delta, error) {
 		)
 	}
 
-	thisName := d.name
+	thisName := d.Name()
 	otherName := other.Name()
 	if thisName != otherName {
 		del.Push(
@@ -204,7 +99,7 @@ func (d Domain) Diff(subject any) (*delta.Delta, error) {
 		)
 	}
 
-	thisRoot := d.parent
+	thisRoot := d.Parent()
 	otherRoot := other.Root()
 	if thisRoot != nil {
 		thisRootUUID := thisRoot.UUID()
@@ -242,7 +137,7 @@ func (d Domain) Diff(subject any) (*delta.Delta, error) {
 		)
 	}
 
-	thisParent := d.parent
+	thisParent := d.Parent()
 	otherParent := other.Parent()
 	if thisParent != nil {
 		thisParentUUID := thisParent.UUID()
@@ -284,16 +179,16 @@ func (d Domain) Diff(subject any) (*delta.Delta, error) {
 
 // diffNew returns a [delta.Delta] containing instructions to make the Domain as a
 // new Domain (i.e. for the first generation)
-func (d Domain) diffNew() (*delta.Delta, error) {
+func diffNew(d api.Domain) (*delta.Delta, error) {
 	del := &delta.Delta{}
 
-	if d.system != nil {
+	if d.System() != nil {
 		del.Push(
 			delta.Difference{
 				FieldPath: FieldPathSystem,
 				Type:      delta.DifferenceTypeAdd,
 				From:      nil,
-				To:        d.system.UUID(),
+				To:        d.System().UUID(),
 			},
 		)
 	}
@@ -302,7 +197,7 @@ func (d Domain) diffNew() (*delta.Delta, error) {
 			FieldPath: FieldPathUUID,
 			Type:      delta.DifferenceTypeAdd,
 			From:      nil,
-			To:        d.uuid,
+			To:        d.UUID(),
 		},
 	)
 	del.Push(
@@ -310,26 +205,26 @@ func (d Domain) diffNew() (*delta.Delta, error) {
 			FieldPath: FieldPathName,
 			Type:      delta.DifferenceTypeAdd,
 			From:      nil,
-			To:        string(d.name),
+			To:        string(d.Name()),
 		},
 	)
-	if d.root != nil {
+	if d.Root() != nil {
 		del.Push(
 			delta.Difference{
 				FieldPath: FieldPathRoot,
 				Type:      delta.DifferenceTypeAdd,
 				From:      nil,
-				To:        d.root.UUID(),
+				To:        d.Root().UUID(),
 			},
 		)
 	}
-	if d.parent != nil {
+	if d.Parent() != nil {
 		del.Push(
 			delta.Difference{
 				FieldPath: FieldPathParent,
 				Type:      delta.DifferenceTypeAdd,
 				From:      nil,
-				To:        d.parent.UUID(),
+				To:        d.Parent().UUID(),
 			},
 		)
 	}

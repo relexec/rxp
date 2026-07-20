@@ -3,8 +3,8 @@ module github.com/relexec/rxp
 go 1.26.3
 
 require (
-	github.com/Masterminds/semver/v3 v3.4.0
-	github.com/google/jsonschema-go v0.4.2
+	github.com/Masterminds/semver/v3 v3.5.0
+	github.com/google/jsonschema-go v0.4.3
 	github.com/google/uuid v1.6.0
 	github.com/relexec/delta v0.1.0
 	github.com/samber/lo v1.53.0
@@ -25,6 +25,6 @@ require (
 	go.opentelemetry.io/otel/sdk v1.44.0 // indirect
 	go.opentelemetry.io/otel/trace v1.44.0 // indirect
 	golang.org/x/sys v0.46.0 // indirect
-	golang.org/x/text v0.38.0 // indirect
+	golang.org/x/text v0.40.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

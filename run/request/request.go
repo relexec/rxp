@@ -20,7 +20,7 @@ type Request struct {
 	// Run.
 	Target *object.Object
 	// Caller contains information about the calling identity.
-	Caller Caller
+	Caller api.Caller
 	// In contains the value of the input parameter when calling Run.
 	In api.Vars
 }

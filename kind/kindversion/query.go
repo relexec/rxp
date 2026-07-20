@@ -34,7 +34,7 @@ func (p NamePredicate) Validate() error {
 }
 
 // NameEqual returns an Expression that will match Objects of a particular
-// KindVersionName.
+// api.KindVersionName.
 func NameEqual(name api.KindVersionName) query.Expression {
 	return query.UnaryExpression{
 		Predicate: NamePredicate{
@@ -47,7 +47,7 @@ func NameEqual(name api.KindVersionName) query.Expression {
 }
 
 // NameNotEqual returns an Expression that will match Objects not of a
-// particular KindVersionName.
+// particular api.KindVersionName.
 func NameNotEqual(name api.KindVersionName) query.Expression {
 	return query.UnaryExpression{
 		Predicate: NamePredicate{
@@ -61,7 +61,7 @@ func NameNotEqual(name api.KindVersionName) query.Expression {
 }
 
 // NameIn returns an Expression that will match Objects that are any of a
-// set of specified KindVersionNames.
+// set of specified api.KindVersionNames.
 func NameIn(names ...api.KindVersionName) query.Expression {
 	return query.UnaryExpression{
 		Predicate: NamePredicate{
@@ -74,7 +74,7 @@ func NameIn(names ...api.KindVersionName) query.Expression {
 }
 
 // NameNotIn returns an Expression that will match Objects that are not any
-// of a set of specified KindVersionNames.
+// of a set of specified api.KindVersionNames.
 func NameNotIn(names ...api.KindVersionName) query.Expression {
 	return query.UnaryExpression{
 		Predicate: NamePredicate{
@@ -92,23 +92,23 @@ type KindVersionPredicate struct {
 }
 
 // Equal returns an Expression that will match things having a
-// particular KindVersion.
-func Equal(kv *KindVersion) query.Expression {
+// particular api.KindVersion.
+func Equal(kv *api.KindVersion) query.Expression {
 	return NameEqual(kv.Name())
 }
 
 // NotEqual returns an Expression that will match things not having
-// a particular KindVersion.
-func NotEqual(kv *KindVersion) query.Expression {
+// a particular api.KindVersion.
+func NotEqual(kv *api.KindVersion) query.Expression {
 	return NameNotEqual(kv.Name())
 }
 
 // In returns an Expression that will match things that have any of
-// a set of specified KindVersion.
-func In(kvs ...*KindVersion) query.Expression {
+// a set of specified api.KindVersion.
+func In(kvs ...*api.KindVersion) query.Expression {
 	names := lo.Map(
 		kvs,
-		func(kv *KindVersion, _ int) api.KindVersionName {
+		func(kv *api.KindVersion, _ int) api.KindVersionName {
 			return kv.Name()
 		},
 	)
@@ -116,11 +116,11 @@ func In(kvs ...*KindVersion) query.Expression {
 }
 
 // NotIn returns an Expression that will match things that do not
-// have any of a set of specified KindVersion.
-func NotIn(kvs ...*KindVersion) query.Expression {
+// have any of a set of specified api.KindVersion.
+func NotIn(kvs ...*api.KindVersion) query.Expression {
 	names := lo.Map(
 		kvs,
-		func(kv *KindVersion, _ int) api.KindVersionName {
+		func(kv *api.KindVersion, _ int) api.KindVersionName {
 			return kv.Name()
 		},
 	)

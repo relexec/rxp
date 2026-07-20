@@ -1,8 +1,6 @@
-# Reference
-
 This document contains the definition of terms and types in `rxp`.
 
-## Scope
+# Scope
 
 Scope* refers to the *extent to which Names of instances of a Type of thing are
 unique*. There are four scopes, shown here in decreasing order of breadth.
@@ -21,11 +19,11 @@ A System represents the universe of known data for an installation of `rxp`.
 A Domain is a logical division of a System. A Domain can have a parent Domain
 allowing hierarchical relationships for these divisions.
 
-## System
+# System
 
 *System* represents the known boundaries of an `rxp` installation.
 
-## Domain
+# Domain
 
 *Domain* is a logical division of a System.
 
@@ -37,12 +35,12 @@ A DomainName` must be unique within the scope of the Domain's System.
 
 A Domain can have a *parent* Domain.
 
-### DomainName
+## DomainName
 
 A valid DomainName is a DNS-formatted (RFC 1035-compliant) name less than 254
 characters.
 
-## Kind
+# Kind
 
 *Kind* identifies a *type* of Object. 
 
@@ -68,7 +66,7 @@ erDiagram
     }
 ```
 
-### KindName
+## KindName
 
 *KindName* is a specialized string containing the *type* of an Object.
 
@@ -92,7 +90,7 @@ A KindName must be unique within the scope of the `rxp` system installation,
 however for any KindName that is intended to be used across multiple `rxp`
 system installations, the KindName should be globally-unique.
 
-## KindVersion
+# KindVersion
 
 *KindVersion* contains the definition for a specific version of a Kind. This
 definition includes a `Schema` that defines the fields that comprise desired
@@ -121,7 +119,7 @@ erDiagram
     }
 ```
 
-### KindVersionName
+## KindVersionName
 
 *KindVersionName* is a specialized string containing the KindName and SemVer
 version string that uniquely identifies the exact type of an Object.
@@ -131,7 +129,7 @@ KindName and `<version>` is a valid SemVer version string.
 
 > Note that a valid SemVer version string does *not* contain a `v` prefix.
 
-## Object
+# Object
 
 *Object* is an *instance* of a KindVersion.
 

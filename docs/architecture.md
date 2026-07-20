@@ -1,15 +1,7 @@
 # Architecture
 
 `rxp` provides low-level functionality for applications and services that
-provide durable/reliable execution platforms.
-
-## Repository structure
-
-The [`types`][pkg-rxptypes] package contains interfaces and type definitions
-referenced throughout the `rxp` library and associated `rxp` backend
-implementations.
-
-[pkg-rxptypes]: https://github.com/relexec/rxp/tree/main/types
+provide reliable execution platforms.
 
 ## Design principles
 
@@ -28,12 +20,14 @@ implementations.
   Developers should not need to wade through needless layers of abstraction to
   properly use the library. Interfaces should be small, with a minimal surface
   area driven by the consumer/caller of the interface's methods. No
-  "AbstractFactoryBuilder" Java-esque stuff.
+  "AbstractFactoryBuilder" Java-esque stuff. In fact, `rxp` tries to minimize
+  the number of interface types, preferring concrete types over abstractions
+  and allowing the caller of rxp code to define interfaces as necessary.
 
 * Safety first, performance second
 
   The focus on the library should be on enforcing the safety and durability
-  constraints that a Reliable Execution platform requires, not on raw
+  constraints that a reliable execution platform requires, not on raw
   performance. Performance optimization should come only after safety is
   guaranteed.
 
@@ -52,8 +46,27 @@ implementations.
   The library should be capable of handling small (less than 10GB) to large
   (greater than 100TB) active data set sizes without rearchitecting.
   This means that structures managed by the library are designed to be
-  partition-aware and advertise [name uniqueness constraints][#namescope].
+  partition-aware and advertise [name uniqueness constraints](reference.md#scope).
 
 ## Out of scope
 
 * Bindings or SDKs for programming languages other than Go.
+
+## Repository structure
+
+The [`api`][pkg-rxpapi] package contains type definitions referenced throughout
+the `rxp` library and associated `rxp` backend implementations.
+
+[pkg-rxpapi]: https://github.com/relexec/rxp/tree/main/api
+
+Type-specific directories like `system/` or `object/` provide type-specific helpers for:
+
+* Syntactic sugared constructors, e.g. `system/system.New()` returns an `api.System`
+  struct pointer.
+* `Diff()` functions that return an `github.com/relexec/delta.Delta` struct
+  describing differences between things of a type.
+* `query.Expression` functions, e.g. `domain/domain.RootEqual()` returns a
+  `query.Expression` that filters a query by a root Domain.
+* `Read()` selectors, e.g. `kind/kind.ByName()` returns a `kind/kind.Selector`
+  that can be passed to `Driver.KindRead()` to fetch an `api.Kind` by its
+  `api.KindName`.

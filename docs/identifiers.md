@@ -8,14 +8,10 @@ calling the former things `UUIDs` and the latter `Names`.
 
 ## UUIDs
 
-A `UUID` is a *globally-unique string identifier*. Many things managed by `rxp`
-can have a `UUID`:
+A `UUID` is a *globally-unique string identifier*.
 
-* [`System`][system]
-* [`Object`][object]
-
-[system]: https://github.com/relexec/rxp/blob/main/docs/taxonomy.md#system
-[object]: https://github.com/relexec/rxp/blob/main/docs/taxonomy.md#object
+All things managed by `rxp` have a `UUID()` method that returns the thing's
+globally-unique identifer:
 
 ## Names
 
@@ -32,28 +28,28 @@ A `Kind`'s `Name` is guaranteed to be unique within the scope of the `Kind`'s
 
 However, conventionally `Kind`s for types that are intended for public APIs are
 globally-unique and conventionally are valid DNS domain names (e.g.
-`flow.temporal.io`).
+`runnable.t2.temporal.io`).
 
 A `Domain`'s `Name` is guaranteed to be unique within the scope of the
 `Domain`'s `System`.
 
 ## Object names
 
-An `Object`'s `Name` is guaranteed to be unique within the `Namescope`
+An `Object`'s `Name` is guaranteed to be unique within the `Scope`
 associated with the `Object`'s `Kind`.
 
 ### System-qualified names
 
-If the `Namescope` associated with an `Object`'s `Kind` is
-`NamescopeSystem`, `rxp` guarantees the Object's `Name` is unique within the
+If the `Scope` associated with an `Object`'s `Kind` is
+`ScopeSystem`, `rxp` guarantees the Object's `Name` is unique within the
 `Object`'s `System` and `Kind`.
 
 Names for these Objects are called *system-qualified names*.
 
 ### Domain-qualified names
 
-If the `Namescope` associated with an `Object`'s `Kind` is
-`NamescopeDomain`, `rxp` guarantees the Object's `Name` is unique within the
+If the `Scope` associated with an `Object`'s `Kind` is
+`ScopeDomain`, `rxp` guarantees the Object's `Name` is unique within the
 `Object`'s `System`, `Kind` and `Domain`.
 
 Names for these Objects are called *domain-qualified names*.

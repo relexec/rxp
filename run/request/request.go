@@ -5,7 +5,6 @@ import (
 
 	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/errors"
-	"github.com/relexec/rxp/object"
 )
 
 // Request describes a single request to execute some work.
@@ -18,7 +17,7 @@ type Request struct {
 	Options Options
 	// Target contains the *definition* of the thing that will be executed by
 	// Run.
-	Target *object.Object
+	Target *api.Object
 	// Caller contains information about the calling identity.
 	Caller api.Caller
 	// In contains the value of the input parameter when calling Run.

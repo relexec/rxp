@@ -5,11 +5,11 @@ import (
 )
 
 // Option modifies an Object returned from New.
-type Option func(*Object)
+type Option func(*api.Object)
 
 // New returns a new [Object]
-func New(opts ...Option) *Object {
-	o := &Object{}
+func New(opts ...Option) *api.Object {
+	o := &api.Object{}
 	for _, opt := range opts {
 		opt(o)
 	}
@@ -18,57 +18,57 @@ func New(opts ...Option) *Object {
 
 // WithSystem sets the Object's System.
 func WithSystem(system *api.System) Option {
-	return func(o *Object) {
-		o.system = system
+	return func(o *api.Object) {
+		o.SetSystem(system)
 	}
 }
 
 // WithKindVersionName sets the Object's KindVersionName.
 func WithKindVersionName(kv api.KindVersionName) Option {
-	return func(o *Object) {
-		o.kindVersionName = kv
+	return func(o *api.Object) {
+		o.SetKindVersionName(kv)
 	}
 }
 
 // WithUUID sets the Object's UUID.
 func WithUUID(uuid string) Option {
-	return func(o *Object) {
-		o.uuid = uuid
+	return func(o *api.Object) {
+		o.SetUUID(uuid)
 	}
 }
 
 // WithDomain sets the Object's Domain.
 func WithDomain(domain *api.Domain) Option {
-	return func(o *Object) {
-		o.domain = domain
+	return func(o *api.Object) {
+		o.SetDomain(domain)
 	}
 }
 
 // WithName sets the Object's Name.
 func WithName(name string) Option {
-	return func(o *Object) {
-		o.name = name
+	return func(o *api.Object) {
+		o.SetName(name)
 	}
 }
 
 // WithLabels sets the Object's Labels.
 func WithLabels(labels api.Labels) Option {
-	return func(o *Object) {
-		o.labels = labels
+	return func(o *api.Object) {
+		o.SetLabels(labels)
 	}
 }
 
 // WithGeneration sets the Object's Generation.
 func WithGeneration(generation api.Generation) Option {
-	return func(o *Object) {
-		o.generation = generation
+	return func(o *api.Object) {
+		o.SetGeneration(generation)
 	}
 }
 
 // WithSpec sets the Object's Spec to the supplied JSON-encoded string of
 // desired state.
 func WithSpec(spec string) Option {
-	return func(o *Object) {
-		o.spec = spec
+	return func(o *api.Object) {
+		o.SetSpec(spec)
 	}
 }

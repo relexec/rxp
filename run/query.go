@@ -1,8 +1,8 @@
 package run
 
 import (
+	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/errors"
-	"github.com/relexec/rxp/object"
 	"github.com/relexec/rxp/query"
 )
 
@@ -228,7 +228,7 @@ func (p TargetPredicate) Validate() error {
 
 // TargetEqual returns an Expression that will match runs having a particular
 // Target.
-func TargetEqual(target *object.Object) query.Expression {
+func TargetEqual(target *api.Object) query.Expression {
 	return query.UnaryExpression{
 		Predicate: TargetPredicate{
 			query.BasePredicate{
@@ -241,7 +241,7 @@ func TargetEqual(target *object.Object) query.Expression {
 
 // TargetIn returns an Expression that will match runs that have any of the
 // supplied Targets.
-func TargetIn(targets ...*object.Object) query.Expression {
+func TargetIn(targets ...*api.Object) query.Expression {
 	// flatten IN to = when there's only one value...
 	if len(targets) == 1 {
 		return TargetEqual(targets[0])

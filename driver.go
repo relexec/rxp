@@ -87,14 +87,14 @@ type Driver interface {
 		context.Context,
 		api.KindVersionName,
 		object.Selector,
-	) (*object.Object, error)
+	) (*api.Object, error)
 	// ObjectWrite persists a single supplied Object to backend storage, Note
 	// that on successful write, the newly-created or updated Object is
 	// returned.
 	ObjectWrite(
 		context.Context,
-		object.Object,
-	) (*object.Object, error)
+		api.Object,
+	) (*api.Object, error)
 	// ObjectQuery queries zero or more Objects of a specified kind or
 	// kindversion from persistent storage.
 	ObjectQuery(
@@ -102,5 +102,5 @@ type Driver interface {
 		api.KindVersionName,
 		query.Expression,
 		...query.Option,
-	) (*query.Result[*object.Object], error)
+	) (*query.Result[*api.Object], error)
 }

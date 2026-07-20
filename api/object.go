@@ -1,11 +1,7 @@
-package object
+package api
 
 import (
 	"encoding/json"
-
-	"github.com/relexec/rxp/api"
-	"github.com/relexec/rxp/domain"
-	"github.com/relexec/rxp/system"
 )
 
 // Object is an *instance* of a KindVersion.
@@ -23,48 +19,48 @@ import (
 type Object struct {
 	// kindVersionName is the kind and version identifier for the type of
 	// Object.
-	kindVersionName api.KindVersionName
+	kindVersionName KindVersionName
 	// system contains the system identifier for the Object.
-	system *api.System
+	system *System
 	// uuid is the globally-unique string identifier.
 	uuid string
 	// domain is the optional Domain.
-	domain *api.Domain
+	domain *Domain
 	// name is the Name.
 	name string
 	// labels is the collection of Labels.
-	labels api.Labels
+	labels Labels
 	// generation contains the generation of the Object's desired state.
-	generation api.Generation
+	generation Generation
 	// spec contains the Object's desired state encoded as a JSON string.
 	spec string
 }
 
 // KindName returns the DNS-formatted name of the Kind of Object, e.g.
 // `flow.temporal.io`.
-func (o Object) KindName() api.KindName {
+func (o Object) KindName() KindName {
 	return o.kindVersionName.Kind()
 }
 
 // KindVersionName returns the KindVersionName of the Object. This string
 // uniquely identifies the type of an Object.
-func (o Object) KindVersionName() api.KindVersionName {
+func (o Object) KindVersionName() KindVersionName {
 	return o.kindVersionName
 }
 
 // SetKindVersionName sets the Object's kind version name which uniquely
 // identifies the type of an Object.
-func (o *Object) SetKindVersionName(kvn api.KindVersionName) {
+func (o *Object) SetKindVersionName(kvn KindVersionName) {
 	o.kindVersionName = kvn
 }
 
 // System returns the System of the Object.
-func (o Object) System() *api.System {
+func (o Object) System() *System {
 	return o.system
 }
 
 // SetSystem sets the System of Object.
-func (o *Object) SetSystem(system *api.System) {
+func (o *Object) SetSystem(system *System) {
 	o.system = system
 }
 
@@ -79,12 +75,12 @@ func (o *Object) SetUUID(uuid string) {
 }
 
 // Domain returns the optional Domain.
-func (o Object) Domain() *api.Domain {
+func (o Object) Domain() *Domain {
 	return o.domain
 }
 
 // SetDomain sets the Domain.
-func (o *Object) SetDomain(domain *api.Domain) {
+func (o *Object) SetDomain(domain *Domain) {
 	o.domain = domain
 }
 
@@ -101,24 +97,24 @@ func (o *Object) SetName(name string) {
 }
 
 // Labels returns the collection of Labels.
-func (o Object) Labels() api.Labels {
+func (o Object) Labels() Labels {
 	return o.labels
 }
 
 // SetLabels sets the collection of Labels.
-func (o *Object) SetLabels(labels api.Labels) {
+func (o *Object) SetLabels(labels Labels) {
 	o.labels = labels
 }
 
 // Generation returns the Object's Generation, which represents the number of
 // mutations to the Object's desired state.
-func (o Object) Generation() api.Generation {
+func (o Object) Generation() Generation {
 	return o.generation
 }
 
 // SetGeneration sets the Object's Generation, which represents the number of
 // mutations to the Object's desired state.
-func (o *Object) SetGeneration(generation api.Generation) {
+func (o *Object) SetGeneration(generation Generation) {
 	o.generation = generation
 }
 
@@ -133,14 +129,14 @@ func (o *Object) SetSpec(spec string) {
 }
 
 type jsonObject struct {
-	KindVersionName string     `json:"kind_version_name"`
-	System          string     `json:"system"`
-	UUID            string     `json:"uuid"`
-	Domain          string     `json:"domain,omitempty"`
-	Name            string     `json:"name"`
-	Labels          api.Labels `json:"labels,omitempty"`
-	Generation      int        `json:"generation"`
-	Spec            string     `json:"spec"`
+	KindVersionName string `json:"kind_version_name"`
+	System          string `json:"system"`
+	UUID            string `json:"uuid"`
+	Domain          string `json:"domain,omitempty"`
+	Name            string `json:"name"`
+	Labels          Labels `json:"labels,omitempty"`
+	Generation      int    `json:"generation"`
+	Spec            string `json:"spec"`
 }
 
 // MarshalJSON serializes the Object to a JSON bytestring.
@@ -168,22 +164,20 @@ func (o *Object) UnmarshalJSON(text []byte) error {
 	if err := json.Unmarshal(text, &jo); err != nil {
 		return err
 	}
-	o.kindVersionName = api.KindVersionName(jo.KindVersionName)
+	o.kindVersionName = KindVersionName(jo.KindVersionName)
 	o.uuid = jo.UUID
 	o.name = jo.Name
 	o.labels = jo.Labels
-	o.generation = api.Generation(jo.Generation)
+	o.generation = Generation(jo.Generation)
 	o.spec = jo.Spec
 	if jo.System != "" {
-		o.system = system.New(
-			system.WithUUID(jo.System),
-		)
+		o.system = &System{uuid: jo.System}
 	}
 	if jo.Domain != "" {
-		o.domain = domain.New(
-			domain.WithSystem(o.system),
-			domain.WithName(api.DomainName(jo.Domain)),
-		)
+		o.domain = &Domain{
+			system: o.system,
+			name:   DomainName(jo.Domain),
+		}
 	}
 	return nil
 }

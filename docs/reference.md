@@ -2,14 +2,16 @@ This document contains the definition of terms and types in `rxp`.
 
 # Scope
 
-Scope* refers to the *extent to which Names of instances of a Type of thing are
-unique*. There are four scopes, shown here in decreasing order of breadth.
+*Scope* refers to the *extent to which Names of instances of a Type of thing are
+unique*. There are three scopes, shown here in decreasing order of breadth.
 
 ```mermaid
 flowchart TD
     subgraph Global
         subgraph System
-            subgraph Domain
+            Domain
+        end
+    end
 ```
 
 All data managed by `rxp` is *scoped* to a System or a Domain.

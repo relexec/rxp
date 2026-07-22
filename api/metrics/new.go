@@ -14,32 +14,32 @@ func New(
 	ctx context.Context,
 	opts ...WithOption,
 ) (*Handler, error) {
-	metrics := &Handler{}
+	h := &Handler{}
 	for _, opt := range opts {
-		opt(metrics)
+		opt(h)
 	}
-	if metrics.exporter == nil {
+	if h.exporter == nil {
 		exp, err := stdoutmetric.New(stdoutmetric.WithPrettyPrint())
 		if err != nil {
 			return nil, err
 		}
-		metrics.exporter = exp
+		h.exporter = exp
 	}
-	if metrics.reader == nil {
-		reader := metric.NewPeriodicReader(metrics.exporter)
-		metrics.reader = reader
+	if h.reader == nil {
+		reader := metric.NewPeriodicReader(h.exporter)
+		h.reader = reader
 	}
-	if metrics.mp == nil {
+	if h.mp == nil {
 		mp := metric.NewMeterProvider(
 			metric.WithView(Views...),
-			metric.WithReader(metrics.reader),
+			metric.WithReader(h.reader),
 		)
-		metrics.mp = mp
+		h.mp = mp
 	}
-	if err := metrics.init(); err != nil {
+	if err := h.init(); err != nil {
 		return nil, err
 	}
-	return metrics, nil
+	return h, nil
 }
 
 // WithMeterProvider sets the Handler handler's MeterProvider.

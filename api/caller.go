@@ -14,10 +14,9 @@ type Caller struct {
 	// system-specific. It could be a UUID, a username, an email or any other
 	// type of identifier.
 	Identity string
-	// System is the UUID of the System that the caller's API request was
-	// routed through. If empty, the host System for the entity executing the
-	// API call is used.
-	//System *System
+	// System is System that the caller's API request was routed through. If
+	// empty, the host System for the entity executing the API call is used.
+	System *System
 	// Domain is the optional Domain the caller should have their rxp API calls
 	// scoped to. Calling systems may add this Domain to the API call request
 	// context automatically during authentication to avoid a caller needing to

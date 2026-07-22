@@ -2,6 +2,7 @@ package object
 
 import (
 	"github.com/relexec/rxp/api"
+	"github.com/relexec/rxp/domain"
 	"github.com/relexec/rxp/errors"
 )
 
@@ -60,8 +61,10 @@ func (s Selector) Validate() error {
 		}
 	}
 	if s.domain != nil {
-		if err := s.domain.Validate(); err != nil {
-			return err
+		// When looking up by Domain, we need either the domain's UUID or its
+		// Name, not both.
+		if s.domain.UUID() == "" && s.domain.Name() == "" {
+			return errors.ErrSelectorDomainUUIDOrNameRequired
 		}
 	}
 	return nil
@@ -88,6 +91,16 @@ func BySystem(system *api.System) SelectOption {
 func ByDomain(domain *api.Domain) SelectOption {
 	return func(s *Selector) {
 		s.domain = domain
+	}
+}
+
+// ByDomainUUID sets the Selector's Domain UUID.
+func ByDomainUUID(uuid string) SelectOption {
+	return func(s *Selector) {
+		if s.domain == nil {
+			s.domain = domain.New()
+		}
+		s.domain.SetUUID(uuid)
 	}
 }
 

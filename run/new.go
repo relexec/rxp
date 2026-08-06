@@ -3,15 +3,15 @@ package run
 import (
 	"time"
 
-	"github.com/relexec/rxp/run/request"
+	"github.com/relexec/rxp/api"
 )
 
 // Option modifies a Run returned from New.
-type Option func(*Run)
+type Option func(*api.Run)
 
 // New returns a new [Run].
-func New(opts ...Option) *Run {
-	r := &Run{}
+func New(opts ...Option) *api.Run {
+	r := &api.Run{}
 	for _, opt := range opts {
 		opt(r)
 	}
@@ -19,65 +19,30 @@ func New(opts ...Option) *Run {
 }
 
 // WithRequest sets the Run's Request.
-func WithRequest(req request.Request) Option {
-	return func(r *Run) {
-		r.req = req
+func WithRequest(req api.RunRequest) Option {
+	return func(r *api.Run) {
+		r.SetRequest(req)
 	}
 }
 
 // WithRoot sets the Run's root Run UUID. A root Run is the outermost execution
 // of a piece of work.
 func WithRoot(root string) Option {
-	return func(r *Run) {
-		r.root = root
+	return func(r *api.Run) {
+		r.SetRoot(root)
 	}
 }
 
 // WithParent sets the Run that spawned this Run.
-func WithParent(parent *Run) Option {
-	return func(r *Run) {
-		r.parent = parent
+func WithParent(parent *api.Run) Option {
+	return func(r *api.Run) {
+		r.SetParent(parent)
 	}
 }
 
 // WithScheduledOn sets the Run's scheduled on nano timestamp.
 func WithScheduledOn(ts time.Time) Option {
-	return func(r *Run) {
-		r.scheduledOn = ts
-	}
-}
-
-// WithCompletedOn sets the Run's completed on nano timestamp.
-func WithCompletedOn(ts time.Time) Option {
-	return func(r *Run) {
-		r.completedOn = ts
-	}
-}
-
-// WithFailedOn sets the Run's failed on nano timestamp.
-func WithFailedOn(ts time.Time) Option {
-	return func(r *Run) {
-		r.completedOn = ts
-	}
-}
-
-// WithCanceledOn sets the Run's canceled on nano timestamp.
-func WithCanceledOn(ts time.Time) Option {
-	return func(r *Run) {
-		r.canceledOn = ts
-	}
-}
-
-// WithPausedOn sets the Run's paused on nano timestamp.
-func WithPausedOn(ts time.Time) Option {
-	return func(r *Run) {
-		r.pausedOn = ts
-	}
-}
-
-// WithResumedOn sets the Run's resumed on nano timestamp.
-func WithResumedOn(ts time.Time) Option {
-	return func(r *Run) {
-		r.resumedOn = ts
+	return func(r *api.Run) {
+		r.SetScheduledOn(ts)
 	}
 }

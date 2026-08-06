@@ -1,16 +1,91 @@
-package run
+package api
 
 import (
 	"time"
 
-	"github.com/relexec/rxp/run/request"
+	"github.com/relexec/rxp/errors"
 )
+
+// RunOptions describes optional per-request Run timeouts, retry behaviour and
+// other configuration options.
+type RunOptions struct {
+	// Wait describes the behaviour of the caller in waiting for the Runnable
+	// to complete. Note that by default, the caller does *not* wait for the
+	// Runnable to complete and the only field of the Response that is
+	// guaranteed to be populated is the RequestUUID field, which may be used
+	// by the caller to poll for the result of the Runnable at a later time.
+	Wait Wait
+	// Timeout is the duration timeout for the entire call to Run.
+	Timeout time.Duration
+	// Retry configures retry behaviour for the call to Run.
+	Retry Retry
+}
+
+// RunRequest describes a single request to execute some work.
+type RunRequest struct {
+	// UUID is the identifier for a single Run call.
+	UUID string
+	// On is the UNIX nanoseconds timestamp of when the Request was made.
+	On time.Time
+	// Options contains per-request settings.
+	Options RunOptions
+	// Target contains the *definition* of the thing that will be executed by
+	// Run.
+	Target *Object
+	// Caller contains information about the calling identity.
+	Caller Caller
+	// In contains the value of the input parameter when calling Run.
+	In Vars
+}
+
+// Validate returns an error if the RunRequest is not valid.
+func (r RunRequest) Validate() error {
+	if r.UUID == "" {
+		return errors.ErrRunRequestUUIDRequired
+	}
+	if r.Target == nil {
+		return errors.ErrRunRequestTargetRequired
+	}
+	if r.On.IsZero() {
+		return errors.ErrRunRequestOnRequired
+	}
+	return nil
+}
+
+// RunResponse contains the result/response for the call to Run.
+type RunResponse struct {
+	// RequestUUID is the Request's UUID. If the Request.UUID field is empty,
+	// the the rxp runtime creates a new UUID for the Request and populates
+	// this field in the Response struct.
+	RequestUUID string
+	// Errors contains collected application-layer errors (i.e. not runtime
+	// errors) that occurred during the call to Run.
+	Errors []error
+	// Stats contains timing information and other statistics scoped to a
+	// single call to Run.
+	Stats RunStats
+	// Out contains any state fields the Runnable added to the Response. Note
+	// that for Run requests that were asynchronous (the default), this field
+	// will be empty. These values are persisted to the RunLog and callers can
+	// retrieve the values by polling the RunResponse via the RequestUUID.
+	Out Vars
+}
+
+// RunStats contains timing information and other statistics scoped to a single
+// call to Run.
+type RunStats struct {
+	// Elapsed is the total amount of wallclock time spent by the Runner to
+	// executed the Run call.
+	Elapsed time.Duration
+	// Attempts is the number of attempts to execute the Runnable.
+	Attempts int
+}
 
 // Run describes a thread of execution of some piece of work.
 type Run struct {
 	// req contains information about the request to execute some piece of
 	// work.
-	req request.Request
+	req RunRequest
 	// root contains the UUID of the root Run. If this is a root Run, this will
 	// be the same as req.UUID.
 	root string
@@ -36,12 +111,12 @@ type Run struct {
 }
 
 // Request returns the Run's Request struct.
-func (r Run) Request() request.Request {
+func (r Run) Request() RunRequest {
 	return r.req
 }
 
 // SetRequest sets the Run's Request struct.
-func (r *Run) SetRequest(req request.Request) {
+func (r *Run) SetRequest(req RunRequest) {
 	r.req = req
 }
 

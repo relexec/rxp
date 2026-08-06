@@ -1,10 +1,7 @@
-package run
+package api
 
 import (
 	"context"
-
-	"github.com/relexec/rxp/run/request"
-	"github.com/relexec/rxp/run/response"
 )
 
 // Runnable standardizes the callable interface for executing code.
@@ -16,14 +13,14 @@ type Runnable interface {
 	// errors (validation failures, duplicate/conflict errors, timeouts, etc).
 	Run(
 		context.Context,
-		request.Request,
-		*response.Response, // mutated by Run
+		RunRequest,
+		*RunResponse, // mutated by Run
 	) error
 }
 
 // RunnableFunc adapts a pure function or method to be a Runnable
 type RunnableFunc struct {
-	r func(context.Context, request.Request, *response.Response) error
+	r func(context.Context, RunRequest, *RunResponse) error
 }
 
 // Run executes a single Request, returning any runtime error that may have
@@ -33,15 +30,15 @@ type RunnableFunc struct {
 // failures, duplicate/conflict errors, timeouts, etc).
 func (f RunnableFunc) Run(
 	ctx context.Context,
-	req request.Request,
-	resp *response.Response,
+	req RunRequest,
+	resp *RunResponse,
 ) error {
 	return f.r(ctx, req, resp)
 }
 
 // RunnableFrom returns an Runnable from a pure function or method.
 func RunnableFrom(
-	r func(context.Context, request.Request, *response.Response) error,
+	r func(context.Context, RunRequest, *RunResponse) error,
 ) Runnable {
 	return RunnableFunc{r}
 }

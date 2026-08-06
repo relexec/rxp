@@ -9,6 +9,7 @@ import (
 	"github.com/relexec/rxp/kind/kindversion"
 	"github.com/relexec/rxp/object"
 	"github.com/relexec/rxp/query"
+	"github.com/relexec/rxp/run"
 	"github.com/relexec/rxp/system"
 )
 
@@ -103,4 +104,16 @@ type Driver interface {
 		query.Expression,
 		...query.Option,
 	) (*query.Result[*api.Object], error)
+
+	// RunRead reads a single Run from persistent storage.
+	RunRead(
+		context.Context,
+		run.Selector,
+	) (*api.Run, error)
+	// RunQuery queries zero or more Runs from persistent storage.
+	RunQuery(
+		context.Context,
+		query.Expression,
+		...query.Option,
+	) (*query.Result[*api.Run], error)
 }

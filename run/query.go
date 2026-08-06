@@ -128,7 +128,7 @@ func (p RootPredicate) Validate() error {
 
 // RootEqual returns an Expression that will match runs having a particular
 // Root.
-func RootEqual(run *Run) query.Expression {
+func RootEqual(run *api.Run) query.Expression {
 	return query.UnaryExpression{
 		Predicate: RootPredicate{
 			query.BasePredicate{
@@ -141,7 +141,7 @@ func RootEqual(run *Run) query.Expression {
 
 // RootIn returns an Expression that will match runs that have any of the
 // supplied Roots.
-func RootIn(runs ...*Run) query.Expression {
+func RootIn(runs ...*api.Run) query.Expression {
 	// flatten IN to = when there's only one value...
 	if len(runs) == 1 {
 		return RootEqual(runs[0])

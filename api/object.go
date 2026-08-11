@@ -1,9 +1,5 @@
 package api
 
-import (
-	"encoding/json"
-)
-
 // Object is an *instance* of a KindVersion.
 //
 // Each Object has a UUID globally-unique identifier.
@@ -126,60 +122,6 @@ func (o Object) Spec() string {
 // SetSpec sets the Object's desired state as a JSON-encoded string.
 func (o *Object) SetSpec(spec string) {
 	o.spec = spec
-}
-
-type jsonObject struct {
-	KindVersionName string `json:"kind_version_name"`
-	System          string `json:"system"`
-	UUID            string `json:"uuid"`
-	Domain          string `json:"domain,omitempty"`
-	Name            string `json:"name"`
-	Labels          Labels `json:"labels,omitempty"`
-	Generation      int    `json:"generation"`
-	Spec            string `json:"spec"`
-}
-
-// MarshalJSON serializes the Object to a JSON bytestring.
-func (o Object) MarshalJSON() ([]byte, error) {
-	jo := jsonObject{
-		KindVersionName: string(o.kindVersionName),
-		UUID:            o.uuid,
-		Name:            o.name,
-		Labels:          o.labels,
-		Generation:      int(o.generation),
-		Spec:            o.spec,
-	}
-	if o.system != nil {
-		jo.System = o.system.UUID()
-	}
-	if o.domain != nil {
-		jo.Domain = string(o.domain.Name())
-	}
-	return json.Marshal(&jo)
-}
-
-// UnmarshalJSON constructs the Object from a JSON bytestring.
-func (o *Object) UnmarshalJSON(text []byte) error {
-	var jo jsonObject
-	if err := json.Unmarshal(text, &jo); err != nil {
-		return err
-	}
-	o.kindVersionName = KindVersionName(jo.KindVersionName)
-	o.uuid = jo.UUID
-	o.name = jo.Name
-	o.labels = jo.Labels
-	o.generation = Generation(jo.Generation)
-	o.spec = jo.Spec
-	if jo.System != "" {
-		o.system = &System{uuid: jo.System}
-	}
-	if jo.Domain != "" {
-		o.domain = &Domain{
-			system: o.system,
-			name:   DomainName(jo.Domain),
-		}
-	}
-	return nil
 }
 
 // Clone returns a copy of the Object.

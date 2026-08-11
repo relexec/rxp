@@ -21,21 +21,65 @@ type RunOptions struct {
 	Retry Retry
 }
 
+// RunTarget uniquely identifies an Object generation that contains the
+// *definition* of the thing that will be executed by Run.
+type RunTarget struct {
+	// KindVersionName is the kind and version identifier for the type of
+	// Object describing the Runnable.
+	KindVersionName KindVersionName
+	// System is System in which the target's Object resides. If empty, the
+	// host System for the entity executing the API call is used.
+	System *System
+	// Domain is the optional Domain the target's Object is scoped to.
+	Domain *Domain
+	// UUID is the identifier of the Object describing the Runnable.
+	UUID string
+	// Generation is the Object generation.
+	Generation Generation
+}
+
+// Validate returns an error if the RunTarget is not valid.
+func (t RunTarget) Validate() error {
+	if t.KindVersionName == "" {
+		return errors.ErrRunTargetKindVersionNameRequired
+	}
+	if t.UUID == "" {
+		return errors.ErrRunTargetUUIDRequired
+	}
+	if t.Generation == 0 {
+		return errors.ErrRunTargetGenerationRequired
+	}
+	if t.System != nil {
+		err := t.System.Validate()
+		if err != nil {
+			return errors.ErrRunTargetSystemInvalid
+		}
+	}
+	if t.Domain != nil {
+		err := t.Domain.Validate()
+		if err != nil {
+			return errors.ErrRunTargetDomainInvalid
+		}
+	}
+	return nil
+}
+
 // RunRequest describes a single request to execute some work.
 type RunRequest struct {
 	// UUID is the identifier for a single Run call.
 	UUID string
 	// On is the UNIX nanoseconds timestamp of when the Request was made.
 	On time.Time
-	// Options contains per-request settings.
-	Options RunOptions
-	// Target contains the *definition* of the thing that will be executed by
-	// Run.
-	Target *Object
+	// Options contains per-request settings, encoded as a JSON string.
+	Options string
+	// Target contains the UUID and Generation of the Object that contains the
+	// *definition* of the thing that will be executed by Run.
+	Target RunTarget
 	// Caller contains information about the calling identity.
 	Caller Caller
-	// In contains the value of the input parameter when calling Run.
-	In Vars
+	// In contains the value of the input parameter when calling Run, encoded
+	// as a JSON string.
+	In string
 }
 
 // Validate returns an error if the RunRequest is not valid.
@@ -43,20 +87,20 @@ func (r RunRequest) Validate() error {
 	if r.UUID == "" {
 		return errors.ErrRunRequestUUIDRequired
 	}
-	if r.Target == nil {
-		return errors.ErrRunRequestTargetRequired
-	}
 	if r.On.IsZero() {
 		return errors.ErrRunRequestOnRequired
 	}
-	return nil
+	if err := r.Caller.Validate(); err != nil {
+		return err
+	}
+	return r.Target.Validate()
 }
 
 // RunResponse contains the result/response for the call to Run.
 type RunResponse struct {
 	// RequestUUID is the Request's UUID. If the Request.UUID field is empty,
-	// the the rxp runtime creates a new UUID for the Request and populates
-	// this field in the Response struct.
+	// the rxp runtime creates a new UUID for the Request and populates this
+	// field in the Response struct.
 	RequestUUID string
 	// Errors contains collected application-layer errors (i.e. not runtime
 	// errors) that occurred during the call to Run.
@@ -77,7 +121,7 @@ type RunStats struct {
 	// Elapsed is the total amount of wallclock time spent by the Runner to
 	// executed the Run call.
 	Elapsed time.Duration
-	// Attempts is the number of attempts to execute the Runnable.
+	// Attempts is the number of executions made to execute the Target.
 	Attempts int
 }
 
@@ -89,8 +133,8 @@ type Run struct {
 	// root contains the UUID of the root Run. If this is a root Run, this will
 	// be the same as req.UUID.
 	root string
-	// parent points at the Run that spawned this Run, if any.
-	parent *Run
+	// parent contains the UUID of the Run that spawned this Run, if any.
+	parent string
 	// scheduledOn stores the UNIX nanoseconds for when the Run was scheduled
 	// to be executed.
 	scheduledOn time.Time
@@ -108,6 +152,28 @@ type Run struct {
 	pausedOn time.Time
 	// resumedOn stores the UNIX namoseconds for when the Run was last resumed.
 	resumedOn time.Time
+}
+
+// Validate returns an error if the Run is not valid.
+func (r Run) Validate() error {
+	err := r.req.Validate()
+	if err != nil {
+		return err
+	}
+	if r.scheduledOn.Before(r.startedOn) {
+		return errors.ErrRunScheduledBeforeStart
+	}
+	if !r.canceledOn.IsZero() {
+		if r.canceledOn.Before(r.scheduledOn) {
+			return errors.ErrRunCanceledBeforeScheduled
+		}
+	}
+	if !r.completedOn.IsZero() {
+		if !r.failedOn.IsZero() {
+			return errors.ErrRunCompletedAndFailed
+		}
+	}
+	return nil
 }
 
 // Request returns the Run's Request struct.
@@ -147,13 +213,13 @@ func (r *Run) SetRoot(root string) {
 	r.root = root
 }
 
-// Parent returns the Run that spawned this Run, if any.
-func (r Run) Parent() *Run {
+// Parent returns the UUID of the Run that spawned this Run, if any.
+func (r Run) Parent() string {
 	return r.parent
 }
 
-// SetParent sets the Run that spawned this Run.
-func (r *Run) SetParent(parent *Run) {
+// SetParent sets the UUID of the Run that spawned this Run.
+func (r *Run) SetParent(parent string) {
 	r.parent = parent
 }
 

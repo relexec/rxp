@@ -33,8 +33,8 @@ func WithRoot(root string) Option {
 	}
 }
 
-// WithParent sets the Run that spawned this Run.
-func WithParent(parent *api.Run) Option {
+// WithParent sets the UUID of the Run that spawned this Run.
+func WithParent(parent string) Option {
 	return func(r *api.Run) {
 		r.SetParent(parent)
 	}

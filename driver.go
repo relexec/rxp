@@ -108,6 +108,7 @@ type Driver interface {
 	// RunRead reads a single Run from persistent storage.
 	RunRead(
 		context.Context,
+		api.RunTarget,
 		run.Selector,
 	) (*api.Run, error)
 	// RunQuery queries zero or more Runs from persistent storage.

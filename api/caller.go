@@ -1,6 +1,10 @@
 package api
 
-import "context"
+import (
+	"context"
+
+	"github.com/relexec/rxp/errors"
+)
 
 type contextKey string
 
@@ -22,6 +26,14 @@ type Caller struct {
 	// context automatically during authentication to avoid a caller needing to
 	// manually specify a Domain UUID in queries.
 	Domain *Domain
+}
+
+// Validate returns an error if the Caller is not valid.
+func (c Caller) Validate() error {
+	if c.Identity == "" {
+		return errors.ErrCallerIdentityRequired
+	}
+	return nil
 }
 
 // CallerToContext sets the supplied Caller information into the supplied

@@ -1,5 +1,7 @@
 package run
 
+import "github.com/relexec/rxp/errors"
+
 // Selector selects a single Run.
 type Selector struct {
 	// uuid is the globally-unique identifier of the Run being selected.
@@ -13,8 +15,8 @@ func (s Selector) UUID() string {
 
 // Validate returns an error if the Selector is not valid.
 func (s Selector) Validate() error {
-	if s.uuid != "" {
-		return nil
+	if s.uuid == "" {
+		return errors.ErrSelectorUUIDRequired
 	}
 	return nil
 }

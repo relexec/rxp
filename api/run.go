@@ -341,3 +341,54 @@ func (r Run) Ended() bool {
 func (r Run) InProgress() bool {
 	return !r.Ended() && !r.Paused()
 }
+
+// RunEventType describes the type of event that occurred in the timeline of a
+// Run.
+type RunEventType int
+
+const (
+	// RunEventTypeRunScheduled is when the Run was scheduled. Scheduled may be
+	// different from Started if the caller has requested execution of a
+	// Runnable at a future time.
+	RunEventTypeRunScheduled RunEventType = iota
+	// RunEventTypeRunStarted is when the Runnable started to execute.
+	RunEventTypeRunStarted
+	// RunEventTypeRunCompleted is when the Runnable completed execution
+	// successfully (no application-layer terminal failures were encountered).
+	RunEventTypeRunCompleted
+	// RunEventTypeRunFailed is when the Runnable completed execution and
+	// encountered an application-layer terminal failure.
+	RunEventTypeRunFailed
+	// RunEventTypeRunCanceled is when a manual call to cancel an ongoing Run
+	// was made. Note that this is different from RunEventTypeRunTimedOut which
+	// is for when the execution of a Runnable hit a configured timeout
+	// duration.
+	RunEventTypeRunCanceled
+	// RunEventTypeRunTimedOut is when the execution of a Runnable hit a
+	// configured timeout duration. Note that logging a RunEventTypeRunTimedOut
+	// event is *not* sufficient information to determine if the entire Run
+	// request timed out. To do that, the retry configuration for the
+	// RunRequest must be consulted.
+	RunEventTypeRunTimedOut
+	// RunEventTypeRunPaused is when a manual call to pause an ongoing Run was
+	// made.
+	RunEventTypeRunPaused
+	// RunEventTypeRunResumed is when a manual call to resume a paused Run was
+	// made.
+	RunEventTypeRunResumed
+	// RunEventTypeTimerStarted is when a timer is started within the execution
+	// of a Runnable.
+	RunEventTypeTimerStarted
+	// RunEventTypeTimerFired is when a timer fires (wakes).
+	RunEventTypeTimerFired
+)
+
+// RunEvent represents a single event that occurred in the timeline of a Run.
+type RunEvent struct {
+	// Sequence stores the RunEvent's sequence number within the Run.
+	Sequence int
+	// Type is the RunEventType of the event that occurred.
+	Type RunEventType
+	// On is the exact time that the RunEvent occurred in UNIX nanoseconds.
+	On time.Time
+}

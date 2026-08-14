@@ -33,7 +33,7 @@ func (d Domain) Validate() error {
 	if d.root != nil {
 		rootSystem := d.root.System()
 		if d.system != nil && rootSystem != nil {
-			if rootSystem.UUID() != d.system.UUID() {
+			if rootSystem.UUID != d.system.UUID {
 				return errors.ErrDomainRootSystemDifferent
 			}
 		}
@@ -44,7 +44,7 @@ func (d Domain) Validate() error {
 		}
 		parentSystem := d.parent.System()
 		if d.system != nil && parentSystem != nil {
-			if parentSystem.UUID() != d.system.UUID() {
+			if parentSystem.UUID != d.system.UUID {
 				return errors.ErrDomainParentSystemDifferent
 			}
 		}

@@ -6,16 +6,15 @@ import (
 	"github.com/google/uuid"
 	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/domain"
-	"github.com/relexec/rxp/system"
 	"github.com/stretchr/testify/require"
 )
 
 func TestDomain_Validate(t *testing.T) {
-	sys := system.New(system.WithUUID(uuid.NewString()))
+	sys := api.System{UUID: uuid.NewString()}
 	domWithSystemName := api.DomainName("dom.with.system")
 	domWithSystem := domain.New(
 		domain.WithUUID(uuid.NewString()),
-		domain.WithSystem(sys),
+		domain.WithSystem(&sys),
 		domain.WithName(domWithSystemName),
 	)
 	domWithParentNoRootName := api.DomainName("dom.with.parent.no.root")
@@ -31,10 +30,10 @@ func TestDomain_Validate(t *testing.T) {
 		domain.WithRoot(domWithSystem),
 		domain.WithName(domWithParentName),
 	)
-	secondSystem := system.New(system.WithUUID(uuid.NewString()))
+	secondSystem := api.System{UUID: uuid.NewString()}
 	domWithParentDiffSystemName := api.DomainName("dom.with.diff.system")
 	domWithParentDiffSystem := domain.New(
-		domain.WithSystem(secondSystem),
+		domain.WithSystem(&secondSystem),
 		domain.WithUUID(uuid.NewString()),
 		domain.WithParent(domWithSystem),
 		domain.WithRoot(domWithSystem),

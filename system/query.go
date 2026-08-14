@@ -89,20 +89,20 @@ func UUIDNotIn(uuids ...string) query.Expression {
 // Equal returns an Expression that will match things having a particular
 // System.
 func Equal(s *api.System) query.Expression {
-	return UUIDEqual(s.UUID())
+	return UUIDEqual(s.UUID)
 }
 
 // NotEqual returns an Expression that will match things not having a
 // particular System.
 func NotEqual(s *api.System) query.Expression {
-	return UUIDNotEqual(s.UUID())
+	return UUIDNotEqual(s.UUID)
 }
 
 // In returns an Expression that will match things that have any of a set
 // of specified System.
 func In(ss ...*api.System) query.Expression {
 	uuids := lo.Map(ss, func(s *api.System, _ int) string {
-		return s.UUID()
+		return s.UUID
 	})
 	return UUIDIn(uuids...)
 }
@@ -111,7 +111,7 @@ func In(ss ...*api.System) query.Expression {
 // have any of a set of specified System.
 func NotIn(ss ...*api.System) query.Expression {
 	uuids := lo.Map(ss, func(s *api.System, _ int) string {
-		return s.UUID()
+		return s.UUID
 	})
 	return UUIDNotIn(uuids...)
 }

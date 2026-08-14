@@ -32,8 +32,8 @@ func Diff(s api.System, subject any) (*delta.Delta, error) {
 
 	d := &delta.Delta{}
 
-	thisSystemUUID := s.UUID()
-	otherSystemUUID := other.UUID()
+	thisSystemUUID := s.UUID
+	otherSystemUUID := other.UUID
 	if thisSystemUUID != otherSystemUUID {
 		d.Push(
 			delta.Difference{
@@ -45,8 +45,8 @@ func Diff(s api.System, subject any) (*delta.Delta, error) {
 		)
 	}
 
-	thisSystemTag := s.Tag()
-	otherSystemTag := other.Tag()
+	thisSystemTag := s.Tag
+	otherSystemTag := other.Tag
 	if thisSystemTag != otherSystemTag {
 		d.Push(
 			delta.Difference{
@@ -70,7 +70,7 @@ func diffNew(s api.System) (*delta.Delta, error) {
 			FieldPath: FieldPathUUID,
 			Type:      delta.DifferenceTypeAdd,
 			From:      nil,
-			To:        s.UUID(),
+			To:        s.UUID,
 		},
 	)
 	d.Push(
@@ -78,7 +78,7 @@ func diffNew(s api.System) (*delta.Delta, error) {
 			FieldPath: FieldPathTag,
 			Type:      delta.DifferenceTypeAdd,
 			From:      nil,
-			To:        s.Tag(),
+			To:        s.Tag,
 		},
 	)
 	return d, nil

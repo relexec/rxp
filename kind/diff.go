@@ -37,7 +37,7 @@ func Diff(k api.Kind, subject any) (*delta.Delta, error) {
 	thisSystem := k.System()
 	otherSystem := other.System()
 	if thisSystem != nil {
-		thisSystemUUID := k.System().UUID()
+		thisSystemUUID := k.System().UUID
 		if otherSystem == nil {
 			d.Push(
 				delta.Difference{
@@ -48,8 +48,8 @@ func Diff(k api.Kind, subject any) (*delta.Delta, error) {
 				},
 			)
 		} else {
-			otherSystemUUID := otherSystem.UUID()
-			if thisSystemUUID != otherSystem.UUID() {
+			otherSystemUUID := otherSystem.UUID
+			if thisSystemUUID != otherSystem.UUID {
 				d.Push(
 					delta.Difference{
 						FieldPath: FieldPathSystem,
@@ -61,7 +61,7 @@ func Diff(k api.Kind, subject any) (*delta.Delta, error) {
 			}
 		}
 	} else if otherSystem != nil {
-		otherSystemUUID := otherSystem.UUID()
+		otherSystemUUID := otherSystem.UUID
 		d.Push(
 			delta.Difference{
 				FieldPath: FieldPathSystem,
@@ -120,7 +120,7 @@ func diffNew(k api.Kind) (*delta.Delta, error) {
 				FieldPath: FieldPathSystem,
 				Type:      delta.DifferenceTypeAdd,
 				From:      nil,
-				To:        k.System().UUID(),
+				To:        k.System().UUID,
 			},
 		)
 	}

@@ -35,8 +35,8 @@ func Diff(d api.Domain, subject any) (*delta.Delta, error) {
 
 	del := &delta.Delta{}
 
-	thisSystem := d.System()
-	otherSystem := other.System()
+	thisSystem := d.System
+	otherSystem := other.System
 	if thisSystem != nil {
 		thisSystemUUID := thisSystem.UUID
 		if otherSystem == nil {
@@ -73,8 +73,8 @@ func Diff(d api.Domain, subject any) (*delta.Delta, error) {
 		)
 	}
 
-	thisUUID := d.UUID()
-	otherUUID := other.UUID()
+	thisUUID := d.UUID
+	otherUUID := other.UUID
 	if thisUUID != otherUUID {
 		del.Push(
 			delta.Difference{
@@ -86,8 +86,8 @@ func Diff(d api.Domain, subject any) (*delta.Delta, error) {
 		)
 	}
 
-	thisName := d.Name()
-	otherName := other.Name()
+	thisName := d.Name
+	otherName := other.Name
 	if thisName != otherName {
 		del.Push(
 			delta.Difference{
@@ -99,10 +99,10 @@ func Diff(d api.Domain, subject any) (*delta.Delta, error) {
 		)
 	}
 
-	thisRoot := d.Parent()
-	otherRoot := other.Root()
+	thisRoot := d.Root
+	otherRoot := other.Root
 	if thisRoot != nil {
-		thisRootUUID := thisRoot.UUID()
+		thisRootUUID := thisRoot.UUID
 		if otherRoot == nil {
 			del.Push(
 				delta.Difference{
@@ -113,8 +113,8 @@ func Diff(d api.Domain, subject any) (*delta.Delta, error) {
 				},
 			)
 		} else {
-			otherRootUUID := otherRoot.UUID()
-			if thisRootUUID != otherRoot.UUID() {
+			otherRootUUID := otherRoot.UUID
+			if thisRootUUID != otherRoot.UUID {
 				del.Push(
 					delta.Difference{
 						FieldPath: FieldPathRoot,
@@ -126,7 +126,7 @@ func Diff(d api.Domain, subject any) (*delta.Delta, error) {
 			}
 		}
 	} else if otherRoot != nil {
-		otherRootUUID := otherRoot.UUID()
+		otherRootUUID := otherRoot.UUID
 		del.Push(
 			delta.Difference{
 				FieldPath: FieldPathRoot,
@@ -137,10 +137,10 @@ func Diff(d api.Domain, subject any) (*delta.Delta, error) {
 		)
 	}
 
-	thisParent := d.Parent()
-	otherParent := other.Parent()
+	thisParent := d.Parent
+	otherParent := other.Parent
 	if thisParent != nil {
-		thisParentUUID := thisParent.UUID()
+		thisParentUUID := thisParent.UUID
 		if otherParent == nil {
 			del.Push(
 				delta.Difference{
@@ -151,8 +151,8 @@ func Diff(d api.Domain, subject any) (*delta.Delta, error) {
 				},
 			)
 		} else {
-			otherParentUUID := otherParent.UUID()
-			if thisParentUUID != otherParent.UUID() {
+			otherParentUUID := otherParent.UUID
+			if thisParentUUID != otherParent.UUID {
 				del.Push(
 					delta.Difference{
 						FieldPath: FieldPathParent,
@@ -164,7 +164,7 @@ func Diff(d api.Domain, subject any) (*delta.Delta, error) {
 			}
 		}
 	} else if otherParent != nil {
-		otherParentUUID := otherParent.UUID()
+		otherParentUUID := otherParent.UUID
 		del.Push(
 			delta.Difference{
 				FieldPath: FieldPathParent,
@@ -182,13 +182,13 @@ func Diff(d api.Domain, subject any) (*delta.Delta, error) {
 func diffNew(d api.Domain) (*delta.Delta, error) {
 	del := &delta.Delta{}
 
-	if d.System() != nil {
+	if d.System != nil {
 		del.Push(
 			delta.Difference{
 				FieldPath: FieldPathSystem,
 				Type:      delta.DifferenceTypeAdd,
 				From:      nil,
-				To:        d.System().UUID,
+				To:        d.System.UUID,
 			},
 		)
 	}
@@ -197,7 +197,7 @@ func diffNew(d api.Domain) (*delta.Delta, error) {
 			FieldPath: FieldPathUUID,
 			Type:      delta.DifferenceTypeAdd,
 			From:      nil,
-			To:        d.UUID(),
+			To:        d.UUID,
 		},
 	)
 	del.Push(
@@ -205,26 +205,26 @@ func diffNew(d api.Domain) (*delta.Delta, error) {
 			FieldPath: FieldPathName,
 			Type:      delta.DifferenceTypeAdd,
 			From:      nil,
-			To:        string(d.Name()),
+			To:        string(d.Name),
 		},
 	)
-	if d.Root() != nil {
+	if d.Root != nil {
 		del.Push(
 			delta.Difference{
 				FieldPath: FieldPathRoot,
 				Type:      delta.DifferenceTypeAdd,
 				From:      nil,
-				To:        d.Root().UUID(),
+				To:        d.Root.UUID,
 			},
 		)
 	}
-	if d.Parent() != nil {
+	if d.Parent != nil {
 		del.Push(
 			delta.Difference{
 				FieldPath: FieldPathParent,
 				Type:      delta.DifferenceTypeAdd,
 				From:      nil,
-				To:        d.Parent().UUID(),
+				To:        d.Parent.UUID,
 			},
 		)
 	}

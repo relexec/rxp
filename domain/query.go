@@ -176,11 +176,11 @@ type DomainPredicate struct {
 // Equal returns an Expression that will match things having a particular
 // Domain.
 func Equal(dom *api.Domain) query.Expression {
-	if dom.UUID() != "" {
-		return UUIDEqual(dom.UUID())
+	if dom.UUID != "" {
+		return UUIDEqual(dom.UUID)
 	}
-	if dom.System() == nil {
-		return NameEqual(dom.Name())
+	if dom.System == nil {
+		return NameEqual(dom.Name)
 	}
 	return query.UnaryExpression{
 		Predicate: DomainPredicate{
@@ -195,11 +195,11 @@ func Equal(dom *api.Domain) query.Expression {
 // NotEqual returns an Expression that will match things not having a
 // particular Domain.
 func NotEqual(dom *api.Domain) query.Expression {
-	if dom.UUID() != "" {
-		return UUIDNotEqual(dom.UUID())
+	if dom.UUID != "" {
+		return UUIDNotEqual(dom.UUID)
 	}
-	if dom.System() == nil {
-		return NameNotEqual(dom.Name())
+	if dom.System == nil {
+		return NameNotEqual(dom.Name)
 	}
 	return query.UnaryExpression{
 		Predicate: DomainPredicate{
@@ -216,7 +216,7 @@ func NotEqual(dom *api.Domain) query.Expression {
 // of specified Domain.
 func In(doms ...*api.Domain) query.Expression {
 	uuids := lo.Map(doms, func(dom *api.Domain, _ int) string {
-		return dom.UUID()
+		return dom.UUID
 	})
 	if !lo.Contains(uuids, "") {
 		return UUIDIn(uuids...)
@@ -232,7 +232,7 @@ func In(doms ...*api.Domain) query.Expression {
 // have any of a set of specified Domain.
 func NotIn(doms ...*api.Domain) query.Expression {
 	uuids := lo.Map(doms, func(dom *api.Domain, _ int) string {
-		return dom.UUID()
+		return dom.UUID
 	})
 	if !lo.Contains(uuids, "") {
 		return UUIDNotIn(uuids...)
@@ -322,11 +322,11 @@ type RootDomainPredicate struct {
 // RootEqual returns an Expression that will match domains having a particular
 // root Domain.
 func RootEqual(dom *api.Domain) query.Expression {
-	if dom.UUID() != "" {
-		return RootUUIDEqual(dom.UUID())
+	if dom.UUID != "" {
+		return RootUUIDEqual(dom.UUID)
 	}
-	if dom.System() == nil {
-		return RootNameEqual(dom.Name())
+	if dom.System == nil {
+		return RootNameEqual(dom.Name)
 	}
 	return query.UnaryExpression{
 		Predicate: RootDomainPredicate{

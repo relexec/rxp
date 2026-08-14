@@ -35,8 +35,8 @@ func Diff(kv api.KindVersion, subject any) (*delta.Delta, error) {
 
 	d := &delta.Delta{}
 
-	thisKind := string(kv.Kind().Name())
-	otherKind := string(other.Kind().Name())
+	thisKind := string(kv.Kind().Name)
+	otherKind := string(other.Kind().Name)
 	if thisKind != otherKind {
 		d.Push(
 			delta.Difference{
@@ -125,7 +125,7 @@ func diffNew(kv api.KindVersion) (*delta.Delta, error) {
 			FieldPath: FieldPathKind,
 			Type:      delta.DifferenceTypeAdd,
 			From:      nil,
-			To:        string(kv.Kind().Name()),
+			To:        string(kv.Kind().Name),
 		},
 	)
 	d.Push(

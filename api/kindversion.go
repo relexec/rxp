@@ -55,7 +55,7 @@ func (kv *KindVersion) SetSystem(system *System) {
 
 // Name returns the KindVersionName of the KindVersion.
 func (kv KindVersion) Name() KindVersionName {
-	return NewKindVersionName(kv.kind.Name(), kv.version)
+	return NewKindVersionName(kv.kind.Name, kv.version)
 }
 
 // Kind returns the Kind of the KindVersion.

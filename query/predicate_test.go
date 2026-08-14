@@ -29,15 +29,15 @@ func TestContainsPredicate(t *testing.T) {
 	}
 	ku := uuid.NewString()
 	kn := api.KindName("SomeKind")
-	k := kind.New(
-		kind.WithUUID(ku),
-		kind.WithName(kn),
-	)
+	k := api.Kind{
+		UUID: ku,
+		Name: kn,
+	}
 	v, err := semver.NewVersion("v0.0.1")
 	require.Nil(t, err)
 	kvn := api.NewKindVersionName(kn, *v)
 	kv := kindversion.New(
-		kindversion.WithKind(k),
+		kindversion.WithKind(&k),
 		kindversion.WithVersion(*v),
 	)
 	cases := []struct {
@@ -99,7 +99,7 @@ func TestContainsPredicate(t *testing.T) {
 		},
 		{
 			"KindEqual",
-			kind.Equal(k),
+			kind.Equal(&k),
 			true,
 		},
 		{

@@ -34,10 +34,10 @@ func Diff(k api.Kind, subject any) (*delta.Delta, error) {
 
 	d := &delta.Delta{}
 
-	thisSystem := k.System()
-	otherSystem := other.System()
+	thisSystem := k.System
+	otherSystem := other.System
 	if thisSystem != nil {
-		thisSystemUUID := k.System().UUID
+		thisSystemUUID := k.System.UUID
 		if otherSystem == nil {
 			d.Push(
 				delta.Difference{
@@ -72,8 +72,8 @@ func Diff(k api.Kind, subject any) (*delta.Delta, error) {
 		)
 	}
 
-	thisUUID := k.UUID()
-	otherUUID := other.UUID()
+	thisUUID := k.UUID
+	otherUUID := other.UUID
 	if thisUUID != otherUUID {
 		d.Push(
 			delta.Difference{
@@ -85,8 +85,8 @@ func Diff(k api.Kind, subject any) (*delta.Delta, error) {
 		)
 	}
 
-	thisName := string(k.Name())
-	otherName := string(other.Name())
+	thisName := string(k.Name)
+	otherName := string(other.Name)
 	if thisName != otherName {
 		d.Push(
 			delta.Difference{
@@ -97,13 +97,13 @@ func Diff(k api.Kind, subject any) (*delta.Delta, error) {
 			},
 		)
 	}
-	if k.Scope() != other.Scope() {
+	if k.Scope != other.Scope {
 		d.Push(
 			delta.Difference{
 				FieldPath: FieldPathScope,
 				Type:      delta.DifferenceTypeModify,
-				From:      k.Scope(),
-				To:        other.Scope(),
+				From:      k.Scope,
+				To:        other.Scope,
 			},
 		)
 	}
@@ -114,13 +114,13 @@ func Diff(k api.Kind, subject any) (*delta.Delta, error) {
 // new Kind (i.e. for the first generation)
 func diffNew(k api.Kind) (*delta.Delta, error) {
 	d := &delta.Delta{}
-	if k.System() != nil {
+	if k.System != nil {
 		d.Push(
 			delta.Difference{
 				FieldPath: FieldPathSystem,
 				Type:      delta.DifferenceTypeAdd,
 				From:      nil,
-				To:        k.System().UUID,
+				To:        k.System.UUID,
 			},
 		)
 	}
@@ -129,7 +129,7 @@ func diffNew(k api.Kind) (*delta.Delta, error) {
 			FieldPath: FieldPathUUID,
 			Type:      delta.DifferenceTypeAdd,
 			From:      nil,
-			To:        k.UUID(),
+			To:        k.UUID,
 		},
 	)
 	d.Push(
@@ -137,7 +137,7 @@ func diffNew(k api.Kind) (*delta.Delta, error) {
 			FieldPath: FieldPathName,
 			Type:      delta.DifferenceTypeAdd,
 			From:      nil,
-			To:        string(k.Name()),
+			To:        string(k.Name),
 		},
 	)
 	d.Push(
@@ -145,7 +145,7 @@ func diffNew(k api.Kind) (*delta.Delta, error) {
 			FieldPath: FieldPathScope,
 			Type:      delta.DifferenceTypeAdd,
 			From:      nil,
-			To:        k.Scope(),
+			To:        k.Scope,
 		},
 	)
 	return d, nil

@@ -36,10 +36,10 @@ func TestContainsPredicate(t *testing.T) {
 	v, err := semver.NewVersion("v0.0.1")
 	require.Nil(t, err)
 	kvn := api.NewKindVersionName(kn, *v)
-	kv := kindversion.New(
-		kindversion.WithKind(&k),
-		kindversion.WithVersion(*v),
-	)
+	kv := api.KindVersion{
+		Kind:    k,
+		Version: *v,
+	}
 	cases := []struct {
 		name    string
 		subject query.Expression
@@ -104,7 +104,7 @@ func TestContainsPredicate(t *testing.T) {
 		},
 		{
 			"KindVersionEqual",
-			kindversion.Equal(kv),
+			kindversion.Equal(&kv),
 			true,
 		},
 		{

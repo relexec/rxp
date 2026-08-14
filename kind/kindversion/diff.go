@@ -35,8 +35,8 @@ func Diff(kv api.KindVersion, subject any) (*delta.Delta, error) {
 
 	d := &delta.Delta{}
 
-	thisKind := string(kv.Kind().Name)
-	otherKind := string(other.Kind().Name)
+	thisKind := string(kv.Kind.Name)
+	otherKind := string(other.Kind.Name)
 	if thisKind != otherKind {
 		d.Push(
 			delta.Difference{
@@ -47,8 +47,8 @@ func Diff(kv api.KindVersion, subject any) (*delta.Delta, error) {
 			},
 		)
 	}
-	thisVersion := kv.Version().String()
-	otherVersion := other.Version().String()
+	thisVersion := kv.Version.String()
+	otherVersion := other.Version.String()
 	if thisVersion != otherVersion {
 		d.Push(
 			delta.Difference{
@@ -59,13 +59,13 @@ func Diff(kv api.KindVersion, subject any) (*delta.Delta, error) {
 			},
 		)
 	}
-	if kv.Schema() != nil {
-		thisSchemaBytes, err := kv.Schema().MarshalJSON()
+	if kv.Schema != nil {
+		thisSchemaBytes, err := kv.Schema.MarshalJSON()
 		if err != nil {
 			return nil, fmt.Errorf("failed marshaling JSONSchema: %w", err)
 		}
 		thisSchemaJSON := string(thisSchemaBytes)
-		if other.Schema() == nil {
+		if other.Schema == nil {
 			d.Push(
 				delta.Difference{
 					FieldPath: FieldPathSchema,
@@ -75,7 +75,7 @@ func Diff(kv api.KindVersion, subject any) (*delta.Delta, error) {
 				},
 			)
 		} else {
-			otherSchemaBytes, err := other.Schema().MarshalJSON()
+			otherSchemaBytes, err := other.Schema.MarshalJSON()
 			if err != nil {
 				return nil, fmt.Errorf("failed marshaling JSONSchema: %w", err)
 			}
@@ -92,8 +92,8 @@ func Diff(kv api.KindVersion, subject any) (*delta.Delta, error) {
 			}
 		}
 	} else {
-		if other.Schema() != nil {
-			otherSchemaBytes, err := other.Schema().MarshalJSON()
+		if other.Schema != nil {
+			otherSchemaBytes, err := other.Schema.MarshalJSON()
 			if err != nil {
 				return nil, fmt.Errorf("failed marshaling JSONSchema: %w", err)
 			}
@@ -125,7 +125,7 @@ func diffNew(kv api.KindVersion) (*delta.Delta, error) {
 			FieldPath: FieldPathKind,
 			Type:      delta.DifferenceTypeAdd,
 			From:      nil,
-			To:        string(kv.Kind().Name),
+			To:        string(kv.Kind.Name),
 		},
 	)
 	d.Push(
@@ -133,7 +133,7 @@ func diffNew(kv api.KindVersion) (*delta.Delta, error) {
 			FieldPath: FieldPathVersion,
 			Type:      delta.DifferenceTypeAdd,
 			From:      nil,
-			To:        kv.Version().String(),
+			To:        kv.Version.String(),
 		},
 	)
 	d.Push(

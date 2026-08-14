@@ -10,17 +10,19 @@ import (
 )
 
 type KindVersion struct {
-	// system contains the System containing the KindVersion.
-	system *System
-	// kind is the [api.Kind] that identifies the type of Objects represented
+	// System contains the System containing the KindVersion. This is a pointer
+	// to a System to allow for backends to default missing System information
+	// to their host system.
+	System *System `json:"system,omitempty"`
+	// Kind is the [api.Kind] that identifies the type of Objects represented
 	// by this KindVersion.
-	kind *Kind
+	Kind Kind `json:"kind"`
 	// version is the [semver.Version] that identifies the specific version of
 	// the Kind of Objects represented by this KindVersion.
-	version semver.Version
+	Version semver.Version `json:"version"`
 	// schema is the [jsonschema.Schema] that describes the Spec field
 	// composition of Object with this Kind+Version.
-	schema *schema.Schema
+	Schema *schema.Schema `json:"schema,omitempty"`
 	// schemaJSON stores a cache of the marshaled JSON for the
 	// [jsonschema.Schema] that describes the Spec field composition of the
 	// Objects with this Kind+Version.
@@ -29,65 +31,19 @@ type KindVersion struct {
 
 // Validate returns an error if the KindVersion is not valid.
 func (kv KindVersion) Validate() error {
-	k := kv.kind
-	if k == nil {
-		return errors.KindVersionMissingKind()
-	}
-	err := k.Validate()
+	err := kv.Kind.Validate()
 	if err != nil {
 		return err
 	}
-	if kv.schema == nil {
+	if kv.Schema == nil {
 		return errors.KindVersionMissingSchema(kv.Name())
 	}
 	return nil
 }
 
-// System returns the System of the KindVersion.
-func (kv KindVersion) System() *System {
-	return kv.system
-}
-
-// SetSystem sets the System of KindVersion.
-func (kv *KindVersion) SetSystem(system *System) {
-	kv.system = system
-}
-
 // Name returns the KindVersionName of the KindVersion.
 func (kv KindVersion) Name() KindVersionName {
-	return NewKindVersionName(kv.kind.Name, kv.version)
-}
-
-// Kind returns the Kind of the KindVersion.
-func (kv KindVersion) Kind() *Kind {
-	return kv.kind
-}
-
-// SetKind sets the Kind of the KindVersion.
-func (kv *KindVersion) SetKind(k *Kind) {
-	kv.kind = k
-}
-
-// Version returns the Version of the KindVersion.
-func (kv KindVersion) Version() semver.Version {
-	return kv.version
-}
-
-// SetKind sets the Version of the KindVersion.
-func (kv *KindVersion) SetVersion(ver semver.Version) {
-	kv.version = ver
-}
-
-// Schema returns a [jsonschema.Schema] that describes the desired state fields
-// of Objects with this KindVersion.
-func (kv KindVersion) Schema() *schema.Schema {
-	return kv.schema
-}
-
-// SetSchema sets the [jsonschema.Schema] that describes the desired state
-// fields of Objects with this KindVersion.
-func (kv *KindVersion) SetSchema(schema *schema.Schema) {
-	kv.schema = schema
+	return NewKindVersionName(kv.Kind.Name, kv.Version)
 }
 
 // SchemaJSON returns a string containing the [jsonschema.Schema] that
@@ -96,10 +52,10 @@ func (kv *KindVersion) SchemaJSON() (string, error) {
 	if kv.schemaJSON != "" {
 		return kv.schemaJSON, nil
 	}
-	if kv.schema == nil {
+	if kv.Schema == nil {
 		return "", nil
 	}
-	jsonb, err := kv.schema.MarshalJSON()
+	jsonb, err := kv.Schema.MarshalJSON()
 	if err != nil {
 		return "", fmt.Errorf(
 			"failed to marshal JSON for schema for %q: %w",

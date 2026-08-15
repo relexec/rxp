@@ -3,11 +3,11 @@ package api
 // Record is a base struct that describes some piece of data managed by rxp.
 type Record struct {
 	// systemInternalID contains the internal rxp backend implementation's
-	// identifier for thir Record. For backends that use relational databases
+	// identifier for the Record. For backends that use relational databases
 	// for persistence, this will most likely be an integer type that matches a
 	// SERIAL or ROWID in the underlying database table row that stores the
-	// record of thir Record.
-	systemInternalID any `json:"-"`
+	// record of the Record.
+	systemInternalID any
 }
 
 // SetSystemInternalID sets the Record's internal system identifier.
@@ -42,4 +42,32 @@ func (r Record) SystemInternalIDInt64() int64 {
 		return -1
 	}
 	return v
+}
+
+// TreeRecord is a base struct for data managed by rxp that is part of a tree
+// structure.
+type TreeRecord struct {
+	Record
+	// nestedSetLeft is the nested set model's left value for this node in the
+	// tree.
+	nestedSetLeft int64
+	// nestedSetRight is the nested set model's right value for this node in
+	// the tree.
+	nestedSetRight int64
+}
+
+// SetNestedSet sets the TreeNode's nested set left and right values.
+func (r *TreeRecord) SetNestedSet(left, right int64) {
+	r.nestedSetLeft = left
+	r.nestedSetRight = right
+}
+
+// NestedSetLeft returns the left value of the tree node's nested set.
+func (r TreeRecord) NestedSetLeft() int64 {
+	return r.nestedSetLeft
+}
+
+// NestedSetRight returns the right value of the tree node's nested set.
+func (r TreeRecord) NestedSetRight() int64 {
+	return r.nestedSetRight
 }

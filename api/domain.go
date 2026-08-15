@@ -6,6 +6,7 @@ import (
 
 // Domain describes a division or partition of a System.
 type Domain struct {
+	Record
 	// System contains the System containing the Domain. This is a pointer to a
 	// System to allow for backends to default missing System information to
 	// their host system.

@@ -5,6 +5,7 @@ import (
 )
 
 type Kind struct {
+	Record
 	// System contains the System containing the Kind. This is a pointer to a
 	// System to allow for backends to default missing System information to
 	// their host system.

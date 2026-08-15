@@ -10,6 +10,7 @@ import (
 )
 
 type KindVersion struct {
+	Record
 	// System contains the System containing the KindVersion. This is a pointer
 	// to a System to allow for backends to default missing System information
 	// to their host system.

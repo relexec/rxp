@@ -5,7 +5,11 @@ import (
 )
 
 // System represents the boundaries of an rxp system installation.
+//
+// An rxp system installation represents an independent division of rxp-managed
+// data.
 type System struct {
+	Record
 	// UUID contains the System's globally-unique identifier.
 	UUID string `json:"uuid"`
 	// Tag contains an optional string tag for the System. Note this is not

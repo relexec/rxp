@@ -24,6 +24,9 @@ type RunOptions struct {
 // RunTarget uniquely identifies an Object generation that contains the
 // *definition* of the thing that will be executed by Run.
 type RunTarget struct {
+	// NOTE(jaypipes): Record.SystemInternalID points to the internal ID of the
+	// Object+Generation record this RunTarget points at.
+	Record
 	// KindVersionName is the kind and version identifier for the type of
 	// Object describing the Runnable.
 	KindVersionName KindVersionName
@@ -127,6 +130,7 @@ type RunStats struct {
 
 // Run describes a thread of execution of some piece of work.
 type Run struct {
+	Record
 	// req contains information about the request to execute some piece of
 	// work.
 	req RunRequest

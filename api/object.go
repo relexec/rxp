@@ -36,7 +36,7 @@ type Object struct {
 	// Labels is the Object's collection of Labels.
 	Labels apicore.Labels
 	// Generation contains the generation of the Object's desired state.
-	Generation Generation
+	Generation apicore.Generation
 	// Spec contains the Object's desired state encoded as a JSON string.
 	Spec string
 }

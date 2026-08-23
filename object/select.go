@@ -2,6 +2,7 @@ package object
 
 import (
 	"github.com/relexec/rxp/api"
+	apicore "github.com/relexec/rxp/api/core"
 	"github.com/relexec/rxp/errors"
 )
 
@@ -16,7 +17,7 @@ type Selector struct {
 	// name is the Name to use when looking up the Object via name.
 	name string
 	// generation is the specific generation of the Object to select.
-	generation api.Generation
+	generation apicore.Generation
 }
 
 // System is the System to search for the Object in.
@@ -42,7 +43,7 @@ func (s Selector) Name() string {
 
 // Generation returns the specific Generation of the Object to select. If this
 // returns 0, the latest Object is selected.
-func (s Selector) Generation() api.Generation {
+func (s Selector) Generation() apicore.Generation {
 	return s.generation
 }
 
@@ -111,7 +112,7 @@ func ByName(name string) SelectOption {
 }
 
 // ByGeneration sets the Selector's Generation.
-func ByGeneration(generation api.Generation) SelectOption {
+func ByGeneration(generation apicore.Generation) SelectOption {
 	return func(s *Selector) {
 		s.generation = generation
 	}

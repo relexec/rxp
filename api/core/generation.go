@@ -1,4 +1,4 @@
-package api
+package apicore
 
 // Generation is a monotonically-incrementing counter of atomic desired state
 // mutations.

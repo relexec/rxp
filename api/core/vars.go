@@ -1,4 +1,4 @@
-package api
+package apicore
 
 // Vars is used as a generic container for input and output field variables.
 //

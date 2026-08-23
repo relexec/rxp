@@ -2,8 +2,6 @@ package apirun
 
 import (
 	"time"
-
-	"github.com/relexec/rxp/api"
 )
 
 // Stats contains timing information and other statistics scoped to a single
@@ -28,9 +26,7 @@ type Response struct {
 	// Stats contains timing information and other statistics scoped to a
 	// single call to Run.
 	Stats Stats
-	// Out contains any state fields the Runnable added to the Response. Note
-	// that for Run requests that were asynchronous (the default), this field
-	// will be empty. These values are persisted to the RunLog and callers can
-	// retrieve the values by polling the RunResponse via the RequestUUID.
-	Out api.Vars
+	// Out contains any state fields the Runnable added to the Response,
+	// encoded as a JSON string.
+	Out string
 }

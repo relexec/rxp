@@ -1,7 +1,7 @@
 package object
 
 import (
-	"github.com/relexec/rxp/api"
+	apicore "github.com/relexec/rxp/api/core"
 	"github.com/relexec/rxp/errors"
 	"github.com/relexec/rxp/query"
 )
@@ -155,9 +155,9 @@ func (p GenerationPredicate) Validate() error {
 	}
 	v := p.Value
 	switch v := v.(type) {
-	case []api.Generation:
+	case []apicore.Generation:
 		return nil
-	case api.Generation:
+	case apicore.Generation:
 		return nil
 	default:
 		return errors.PredicateUnsupportedValueType(v)
@@ -166,7 +166,7 @@ func (p GenerationPredicate) Validate() error {
 
 // GenerationEqual returns an Expression that will match things having a
 // particular Generation.
-func GenerationEqual(generation api.Generation) query.Expression {
+func GenerationEqual(generation apicore.Generation) query.Expression {
 	return query.UnaryExpression{
 		Predicate: GenerationPredicate{
 			query.BasePredicate{
@@ -179,7 +179,7 @@ func GenerationEqual(generation api.Generation) query.Expression {
 
 // GenerationNotEqual returns an Expression that will match things not having a
 // particular Generation.
-func GenerationNotEqual(generation api.Generation) query.Expression {
+func GenerationNotEqual(generation apicore.Generation) query.Expression {
 	return query.UnaryExpression{
 		Predicate: GenerationPredicate{
 			query.BasePredicate{
@@ -193,7 +193,7 @@ func GenerationNotEqual(generation api.Generation) query.Expression {
 
 // GenerationIn returns an Expression that will match things that have any of a
 // set of specified Generations.
-func GenerationIn(generations ...api.Generation) query.Expression {
+func GenerationIn(generations ...apicore.Generation) query.Expression {
 	// flatten IN to = when there's only one value...
 	if len(generations) == 1 {
 		return GenerationEqual(generations[0])
@@ -210,7 +210,7 @@ func GenerationIn(generations ...api.Generation) query.Expression {
 
 // GenerationNotIn returns an Expression that will match things that do not
 // have any of a set of specified Generations.
-func GenerationNotIn(generations ...api.Generation) query.Expression {
+func GenerationNotIn(generations ...apicore.Generation) query.Expression {
 	return query.UnaryExpression{
 		Predicate: GenerationPredicate{
 			query.BasePredicate{

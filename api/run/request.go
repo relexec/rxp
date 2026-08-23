@@ -20,7 +20,7 @@ type Request struct {
 	Target Target
 	// Caller contains information about the calling identity.
 	Caller api.Caller
-	// In contains the value of the input parameter when calling Run, encoded
+	// In contains the values of the input parameters when calling Run, encoded
 	// as a JSON string.
 	In string
 }

@@ -23,7 +23,7 @@ type Target struct {
 	// UUID is the identifier of the Object describing the Runnable.
 	UUID string
 	// Generation is the Object generation.
-	Generation api.Generation
+	Generation apicore.Generation
 }
 
 // Validate returns an error if the Target is not valid.

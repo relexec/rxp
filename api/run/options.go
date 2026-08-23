@@ -3,7 +3,7 @@ package apirun
 import (
 	"time"
 
-	"github.com/relexec/rxp/api"
+	apicore "github.com/relexec/rxp/api/core"
 )
 
 // Options describes optional per-request Run timeouts, retry behaviour and
@@ -14,9 +14,9 @@ type Options struct {
 	// Runnable to complete and the only field of the Response that is
 	// guaranteed to be populated is the RequestUUID field, which may be used
 	// by the caller to poll for the result of the Runnable at a later time.
-	Wait api.Wait
+	Wait apicore.Wait `json:"wait"`
 	// Timeout is the duration timeout for the entire call to Run.
-	Timeout time.Duration
+	Timeout time.Duration `json:"timeout"`
 	// Retry configures retry behaviour for the call to Run.
-	Retry api.Retry
+	Retry apicore.Retry `json:"retry"`
 }

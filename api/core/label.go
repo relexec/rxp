@@ -1,4 +1,4 @@
-package api
+package apicore
 
 // Label is a key/value pair that may be attached to an Object.
 //

@@ -34,7 +34,7 @@ type Object struct {
 	// Name is guaranteed within the Kind's Scope.
 	Name string
 	// Labels is the Object's collection of Labels.
-	Labels Labels
+	Labels apicore.Labels
 	// Generation contains the generation of the Object's desired state.
 	Generation Generation
 	// Spec contains the Object's desired state encoded as a JSON string.

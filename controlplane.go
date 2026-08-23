@@ -10,7 +10,6 @@ import (
 	"github.com/relexec/rxp/kind/kindversion"
 	"github.com/relexec/rxp/object"
 	"github.com/relexec/rxp/query"
-	"github.com/relexec/rxp/run"
 	"github.com/relexec/rxp/system"
 )
 
@@ -111,7 +110,7 @@ type ControlPlane interface {
 	RunRead(
 		context.Context,
 		apirun.Target,
-		run.Selector,
+		apirun.Selector,
 	) (*apirun.Run, error)
 	// RunWrite persists a single supplied Run to backend storage, Note
 	// that on successful write, the newly-created or updated Run is

@@ -1,4 +1,4 @@
-package run
+package apirun
 
 import "github.com/relexec/rxp/errors"
 

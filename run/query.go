@@ -2,6 +2,7 @@ package run
 
 import (
 	"github.com/relexec/rxp/api"
+	apirun "github.com/relexec/rxp/api/run"
 	"github.com/relexec/rxp/errors"
 	"github.com/relexec/rxp/query"
 )
@@ -117,9 +118,9 @@ func (p RootPredicate) Validate() error {
 	}
 	v := p.Value
 	switch v := v.(type) {
-	case []string:
+	case []*apirun.Run:
 		return nil
-	case string:
+	case *apirun.Run:
 		return nil
 	default:
 		return errors.PredicateUnsupportedValueType(v)
@@ -128,7 +129,7 @@ func (p RootPredicate) Validate() error {
 
 // RootEqual returns an Expression that will match runs having a particular
 // Root.
-func RootEqual(run *api.Run) query.Expression {
+func RootEqual(run *apirun.Run) query.Expression {
 	return query.UnaryExpression{
 		Predicate: RootPredicate{
 			query.BasePredicate{
@@ -141,7 +142,7 @@ func RootEqual(run *api.Run) query.Expression {
 
 // RootIn returns an Expression that will match runs that have any of the
 // supplied Roots.
-func RootIn(runs ...*api.Run) query.Expression {
+func RootIn(runs ...*apirun.Run) query.Expression {
 	// flatten IN to = when there's only one value...
 	if len(runs) == 1 {
 		return RootEqual(runs[0])
@@ -217,9 +218,9 @@ func (p TargetPredicate) Validate() error {
 	}
 	v := p.Value
 	switch v := v.(type) {
-	case []string:
+	case []*api.Object:
 		return nil
-	case string:
+	case *api.Object:
 		return nil
 	default:
 		return errors.PredicateUnsupportedValueType(v)

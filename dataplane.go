@@ -3,16 +3,16 @@ package rxp
 import (
 	"context"
 
-	"github.com/relexec/rxp/api"
+	apirun "github.com/relexec/rxp/api/run"
 )
 
 // DataPlane is the interface that rxp backends implement for data plane
 // operations.
 type DataPlane interface {
-	// RunEventsWrite atomically writes the RunEvents for the supplied Run.
+	// RunEventsWrite atomically writes the Events for the supplied Run.
 	RunEventsWrite(
 		context.Context,
-		api.Run,
-		[]api.RunEvent,
+		apirun.Run,
+		[]apirun.Event,
 	) error
 }

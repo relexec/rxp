@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/relexec/rxp/api"
+	apirun "github.com/relexec/rxp/api/run"
 	"github.com/relexec/rxp/domain"
 	"github.com/relexec/rxp/kind"
 	"github.com/relexec/rxp/kind/kindversion"
@@ -109,20 +110,20 @@ type ControlPlane interface {
 	// RunRead reads a single Run from persistent storage.
 	RunRead(
 		context.Context,
-		api.RunTarget,
+		apirun.Target,
 		run.Selector,
-	) (*api.Run, error)
+	) (*apirun.Run, error)
 	// RunWrite persists a single supplied Run to backend storage, Note
 	// that on successful write, the newly-created or updated Run is
 	// returned.
 	RunWrite(
 		context.Context,
-		api.Run,
-	) (*api.Run, error)
+		apirun.Run,
+	) (*apirun.Run, error)
 	// RunQuery queries zero or more Runs from persistent storage.
 	RunQuery(
 		context.Context,
 		query.Expression,
 		...query.Option,
-	) (*query.Result[*api.Run], error)
+	) (*query.Result[*apirun.Run], error)
 }

@@ -17,7 +17,7 @@ type Kind struct {
 	Name KindName
 	// Scope is the uniqueness constraint of the names of Objects having this
 	// Kind.
-	Scope Scope
+	Scope apicore.Scope
 }
 
 // Validate returns an error if the Kind is not valid.

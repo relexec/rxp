@@ -1,4 +1,4 @@
-package api
+package apicore
 
 // Scope refers to the extent to which Names of instances of a Type of thing
 // are unique.

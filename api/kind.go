@@ -1,11 +1,12 @@
 package api
 
 import (
+	apicore "github.com/relexec/rxp/api/core"
 	"github.com/relexec/rxp/errors"
 )
 
 type Kind struct {
-	Record
+	apicore.Record
 	// System contains the System containing the Kind. This is a pointer to a
 	// System to allow for backends to default missing System information to
 	// their host system.

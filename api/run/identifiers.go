@@ -1,11 +1,11 @@
 package apirun
 
-import "github.com/relexec/rxp/api"
+import apicore "github.com/relexec/rxp/api/core"
 
 // Identifiers contains all the information needed to identify a particular
 // Run.
 type Identifiers struct {
-	api.Record
+	apicore.Record
 	// UUID is the globally-unique string identifiers for the Run.
 	UUID string
 	// Root points at the root Run. If this *is* a root Run, this is nil.

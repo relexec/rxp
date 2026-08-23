@@ -2,6 +2,7 @@ package apirun
 
 import (
 	"github.com/relexec/rxp/api"
+	apicore "github.com/relexec/rxp/api/core"
 	"github.com/relexec/rxp/errors"
 )
 
@@ -10,7 +11,7 @@ import (
 type Target struct {
 	// NOTE(jaypipes): Record.SystemInternalID points to the internal ID of the
 	// Object+Generation record this RunTarget points at.
-	api.Record
+	apicore.Record
 	// KindVersionName is the kind and version identifier for the type of
 	// Object describing the Runnable.
 	KindVersionName api.KindVersionName

@@ -5,12 +5,13 @@ import (
 
 	"github.com/Masterminds/semver/v3"
 
+	apicore "github.com/relexec/rxp/api/core"
 	"github.com/relexec/rxp/errors"
 	"github.com/relexec/rxp/kind/kindversion/schema"
 )
 
 type KindVersion struct {
-	Record
+	apicore.Record
 	// System contains the System containing the KindVersion. This is a pointer
 	// to a System to allow for backends to default missing System information
 	// to their host system.

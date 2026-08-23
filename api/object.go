@@ -1,5 +1,7 @@
 package api
 
+import apicore "github.com/relexec/rxp/api/core"
+
 // Object is an *instance* of a KindVersion.
 //
 // Object is designed for read-heavy, write-seldom entities that need strict
@@ -16,7 +18,7 @@ package api
 // structures with a `Key` and optional `Value` that can be used to categorize
 // Objects and filter them in query operations.
 type Object struct {
-	Record
+	apicore.Record
 	// KindVersionName is the kind and version identifier for the type of
 	// Object.
 	KindVersionName KindVersionName

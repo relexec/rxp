@@ -1,6 +1,7 @@
 package api
 
 import (
+	apicore "github.com/relexec/rxp/api/core"
 	"github.com/relexec/rxp/errors"
 )
 
@@ -9,7 +10,7 @@ import (
 // An rxp system installation represents an independent division of rxp-managed
 // data.
 type System struct {
-	Record
+	apicore.Record
 	// UUID contains the System's globally-unique identifier.
 	UUID string `json:"uuid"`
 	// Tag contains an optional string tag for the System. Note this is not

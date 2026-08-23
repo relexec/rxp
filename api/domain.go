@@ -1,12 +1,13 @@
 package api
 
 import (
+	apicore "github.com/relexec/rxp/api/core"
 	"github.com/relexec/rxp/errors"
 )
 
 // Domain describes a division or partition of a System.
 type Domain struct {
-	TreeRecord
+	apicore.NestedSetRecord
 	// System contains the System containing the Domain. This is a pointer to a
 	// System to allow for backends to default missing System information to
 	// their host system.

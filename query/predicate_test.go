@@ -6,8 +6,8 @@ import (
 	"github.com/Masterminds/semver/v3"
 	"github.com/google/uuid"
 	"github.com/relexec/rxp/api"
+	apidomain "github.com/relexec/rxp/api/domain"
 	apikind "github.com/relexec/rxp/api/kind"
-	"github.com/relexec/rxp/domain"
 	"github.com/relexec/rxp/kind/kindversion"
 	"github.com/relexec/rxp/query"
 	"github.com/stretchr/testify/require"
@@ -51,23 +51,23 @@ func TestContainsPredicate(t *testing.T) {
 			false,
 		},
 		{
-			"DomainNameEqual",
-			domain.NameEqual(api.DomainName("some.domain")),
+			"NameEqual",
+			apidomain.NameEqual(apidomain.Name("some.domain")),
 			false,
 		},
 		{
-			"Or with two DomainNameEquals",
+			"Or with two NameEquals",
 			query.Or(
-				domain.NameEqual(api.DomainName("some.domain")),
-				domain.NameEqual(api.DomainName("other.domain")),
+				apidomain.NameEqual(apidomain.Name("some.domain")),
+				apidomain.NameEqual(apidomain.Name("other.domain")),
 			),
 			false,
 		},
 		{
-			"And with two DomainNameEquals",
+			"And with two NameEquals",
 			query.And(
-				domain.NameEqual(api.DomainName("some.domain")),
-				domain.NameEqual(api.DomainName("other.domain")),
+				apidomain.NameEqual(apidomain.Name("some.domain")),
+				apidomain.NameEqual(apidomain.Name("other.domain")),
 			),
 			false,
 		},
@@ -82,18 +82,18 @@ func TestContainsPredicate(t *testing.T) {
 			true,
 		},
 		{
-			"Or with KindNameEqual and DomainNameEqual",
+			"Or with KindNameEqual and NameEqual",
 			query.Or(
 				apikind.NameEqual(kn),
-				domain.NameEqual(api.DomainName("other.domain")),
+				apidomain.NameEqual(apidomain.Name("other.domain")),
 			),
 			true,
 		},
 		{
-			"And with KindNameEqual and DomainNameEqual",
+			"And with KindNameEqual and NameEqual",
 			query.And(
 				apikind.NameEqual(kn),
-				domain.NameEqual(api.DomainName("other.domain")),
+				apidomain.NameEqual(apidomain.Name("other.domain")),
 			),
 			true,
 		},

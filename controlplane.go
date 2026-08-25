@@ -4,10 +4,10 @@ import (
 	"context"
 
 	"github.com/relexec/rxp/api"
+	apidomain "github.com/relexec/rxp/api/domain"
 	apikind "github.com/relexec/rxp/api/kind"
 	apirun "github.com/relexec/rxp/api/run"
 	apisystem "github.com/relexec/rxp/api/system"
-	"github.com/relexec/rxp/domain"
 	"github.com/relexec/rxp/kind/kindversion"
 	"github.com/relexec/rxp/object"
 	"github.com/relexec/rxp/query"
@@ -35,19 +35,19 @@ type ControlPlane interface {
 	// DomainRead reads a Domain from persistent storage.
 	DomainRead(
 		context.Context,
-		domain.Selector,
-	) (*api.Domain, error)
+		apidomain.Selector,
+	) (*apidomain.Domain, error)
 	// DomainWrite atomically writes the supplied Domain to persistent storage.
 	DomainWrite(
 		context.Context,
-		api.Domain,
+		apidomain.Domain,
 	) error
 	// DomainQuery queries zero or more Domains from persistent storage.
 	DomainQuery(
 		context.Context,
 		query.Expression,
 		...query.Option,
-	) (*query.Result[*api.Domain], error)
+	) (*query.Result[*apidomain.Domain], error)
 
 	// KindRead reads a Kind from persistent storage.
 	KindRead(

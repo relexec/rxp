@@ -1,9 +1,8 @@
-package domain
+package apidomain
 
 import (
 	"github.com/samber/lo"
 
-	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/errors"
 	"github.com/relexec/rxp/query"
 )
@@ -19,13 +18,13 @@ func (p NamePredicate) Validate() error {
 	}
 	v := p.Value
 	switch v := v.(type) {
-	case []api.DomainName:
+	case []Name:
 		for _, dn := range v {
 			if err := dn.Validate(); err != nil {
 				return errors.PredicateInvalid(err.Error())
 			}
 		}
-	case api.DomainName:
+	case Name:
 		return v.Validate()
 	default:
 		return errors.PredicateUnsupportedValueType(v)
@@ -34,8 +33,8 @@ func (p NamePredicate) Validate() error {
 }
 
 // NameEqual returns an Expression that will match things having a
-// particular DomainName.
-func NameEqual(name api.DomainName) query.Expression {
+// particular Name.
+func NameEqual(name Name) query.Expression {
 	return query.UnaryExpression{
 		Predicate: NamePredicate{
 			query.BasePredicate{
@@ -47,8 +46,8 @@ func NameEqual(name api.DomainName) query.Expression {
 }
 
 // NameNotEqual returns an Expression that will match things not having a
-// particular DomainName.
-func NameNotEqual(name api.DomainName) query.Expression {
+// particular Name.
+func NameNotEqual(name Name) query.Expression {
 	return query.UnaryExpression{
 		Predicate: NamePredicate{
 			query.BasePredicate{
@@ -61,8 +60,8 @@ func NameNotEqual(name api.DomainName) query.Expression {
 }
 
 // NameIn returns an Expression that will match things that have any of a
-// set of specified DomainNames.
-func NameIn(names ...api.DomainName) query.Expression {
+// set of specified Names.
+func NameIn(names ...Name) query.Expression {
 	// flatten IN to = when there's only one value...
 	if len(names) == 1 {
 		return NameEqual(names[0])
@@ -78,8 +77,8 @@ func NameIn(names ...api.DomainName) query.Expression {
 }
 
 // NameNotIn returns an Expression that will match things that do not
-// have any of a set of specified DomainNames.
-func NameNotIn(names ...api.DomainName) query.Expression {
+// have any of a set of specified Names.
+func NameNotIn(names ...Name) query.Expression {
 	return query.UnaryExpression{
 		Predicate: NamePredicate{
 			query.BasePredicate{
@@ -175,7 +174,7 @@ type DomainPredicate struct {
 
 // Equal returns an Expression that will match things having a particular
 // Domain.
-func Equal(dom *api.Domain) query.Expression {
+func Equal(dom *Domain) query.Expression {
 	if dom.UUID != "" {
 		return UUIDEqual(dom.UUID)
 	}
@@ -194,7 +193,7 @@ func Equal(dom *api.Domain) query.Expression {
 
 // NotEqual returns an Expression that will match things not having a
 // particular Domain.
-func NotEqual(dom *api.Domain) query.Expression {
+func NotEqual(dom *Domain) query.Expression {
 	if dom.UUID != "" {
 		return UUIDNotEqual(dom.UUID)
 	}
@@ -214,8 +213,8 @@ func NotEqual(dom *api.Domain) query.Expression {
 
 // In returns an Expression that will match things that have any of a set
 // of specified Domain.
-func In(doms ...*api.Domain) query.Expression {
-	uuids := lo.Map(doms, func(dom *api.Domain, _ int) string {
+func In(doms ...*Domain) query.Expression {
+	uuids := lo.Map(doms, func(dom *Domain, _ int) string {
 		return dom.UUID
 	})
 	if !lo.Contains(uuids, "") {
@@ -230,8 +229,8 @@ func In(doms ...*api.Domain) query.Expression {
 
 // NotIn returns an Expression that will match things that do not
 // have any of a set of specified Domain.
-func NotIn(doms ...*api.Domain) query.Expression {
-	uuids := lo.Map(doms, func(dom *api.Domain, _ int) string {
+func NotIn(doms ...*Domain) query.Expression {
+	uuids := lo.Map(doms, func(dom *Domain, _ int) string {
 		return dom.UUID
 	})
 	if !lo.Contains(uuids, "") {
@@ -255,13 +254,13 @@ func (p RootNamePredicate) Validate() error {
 	}
 	v := p.Value
 	switch v := v.(type) {
-	case []api.DomainName:
+	case []Name:
 		for _, dn := range v {
 			if err := dn.Validate(); err != nil {
 				return errors.PredicateInvalid(err.Error())
 			}
 		}
-	case api.DomainName:
+	case Name:
 		return v.Validate()
 	default:
 		return errors.PredicateUnsupportedValueType(v)
@@ -270,8 +269,8 @@ func (p RootNamePredicate) Validate() error {
 }
 
 // RootNameEqual returns an Expression that will match domains having a
-// particular DomainName as their root Domain.
-func RootNameEqual(name api.DomainName) query.Expression {
+// particular Name as their root Domain.
+func RootNameEqual(name Name) query.Expression {
 	return query.UnaryExpression{
 		Predicate: RootNamePredicate{
 			query.BasePredicate{
@@ -321,7 +320,7 @@ type RootDomainPredicate struct {
 
 // RootEqual returns an Expression that will match domains having a particular
 // root Domain.
-func RootEqual(dom *api.Domain) query.Expression {
+func RootEqual(dom *Domain) query.Expression {
 	if dom.UUID != "" {
 		return RootUUIDEqual(dom.UUID)
 	}
@@ -349,13 +348,13 @@ func (p ParentNamePredicate) Validate() error {
 	}
 	v := p.Value
 	switch v := v.(type) {
-	case []api.DomainName:
+	case []Name:
 		for _, dn := range v {
 			if err := dn.Validate(); err != nil {
 				return errors.PredicateInvalid(err.Error())
 			}
 		}
-	case api.DomainName:
+	case Name:
 		return v.Validate()
 	default:
 		return errors.PredicateUnsupportedValueType(v)
@@ -364,9 +363,9 @@ func (p ParentNamePredicate) Validate() error {
 }
 
 // ParentNameEqual returns an Expression that will match domains having a
-// particular DomainName as their parent Domain and any of that Domain's child
+// particular Name as their parent Domain and any of that Domain's child
 // domains.
-func ParentNameEqual(name api.DomainName) query.Expression {
+func ParentNameEqual(name Name) query.Expression {
 	return query.UnaryExpression{
 		Predicate: ParentNamePredicate{
 			query.BasePredicate{
@@ -416,7 +415,7 @@ type ParentDomainPredicate struct {
 
 // ParentEqual returns an Expression that will match domains that are in the
 // supplied Domain and any of that Domain's child domains.
-func ParentEqual(dom *api.Domain) query.Expression {
+func ParentEqual(dom *Domain) query.Expression {
 	return query.UnaryExpression{
 		Predicate: ParentDomainPredicate{
 			query.BasePredicate{

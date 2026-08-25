@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 
+	apidomain "github.com/relexec/rxp/api/domain"
 	apisystem "github.com/relexec/rxp/api/system"
 	"github.com/relexec/rxp/errors"
 )
@@ -26,7 +27,7 @@ type Caller struct {
 	// scoped to. Calling systems may add this Domain to the API call request
 	// context automatically during authentication to avoid a caller needing to
 	// manually specify a Domain UUID in queries.
-	Domain *Domain
+	Domain *apidomain.Domain
 }
 
 // Validate returns an error if the Caller is not valid.

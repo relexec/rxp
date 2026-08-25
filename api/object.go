@@ -2,6 +2,7 @@ package api
 
 import (
 	apicore "github.com/relexec/rxp/api/core"
+	apidomain "github.com/relexec/rxp/api/domain"
 	apikind "github.com/relexec/rxp/api/kind"
 	apisystem "github.com/relexec/rxp/api/system"
 )
@@ -33,7 +34,7 @@ type Object struct {
 	// UUID stores the Object's globally-unique identifier.
 	UUID string
 	// Domain is the optional Domain.
-	Domain *Domain
+	Domain *apidomain.Domain
 	// Name is the human-readable name for the Object. The uniqueness of the
 	// Name is guaranteed within the Kind's Scope.
 	Name string

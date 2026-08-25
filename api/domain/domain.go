@@ -1,4 +1,4 @@
-package api
+package apidomain
 
 import (
 	apicore "github.com/relexec/rxp/api/core"
@@ -22,7 +22,7 @@ type Domain struct {
 	//
 	// A Domain's Name must be unique within the scope of the `rxp` system
 	// installation.
-	Name DomainName `json:"name"`
+	Name Name `json:"name"`
 	// Root contains a pointer to the root Domain, if any. If empty, the Domain
 	// is itself the root Domain.
 	Root *Domain `json:"root,omitempty"`

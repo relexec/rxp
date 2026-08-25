@@ -1,10 +1,8 @@
-package domain
+package apidomain
 
 import (
 	"github.com/relexec/delta"
 	"github.com/relexec/delta/fieldpath"
-
-	"github.com/relexec/rxp/api"
 )
 
 var (
@@ -20,14 +18,14 @@ var (
 //
 // If the argument is the [delta.ZeroGen] sentinel, the returned [delta.Delta]
 // represents instructions to create the thing.
-func Diff(d api.Domain, subject any) (*delta.Delta, error) {
-	var other *api.Domain
+func Diff(d Domain, subject any) (*delta.Delta, error) {
+	var other *Domain
 	switch subject := subject.(type) {
 	case delta.ZeroGen:
 		return diffNew(d)
-	case api.Domain:
+	case Domain:
 		other = &subject
-	case *api.Domain:
+	case *Domain:
 		other = subject
 	default:
 		return nil, delta.CannotCompareTypes(d, subject)
@@ -179,7 +177,7 @@ func Diff(d api.Domain, subject any) (*delta.Delta, error) {
 
 // diffNew returns a [delta.Delta] containing instructions to make the Domain as a
 // new Domain (i.e. for the first generation)
-func diffNew(d api.Domain) (*delta.Delta, error) {
+func diffNew(d Domain) (*delta.Delta, error) {
 	del := &delta.Delta{}
 
 	if d.System != nil {

@@ -1,38 +1,38 @@
-package domain_test
+package apidomain_test
 
 import (
 	"testing"
 
 	"github.com/google/uuid"
-	"github.com/relexec/rxp/api"
+	apidomain "github.com/relexec/rxp/api/domain"
 	apisystem "github.com/relexec/rxp/api/system"
 	"github.com/stretchr/testify/require"
 )
 
 func TestDomain_Validate(t *testing.T) {
 	sys := apisystem.System{UUID: uuid.NewString()}
-	domWithSystemName := api.DomainName("dom.with.system")
-	domWithSystem := api.Domain{
+	domWithSystemName := apidomain.Name("dom.with.system")
+	domWithSystem := apidomain.Domain{
 		UUID:   uuid.NewString(),
 		System: &sys,
 		Name:   domWithSystemName,
 	}
-	domWithParentNoRootName := api.DomainName("dom.with.parent.no.root")
-	domWithParentNoRoot := api.Domain{
+	domWithParentNoRootName := apidomain.Name("dom.with.parent.no.root")
+	domWithParentNoRoot := apidomain.Domain{
 		UUID:   uuid.NewString(),
 		Parent: &domWithSystem,
 		Name:   domWithParentNoRootName,
 	}
-	domWithParentName := api.DomainName("dom.with.parent")
-	domWithParent := api.Domain{
+	domWithParentName := apidomain.Name("dom.with.parent")
+	domWithParent := apidomain.Domain{
 		UUID:   uuid.NewString(),
 		Parent: &domWithSystem,
 		Root:   &domWithSystem,
 		Name:   domWithParentName,
 	}
 	secondSystem := apisystem.System{UUID: uuid.NewString()}
-	domWithParentDiffSystemName := api.DomainName("dom.with.diff.system")
-	domWithParentDiffSystem := api.Domain{
+	domWithParentDiffSystemName := apidomain.Name("dom.with.diff.system")
+	domWithParentDiffSystem := apidomain.Domain{
 		System: &secondSystem,
 		UUID:   uuid.NewString(),
 		Parent: &domWithSystem,
@@ -42,7 +42,7 @@ func TestDomain_Validate(t *testing.T) {
 
 	cases := []struct {
 		name     string
-		subject  api.Domain
+		subject  apidomain.Domain
 		expError string
 	}{
 		{

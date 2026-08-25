@@ -1,17 +1,17 @@
-package api_test
+package apidomain_test
 
 import (
 	"strings"
 	"testing"
 
-	"github.com/relexec/rxp/api"
+	apidomain "github.com/relexec/rxp/api/domain"
 	"github.com/stretchr/testify/require"
 )
 
-func TestDomainName(t *testing.T) {
+func TestName(t *testing.T) {
 	cases := []struct {
 		name             string
-		subject          api.DomainName
+		subject          apidomain.Name
 		expValidateError string
 	}{
 		{
@@ -26,8 +26,8 @@ func TestDomainName(t *testing.T) {
 		},
 		{
 			"max length exceeded",
-			api.DomainName(
-				strings.Repeat("X", api.DomainNameMaxLength+1),
+			apidomain.Name(
+				strings.Repeat("X", apidomain.NameMaxLength+1),
 			),
 			"max length exceeded",
 		},

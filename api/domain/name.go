@@ -1,4 +1,4 @@
-package api
+package apidomain
 
 import (
 	"strings"
@@ -8,25 +8,25 @@ import (
 )
 
 const (
-	DomainNameMaxLength = 253
-	DomainNamePattern   = `^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$`
+	NameMaxLength = 253
+	NamePattern   = `^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$`
 )
 
-// DomainName is a DNS-formatted (RFC 1035-compliant) name less than 254
+// Name is a DNS-formatted (RFC 1035-compliant) name less than 254
 // characters.
 //
-// A DomainName must be unique within the scope of the `rxp` system
+// A Name must be unique within the scope of the `rxp` system
 // installation.
-type DomainName string
+type Name string
 
 // Validate returns an error if the Domain is invalid.
 //
 // Note that we do not use regexp parsing here for performance reasons.
-func (n DomainName) Validate() error {
+func (n Name) Validate() error {
 	if len(n) == 0 {
 		return errors.ErrDomainNameRequired
 	}
-	if len(n) > DomainNameMaxLength {
+	if len(n) > NameMaxLength {
 		return errors.ErrDomainNameMaxLengthExceeded
 	}
 	first := rune(n[0])

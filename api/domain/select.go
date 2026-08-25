@@ -1,7 +1,6 @@
-package domain
+package apidomain
 
 import (
-	"github.com/relexec/rxp/api"
 	apisystem "github.com/relexec/rxp/api/system"
 	"github.com/relexec/rxp/errors"
 )
@@ -13,7 +12,7 @@ type Selector struct {
 	// system is the System to find the Domain in.
 	system *apisystem.System
 	// name is the name to look up the Domain for.
-	name api.DomainName
+	name Name
 }
 
 // UUID returns the globally-unique identifier of the Domain being selected.
@@ -27,7 +26,7 @@ func (s Selector) System() *apisystem.System {
 }
 
 // Name returns the name to use when looking up the Domain.
-func (s Selector) Name() api.DomainName {
+func (s Selector) Name() Name {
 	return s.name
 }
 
@@ -67,7 +66,7 @@ func BySystem(system *apisystem.System) SelectOption {
 }
 
 // ByName sets the Selector's Name.
-func ByName(name api.DomainName) SelectOption {
+func ByName(name Name) SelectOption {
 	return func(s *Selector) {
 		s.name = name
 	}

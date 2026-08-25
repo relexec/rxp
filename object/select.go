@@ -1,8 +1,8 @@
 package object
 
 import (
-	"github.com/relexec/rxp/api"
 	apicore "github.com/relexec/rxp/api/core"
+	apidomain "github.com/relexec/rxp/api/domain"
 	apisystem "github.com/relexec/rxp/api/system"
 	"github.com/relexec/rxp/errors"
 )
@@ -14,7 +14,7 @@ type Selector struct {
 	// system is the System to find the Object in.
 	system *apisystem.System
 	// domain is the Domain to use when looking up the Object via name.
-	domain *api.Domain
+	domain *apidomain.Domain
 	// name is the Name to use when looking up the Object via name.
 	name string
 	// generation is the specific generation of the Object to select.
@@ -33,7 +33,7 @@ func (s Selector) UUID() string {
 }
 
 // Domain returns the Domain to use when looking up the Object via name.
-func (s Selector) Domain() *api.Domain {
+func (s Selector) Domain() *apidomain.Domain {
 	return s.domain
 }
 
@@ -89,7 +89,7 @@ func BySystem(system *apisystem.System) SelectOption {
 }
 
 // ByDomain sets the Selector's Domain.
-func ByDomain(domain *api.Domain) SelectOption {
+func ByDomain(domain *apidomain.Domain) SelectOption {
 	return func(s *Selector) {
 		s.domain = domain
 	}
@@ -99,7 +99,7 @@ func ByDomain(domain *api.Domain) SelectOption {
 func ByDomainUUID(uuid string) SelectOption {
 	return func(s *Selector) {
 		if s.domain == nil {
-			s.domain = &api.Domain{}
+			s.domain = &apidomain.Domain{}
 		}
 		s.domain.UUID = uuid
 	}

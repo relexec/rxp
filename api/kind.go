@@ -2,6 +2,7 @@ package api
 
 import (
 	apicore "github.com/relexec/rxp/api/core"
+	apisystem "github.com/relexec/rxp/api/system"
 	"github.com/relexec/rxp/errors"
 )
 
@@ -10,7 +11,7 @@ type Kind struct {
 	// System contains the System containing the Kind. This is a pointer to a
 	// System to allow for backends to default missing System information to
 	// their host system.
-	System *System
+	System *apisystem.System
 	// UUID stores the Kind's globally-unique identifier.
 	UUID string
 	// Name is the name of the Kind.

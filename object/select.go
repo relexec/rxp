@@ -3,6 +3,7 @@ package object
 import (
 	"github.com/relexec/rxp/api"
 	apicore "github.com/relexec/rxp/api/core"
+	apisystem "github.com/relexec/rxp/api/system"
 	"github.com/relexec/rxp/errors"
 )
 
@@ -11,7 +12,7 @@ type Selector struct {
 	// uuid is the globally-unique string identifier to look up the Object for.
 	uuid string
 	// system is the System to find the Object in.
-	system *api.System
+	system *apisystem.System
 	// domain is the Domain to use when looking up the Object via name.
 	domain *api.Domain
 	// name is the Name to use when looking up the Object via name.
@@ -21,7 +22,7 @@ type Selector struct {
 }
 
 // System is the System to search for the Object in.
-func (s Selector) System() *api.System {
+func (s Selector) System() *apisystem.System {
 	return s.system
 }
 
@@ -81,7 +82,7 @@ func ByUUID(uuid string) SelectOption {
 }
 
 // BySystem sets the Selector's System.
-func BySystem(system *api.System) SelectOption {
+func BySystem(system *apisystem.System) SelectOption {
 	return func(s *Selector) {
 		s.system = system
 	}

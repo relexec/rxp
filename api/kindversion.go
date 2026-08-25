@@ -6,6 +6,7 @@ import (
 	"github.com/Masterminds/semver/v3"
 
 	apicore "github.com/relexec/rxp/api/core"
+	apisystem "github.com/relexec/rxp/api/system"
 	"github.com/relexec/rxp/errors"
 	"github.com/relexec/rxp/kind/kindversion/schema"
 )
@@ -15,7 +16,7 @@ type KindVersion struct {
 	// System contains the System containing the KindVersion. This is a pointer
 	// to a System to allow for backends to default missing System information
 	// to their host system.
-	System *System `json:"system,omitempty"`
+	System *apisystem.System `json:"system,omitempty"`
 	// Kind is the [api.Kind] that identifies the type of Objects represented
 	// by this KindVersion.
 	Kind Kind `json:"kind"`

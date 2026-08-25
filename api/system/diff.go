@@ -1,10 +1,8 @@
-package system
+package apisystem
 
 import (
 	"github.com/relexec/delta"
 	"github.com/relexec/delta/fieldpath"
-
-	"github.com/relexec/rxp/api"
 )
 
 var (
@@ -17,14 +15,14 @@ var (
 //
 // If the argument is the [delta.ZeroGen] sentinel, the returned [delta.Delta]
 // represents instructions to create the thing.
-func Diff(s api.System, subject any) (*delta.Delta, error) {
-	var other *api.System
+func Diff(s System, subject any) (*delta.Delta, error) {
+	var other *System
 	switch subject := subject.(type) {
 	case delta.ZeroGen:
 		return diffNew(s)
-	case api.System:
+	case System:
 		other = &subject
-	case *api.System:
+	case *System:
 		other = subject
 	default:
 		return nil, delta.CannotCompareTypes(s, subject)
@@ -62,7 +60,7 @@ func Diff(s api.System, subject any) (*delta.Delta, error) {
 
 // diffNew returns a [delta.Delta] containing instructions to make the System as a
 // new System (i.e. for the first generation)
-func diffNew(s api.System) (*delta.Delta, error) {
+func diffNew(s System) (*delta.Delta, error) {
 	d := &delta.Delta{}
 
 	d.Push(

@@ -1,4 +1,4 @@
-package api
+package apisystem
 
 import (
 	apicore "github.com/relexec/rxp/api/core"

@@ -3,6 +3,7 @@ package apirun
 import (
 	"github.com/relexec/rxp/api"
 	apicore "github.com/relexec/rxp/api/core"
+	apisystem "github.com/relexec/rxp/api/system"
 	"github.com/relexec/rxp/errors"
 )
 
@@ -17,7 +18,7 @@ type Target struct {
 	KindVersionName api.KindVersionName
 	// System is System in which the target's Object resides. If empty, the
 	// host System for the entity executing the API call is used.
-	System *api.System
+	System *apisystem.System
 	// Domain is the optional Domain the target's Object is scoped to.
 	Domain *api.Domain
 	// UUID is the identifier of the Object describing the Runnable.

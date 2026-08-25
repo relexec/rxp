@@ -1,6 +1,9 @@
 package api
 
-import apicore "github.com/relexec/rxp/api/core"
+import (
+	apicore "github.com/relexec/rxp/api/core"
+	apisystem "github.com/relexec/rxp/api/system"
+)
 
 // Object is an *instance* of a KindVersion.
 //
@@ -25,7 +28,7 @@ type Object struct {
 	// System contains the System containing the Object. This is a pointer to a
 	// System to allow for backends to default missing System information to
 	// their host system.
-	System *System
+	System *apisystem.System
 	// UUID stores the Object's globally-unique identifier.
 	UUID string
 	// Domain is the optional Domain.

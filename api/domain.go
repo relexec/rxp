@@ -2,6 +2,7 @@ package api
 
 import (
 	apicore "github.com/relexec/rxp/api/core"
+	apisystem "github.com/relexec/rxp/api/system"
 	"github.com/relexec/rxp/errors"
 )
 
@@ -11,7 +12,7 @@ type Domain struct {
 	// System contains the System containing the Domain. This is a pointer to a
 	// System to allow for backends to default missing System information to
 	// their host system.
-	System *System `json:"system,omitempty"`
+	System *apisystem.System `json:"system,omitempty"`
 	// UUID stores the Domain's globally-unique identifier.
 	UUID string `json:"uuid"`
 	// Name contains the Domain name.

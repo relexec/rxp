@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 
+	apisystem "github.com/relexec/rxp/api/system"
 	"github.com/relexec/rxp/errors"
 )
 
@@ -20,7 +21,7 @@ type Caller struct {
 	Identity string
 	// System is System that the caller's API request was routed through. If
 	// empty, the host System for the entity executing the API call is used.
-	System *System
+	System *apisystem.System
 	// Domain is the optional Domain the caller should have their rxp API calls
 	// scoped to. Calling systems may add this Domain to the API call request
 	// context automatically during authentication to avoid a caller needing to

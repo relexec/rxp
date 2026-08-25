@@ -1,4 +1,4 @@
-package system
+package apisystem
 
 import "github.com/relexec/rxp/errors"
 

@@ -2,6 +2,7 @@ package kind
 
 import (
 	"github.com/relexec/rxp/api"
+	apisystem "github.com/relexec/rxp/api/system"
 	"github.com/relexec/rxp/errors"
 )
 
@@ -10,7 +11,7 @@ type Selector struct {
 	// uuid is the globally-unique identifier of the Kind being selected.
 	uuid string
 	// system is the System to find the Kind in.
-	system *api.System
+	system *apisystem.System
 	// name is the name to look up the Kind for.
 	name api.KindName
 }
@@ -21,7 +22,7 @@ func (s Selector) UUID() string {
 }
 
 // System is the rxp system identifier to search for the Kind in.
-func (s Selector) System() *api.System {
+func (s Selector) System() *apisystem.System {
 	return s.system
 }
 
@@ -59,7 +60,7 @@ func ByUUID(uuid string) SelectOption {
 }
 
 // BySystem sets the Selector's System.
-func BySystem(system *api.System) SelectOption {
+func BySystem(system *apisystem.System) SelectOption {
 	return func(s *Selector) {
 		s.system = system
 	}

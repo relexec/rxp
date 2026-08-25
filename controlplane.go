@@ -5,12 +5,12 @@ import (
 
 	"github.com/relexec/rxp/api"
 	apirun "github.com/relexec/rxp/api/run"
+	apisystem "github.com/relexec/rxp/api/system"
 	"github.com/relexec/rxp/domain"
 	"github.com/relexec/rxp/kind"
 	"github.com/relexec/rxp/kind/kindversion"
 	"github.com/relexec/rxp/object"
 	"github.com/relexec/rxp/query"
-	"github.com/relexec/rxp/system"
 )
 
 // ControlPlane is the interface that rxp backends implement for control plane
@@ -19,19 +19,19 @@ type ControlPlane interface {
 	// SystemRead reads a System from persistent storage.
 	SystemRead(
 		context.Context,
-		system.Selector,
-	) (*api.System, error)
+		apisystem.Selector,
+	) (*apisystem.System, error)
 	// SystemWrite atomically writes the supplied System to persistent storage.
 	SystemWrite(
 		context.Context,
-		api.System,
+		apisystem.System,
 	) error
 	// SystemQuery queries zero or more Systems from persistent storage.
 	SystemQuery(
 		context.Context,
 		query.Expression,
 		...query.Option,
-	) (*query.Result[*api.System], error)
+	) (*query.Result[*apisystem.System], error)
 	// DomainRead reads a Domain from persistent storage.
 	DomainRead(
 		context.Context,

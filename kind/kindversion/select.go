@@ -2,6 +2,7 @@ package kindversion
 
 import (
 	"github.com/relexec/rxp/api"
+	apisystem "github.com/relexec/rxp/api/system"
 )
 
 // Selector selects a single KindVersion.
@@ -12,7 +13,7 @@ type Selector struct {
 	// name is the KindVersionName of the KindVersion being selected.
 	name api.KindVersionName
 	// system is the System to find the KindVersion in.
-	system *api.System
+	system *apisystem.System
 	// domain is the Domain to find the KindVersion in.
 	domain *api.Domain
 }
@@ -29,7 +30,7 @@ func (s Selector) Name() api.KindVersionName {
 }
 
 // System is the System to search for the KindVersion in.
-func (s Selector) System() *api.System {
+func (s Selector) System() *apisystem.System {
 	return s.system
 }
 
@@ -71,7 +72,7 @@ func ByUUID(uuid string) SelectOption {
 }
 
 // BySystem sets the Selector's System.
-func BySystem(system *api.System) SelectOption {
+func BySystem(system *apisystem.System) SelectOption {
 	return func(s *Selector) {
 		s.system = system
 	}

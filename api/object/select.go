@@ -1,4 +1,4 @@
-package object
+package apiobject
 
 import (
 	apicore "github.com/relexec/rxp/api/core"

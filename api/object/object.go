@@ -1,6 +1,7 @@
-package api
+package apiobject
 
 import (
+	"github.com/relexec/rxp/api"
 	apicore "github.com/relexec/rxp/api/core"
 	apidomain "github.com/relexec/rxp/api/domain"
 	apikind "github.com/relexec/rxp/api/kind"
@@ -24,9 +25,9 @@ import (
 // Objects and filter them in query operations.
 type Object struct {
 	apicore.Record
-	// KindVersionName is the kind and version identifier for the type of
+	// api.KindVersionName is the kind and version identifier for the type of
 	// Object.
-	KindVersionName KindVersionName
+	KindVersionName api.KindVersionName
 	// System contains the System containing the Object. This is a pointer to a
 	// System to allow for backends to default missing System information to
 	// their host system.

@@ -1,7 +1,7 @@
 package apirun
 
 import (
-	"github.com/relexec/rxp/api"
+	apiobject "github.com/relexec/rxp/api/object"
 	"github.com/relexec/rxp/errors"
 	"github.com/relexec/rxp/query"
 )
@@ -217,9 +217,9 @@ func (p TargetPredicate) Validate() error {
 	}
 	v := p.Value
 	switch v := v.(type) {
-	case []*api.Object:
+	case []*apiobject.Object:
 		return nil
-	case *api.Object:
+	case *apiobject.Object:
 		return nil
 	default:
 		return errors.PredicateUnsupportedValueType(v)
@@ -228,7 +228,7 @@ func (p TargetPredicate) Validate() error {
 
 // TargetEqual returns an Expression that will match runs having a particular
 // Target.
-func TargetEqual(target *api.Object) query.Expression {
+func TargetEqual(target *apiobject.Object) query.Expression {
 	return query.UnaryExpression{
 		Predicate: TargetPredicate{
 			query.BasePredicate{
@@ -241,7 +241,7 @@ func TargetEqual(target *api.Object) query.Expression {
 
 // TargetIn returns an Expression that will match runs that have any of the
 // supplied Targets.
-func TargetIn(targets ...*api.Object) query.Expression {
+func TargetIn(targets ...*apiobject.Object) query.Expression {
 	// flatten IN to = when there's only one value...
 	if len(targets) == 1 {
 		return TargetEqual(targets[0])

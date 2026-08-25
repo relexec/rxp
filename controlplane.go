@@ -6,10 +6,10 @@ import (
 	"github.com/relexec/rxp/api"
 	apidomain "github.com/relexec/rxp/api/domain"
 	apikind "github.com/relexec/rxp/api/kind"
+	apiobject "github.com/relexec/rxp/api/object"
 	apirun "github.com/relexec/rxp/api/run"
 	apisystem "github.com/relexec/rxp/api/system"
 	"github.com/relexec/rxp/kind/kindversion"
-	"github.com/relexec/rxp/object"
 	"github.com/relexec/rxp/query"
 )
 
@@ -88,15 +88,15 @@ type ControlPlane interface {
 	ObjectRead(
 		context.Context,
 		api.KindVersionName,
-		object.Selector,
-	) (*api.Object, error)
+		apiobject.Selector,
+	) (*apiobject.Object, error)
 	// ObjectWrite persists a single supplied Object to backend storage, Note
 	// that on successful write, the newly-created or updated Object is
 	// returned.
 	ObjectWrite(
 		context.Context,
-		api.Object,
-	) (*api.Object, error)
+		apiobject.Object,
+	) (*apiobject.Object, error)
 	// ObjectQuery queries zero or more Objects of a specified kind or
 	// kindversion from persistent storage.
 	ObjectQuery(
@@ -104,7 +104,7 @@ type ControlPlane interface {
 		api.KindVersionName,
 		query.Expression,
 		...query.Option,
-	) (*query.Result[*api.Object], error)
+	) (*query.Result[*apiobject.Object], error)
 
 	// RunRead reads a single Run from persistent storage.
 	RunRead(

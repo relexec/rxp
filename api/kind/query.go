@@ -1,9 +1,8 @@
-package kind
+package apikind
 
 import (
 	"github.com/samber/lo"
 
-	"github.com/relexec/rxp/api"
 	"github.com/relexec/rxp/errors"
 	"github.com/relexec/rxp/query"
 )
@@ -19,13 +18,13 @@ func (p NamePredicate) Validate() error {
 	}
 	v := p.Value
 	switch v := v.(type) {
-	case []api.KindName:
+	case []Name:
 		for _, kn := range v {
 			if err := kn.Validate(); err != nil {
 				return errors.PredicateInvalid(err.Error())
 			}
 		}
-	case api.KindName:
+	case Name:
 		return v.Validate()
 	default:
 		return errors.PredicateUnsupportedValueType(v)
@@ -35,7 +34,7 @@ func (p NamePredicate) Validate() error {
 
 // NameEqual returns an Expression that will match Objects of a particular
 // KindName.
-func NameEqual(name api.KindName) query.Expression {
+func NameEqual(name Name) query.Expression {
 	return query.UnaryExpression{
 		Predicate: NamePredicate{
 			query.BasePredicate{
@@ -48,7 +47,7 @@ func NameEqual(name api.KindName) query.Expression {
 
 // NameNotEqual returns an Expression that will match Objects not of a
 // particular KindName.
-func NameNotEqual(name api.KindName) query.Expression {
+func NameNotEqual(name Name) query.Expression {
 	return query.UnaryExpression{
 		Predicate: NamePredicate{
 			query.BasePredicate{
@@ -62,7 +61,7 @@ func NameNotEqual(name api.KindName) query.Expression {
 
 // KindNameIn returns an Expression that will match Objects that are any of a
 // set of specified KindNames.
-func KindNameIn(names ...api.KindName) query.Expression {
+func KindNameIn(names ...Name) query.Expression {
 	return query.UnaryExpression{
 		Predicate: NamePredicate{
 			query.BasePredicate{
@@ -75,7 +74,7 @@ func KindNameIn(names ...api.KindName) query.Expression {
 
 // NameNotIn returns an Expression that will match Objects that are not any
 // of a set of specified KindNames.
-func NameNotIn(names ...api.KindName) query.Expression {
+func NameNotIn(names ...Name) query.Expression {
 	return query.UnaryExpression{
 		Predicate: NamePredicate{
 			query.BasePredicate{
@@ -171,7 +170,7 @@ type KindPredicate struct {
 
 // Equal returns an Expression that will match things having a particular
 // Kind.
-func Equal(k *api.Kind) query.Expression {
+func Equal(k *Kind) query.Expression {
 	if k.UUID != "" {
 		return UUIDEqual(k.UUID)
 	}
@@ -190,7 +189,7 @@ func Equal(k *api.Kind) query.Expression {
 
 // NotEqual returns an Expression that will match things not having a
 // particular Kind.
-func NotEqual(k *api.Kind) query.Expression {
+func NotEqual(k *Kind) query.Expression {
 	if k.UUID != "" {
 		return UUIDNotEqual(k.UUID)
 	}
@@ -210,8 +209,8 @@ func NotEqual(k *api.Kind) query.Expression {
 
 // In returns an Expression that will match things that have any of a set
 // of specified Kind.
-func In(kinds ...*api.Kind) query.Expression {
-	uuids := lo.Map(kinds, func(k *api.Kind, _ int) string {
+func In(kinds ...*Kind) query.Expression {
+	uuids := lo.Map(kinds, func(k *Kind, _ int) string {
 		return k.UUID
 	})
 	if !lo.Contains(uuids, "") {
@@ -226,8 +225,8 @@ func In(kinds ...*api.Kind) query.Expression {
 
 // NotIn returns an Expression that will match things that do not
 // have any of a set of specified Kind.
-func NotIn(kinds ...*api.Kind) query.Expression {
-	uuids := lo.Map(kinds, func(k *api.Kind, _ int) string {
+func NotIn(kinds ...*Kind) query.Expression {
+	uuids := lo.Map(kinds, func(k *Kind, _ int) string {
 		return k.UUID
 	})
 	if !lo.Contains(uuids, "") {

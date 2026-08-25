@@ -1,10 +1,8 @@
-package kind
+package apikind
 
 import (
 	"github.com/relexec/delta"
 	"github.com/relexec/delta/fieldpath"
-
-	"github.com/relexec/rxp/api"
 )
 
 var (
@@ -19,14 +17,14 @@ var (
 //
 // If the argument is the [delta.ZeroGen] sentinel, the returned [delta.Delta]
 // represents instructions to create the thing.
-func Diff(k api.Kind, subject any) (*delta.Delta, error) {
-	var other *api.Kind
+func Diff(k Kind, subject any) (*delta.Delta, error) {
+	var other *Kind
 	switch subject := subject.(type) {
 	case delta.ZeroGen:
 		return diffNew(k)
-	case api.Kind:
+	case Kind:
 		other = &subject
-	case *api.Kind:
+	case *Kind:
 		other = subject
 	default:
 		return nil, delta.CannotCompareTypes(k, subject)
@@ -112,7 +110,7 @@ func Diff(k api.Kind, subject any) (*delta.Delta, error) {
 
 // diffNew returns a [delta.Delta] containing instructions to make the Kind as a
 // new Kind (i.e. for the first generation)
-func diffNew(k api.Kind) (*delta.Delta, error) {
+func diffNew(k Kind) (*delta.Delta, error) {
 	d := &delta.Delta{}
 	if k.System != nil {
 		d.Push(

@@ -6,8 +6,8 @@ import (
 	"github.com/Masterminds/semver/v3"
 	"github.com/google/uuid"
 	"github.com/relexec/rxp/api"
+	apikind "github.com/relexec/rxp/api/kind"
 	"github.com/relexec/rxp/domain"
-	"github.com/relexec/rxp/kind"
 	"github.com/relexec/rxp/kind/kindversion"
 	"github.com/relexec/rxp/query"
 	"github.com/stretchr/testify/require"
@@ -17,9 +17,9 @@ func TestContainsPredicate(t *testing.T) {
 	isKindish := func(p query.Predicate) bool {
 		switch p.(type) {
 		case
-			kind.NamePredicate,
-			kind.UUIDPredicate,
-			kind.KindPredicate,
+			apikind.NamePredicate,
+			apikind.UUIDPredicate,
+			apikind.KindPredicate,
 			kindversion.NamePredicate,
 			kindversion.KindVersionPredicate:
 			return true
@@ -28,8 +28,8 @@ func TestContainsPredicate(t *testing.T) {
 		}
 	}
 	ku := uuid.NewString()
-	kn := api.KindName("SomeKind")
-	k := api.Kind{
+	kn := apikind.Name("SomeKind")
+	k := apikind.Kind{
 		UUID: ku,
 		Name: kn,
 	}
@@ -73,18 +73,18 @@ func TestContainsPredicate(t *testing.T) {
 		},
 		{
 			"KindNameEqual",
-			kind.NameEqual(kn),
+			apikind.NameEqual(kn),
 			true,
 		},
 		{
 			"KindUUIDEqual",
-			kind.UUIDEqual(ku),
+			apikind.UUIDEqual(ku),
 			true,
 		},
 		{
 			"Or with KindNameEqual and DomainNameEqual",
 			query.Or(
-				kind.NameEqual(kn),
+				apikind.NameEqual(kn),
 				domain.NameEqual(api.DomainName("other.domain")),
 			),
 			true,
@@ -92,14 +92,14 @@ func TestContainsPredicate(t *testing.T) {
 		{
 			"And with KindNameEqual and DomainNameEqual",
 			query.And(
-				kind.NameEqual(kn),
+				apikind.NameEqual(kn),
 				domain.NameEqual(api.DomainName("other.domain")),
 			),
 			true,
 		},
 		{
 			"KindEqual",
-			kind.Equal(&k),
+			apikind.Equal(&k),
 			true,
 		},
 		{

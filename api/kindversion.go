@@ -6,6 +6,7 @@ import (
 	"github.com/Masterminds/semver/v3"
 
 	apicore "github.com/relexec/rxp/api/core"
+	apikind "github.com/relexec/rxp/api/kind"
 	apisystem "github.com/relexec/rxp/api/system"
 	"github.com/relexec/rxp/errors"
 	"github.com/relexec/rxp/kind/kindversion/schema"
@@ -19,7 +20,7 @@ type KindVersion struct {
 	System *apisystem.System `json:"system,omitempty"`
 	// Kind is the [api.Kind] that identifies the type of Objects represented
 	// by this KindVersion.
-	Kind Kind `json:"kind"`
+	Kind apikind.Kind `json:"kind"`
 	// version is the [semver.Version] that identifies the specific version of
 	// the Kind of Objects represented by this KindVersion.
 	Version semver.Version `json:"version"`

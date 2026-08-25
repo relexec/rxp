@@ -5,6 +5,7 @@ import (
 
 	"github.com/Masterminds/semver/v3"
 
+	apikind "github.com/relexec/rxp/api/kind"
 	"github.com/relexec/rxp/errors"
 )
 
@@ -16,7 +17,7 @@ const (
 // string that uniquely identifies a type of Object.
 //
 // A KindVersionName string has the format <kind>@<version>, where <kind> is a
-// valid KindName and <version> is a valid SemVer version string.
+// valid apikind.Name and <version> is a valid SemVer version string.
 type KindVersionName string
 
 // Validate returns an error if the KindVersionName is invalid.
@@ -38,9 +39,9 @@ func (kv KindVersionName) Validate() error {
 
 // Kind returns the Kind identifier of the KindVersionName. Note that this does
 // not attempt to do any validation of the kind string.
-func (kv KindVersionName) Kind() KindName {
+func (kv KindVersionName) Kind() apikind.Name {
 	parts := strings.SplitN(string(kv), KindVersionNameSeparator, 2)
-	return KindName(parts[0])
+	return apikind.Name(parts[0])
 }
 
 // VersionString returns the SemVer version string from the optional version
@@ -64,8 +65,8 @@ func (kv KindVersionName) Version() (*semver.Version, error) {
 	return semver.StrictNewVersion(vs)
 }
 
-// NewKindVersionName returns a KindVersionName from a supplied KindName and
+// NewKindVersionName returns a KindVersionName from a supplied apikind.Name and
 // [semver.Version].
-func NewKindVersionName(kind KindName, ver semver.Version) KindVersionName {
+func NewKindVersionName(kind apikind.Name, ver semver.Version) KindVersionName {
 	return KindVersionName(string(kind) + KindVersionNameSeparator + ver.String())
 }

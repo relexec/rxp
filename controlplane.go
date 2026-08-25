@@ -4,10 +4,10 @@ import (
 	"context"
 
 	"github.com/relexec/rxp/api"
+	apikind "github.com/relexec/rxp/api/kind"
 	apirun "github.com/relexec/rxp/api/run"
 	apisystem "github.com/relexec/rxp/api/system"
 	"github.com/relexec/rxp/domain"
-	"github.com/relexec/rxp/kind"
 	"github.com/relexec/rxp/kind/kindversion"
 	"github.com/relexec/rxp/object"
 	"github.com/relexec/rxp/query"
@@ -52,19 +52,19 @@ type ControlPlane interface {
 	// KindRead reads a Kind from persistent storage.
 	KindRead(
 		context.Context,
-		kind.Selector,
-	) (*api.Kind, error)
+		apikind.Selector,
+	) (*apikind.Kind, error)
 	// KindWrite atomically writes the supplied Kind to persistent storage.
 	KindWrite(
 		context.Context,
-		api.Kind,
+		apikind.Kind,
 	) error
 	// KindQuery queries zero or more Kinds from persistent storage.
 	KindQuery(
 		context.Context,
 		query.Expression,
 		...query.Option,
-	) (*query.Result[*api.Kind], error)
+	) (*query.Result[*apikind.Kind], error)
 	// KindVersionRead reads a KindVersion from persistent storage.
 	KindVersionRead(
 		context.Context,

@@ -2,6 +2,7 @@ package api
 
 import (
 	apicore "github.com/relexec/rxp/api/core"
+	apikind "github.com/relexec/rxp/api/kind"
 	apisystem "github.com/relexec/rxp/api/system"
 )
 
@@ -46,7 +47,7 @@ type Object struct {
 
 // KindName returns the DNS-formatted name of the Kind of Object, e.g.
 // `flow.temporal.io`.
-func (o Object) KindName() KindName {
+func (o Object) KindName() apikind.Name {
 	return o.KindVersionName.Kind()
 }
 

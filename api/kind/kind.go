@@ -1,4 +1,4 @@
-package api
+package apikind
 
 import (
 	apicore "github.com/relexec/rxp/api/core"
@@ -15,7 +15,7 @@ type Kind struct {
 	// UUID stores the Kind's globally-unique identifier.
 	UUID string
 	// Name is the name of the Kind.
-	Name KindName
+	Name Name
 	// Scope is the uniqueness constraint of the names of Objects having this
 	// Kind.
 	Scope apicore.Scope

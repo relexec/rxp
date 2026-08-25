@@ -1,16 +1,17 @@
-package api_test
+package apikind_test
 
 import (
 	"testing"
 
-	"github.com/relexec/rxp/api"
+	apikind "github.com/relexec/rxp/api/kind"
+
 	"github.com/stretchr/testify/require"
 )
 
 func TestKindName(t *testing.T) {
 	cases := []struct {
 		name             string
-		subject          api.KindName
+		subject          apikind.Name
 		expValidateError string
 	}{
 		{

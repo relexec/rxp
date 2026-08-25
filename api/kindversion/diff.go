@@ -1,12 +1,10 @@
-package kindversion
+package apikindversion
 
 import (
 	"fmt"
 
 	"github.com/relexec/delta"
 	"github.com/relexec/delta/fieldpath"
-
-	"github.com/relexec/rxp/api"
 )
 
 var (
@@ -20,14 +18,14 @@ var (
 //
 // If the argument is the [delta.ZeroGen] sentinel, the returned [delta.Delta]
 // represents instructions to create the thing.
-func Diff(kv api.KindVersion, subject any) (*delta.Delta, error) {
-	var other *api.KindVersion
+func Diff(kv KindVersion, subject any) (*delta.Delta, error) {
+	var other *KindVersion
 	switch subject := subject.(type) {
 	case delta.ZeroGen:
 		return diffNew(kv)
-	case api.KindVersion:
+	case KindVersion:
 		other = &subject
-	case *api.KindVersion:
+	case *KindVersion:
 		other = subject
 	default:
 		return nil, delta.CannotCompareTypes(kv, subject)
@@ -113,7 +111,7 @@ func Diff(kv api.KindVersion, subject any) (*delta.Delta, error) {
 
 // diffNew returns a [delta.Delta] containing instructions to make the KindVersion as a
 // new KindVersion (i.e. for the first generation)
-func diffNew(kv api.KindVersion) (*delta.Delta, error) {
+func diffNew(kv KindVersion) (*delta.Delta, error) {
 	schemaJSON, err := kv.SchemaJSON()
 	if err != nil {
 		return nil, err

@@ -1,9 +1,9 @@
 package apirun
 
 import (
-	"github.com/relexec/rxp/api"
 	apicore "github.com/relexec/rxp/api/core"
 	apidomain "github.com/relexec/rxp/api/domain"
+	apikindversion "github.com/relexec/rxp/api/kindversion"
 	apisystem "github.com/relexec/rxp/api/system"
 	"github.com/relexec/rxp/errors"
 )
@@ -16,7 +16,7 @@ type Target struct {
 	apicore.Record
 	// KindVersionName is the kind and version identifier for the type of
 	// Object describing the Runnable.
-	KindVersionName api.KindVersionName
+	KindVersionName apikindversion.Name
 	// System is System in which the target's Object resides. If empty, the
 	// host System for the entity executing the API call is used.
 	System *apisystem.System

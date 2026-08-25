@@ -5,10 +5,9 @@ import (
 
 	"github.com/Masterminds/semver/v3"
 	"github.com/google/uuid"
-	"github.com/relexec/rxp/api"
 	apidomain "github.com/relexec/rxp/api/domain"
 	apikind "github.com/relexec/rxp/api/kind"
-	"github.com/relexec/rxp/kind/kindversion"
+	apikindversion "github.com/relexec/rxp/api/kindversion"
 	"github.com/relexec/rxp/query"
 	"github.com/stretchr/testify/require"
 )
@@ -20,8 +19,8 @@ func TestContainsPredicate(t *testing.T) {
 			apikind.NamePredicate,
 			apikind.UUIDPredicate,
 			apikind.KindPredicate,
-			kindversion.NamePredicate,
-			kindversion.KindVersionPredicate:
+			apikindversion.NamePredicate,
+			apikindversion.KindVersionPredicate:
 			return true
 		default:
 			return false
@@ -35,8 +34,8 @@ func TestContainsPredicate(t *testing.T) {
 	}
 	v, err := semver.NewVersion("v0.0.1")
 	require.Nil(t, err)
-	kvn := api.NewKindVersionName(kn, *v)
-	kv := api.KindVersion{
+	kvn := apikindversion.NewName(kn, *v)
+	kv := apikindversion.KindVersion{
 		Kind:    k,
 		Version: *v,
 	}
@@ -104,12 +103,12 @@ func TestContainsPredicate(t *testing.T) {
 		},
 		{
 			"KindVersionEqual",
-			kindversion.Equal(&kv),
+			apikindversion.Equal(&kv),
 			true,
 		},
 		{
 			"KindVersionNameEqual",
-			kindversion.NameEqual(kvn),
+			apikindversion.NameEqual(kvn),
 			true,
 		},
 	}

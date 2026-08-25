@@ -1,4 +1,4 @@
-package api
+package apikindversion
 
 import (
 	"fmt"
@@ -7,9 +7,9 @@ import (
 
 	apicore "github.com/relexec/rxp/api/core"
 	apikind "github.com/relexec/rxp/api/kind"
+	"github.com/relexec/rxp/api/kindversion/schema"
 	apisystem "github.com/relexec/rxp/api/system"
 	"github.com/relexec/rxp/errors"
-	"github.com/relexec/rxp/kind/kindversion/schema"
 )
 
 type KindVersion struct {
@@ -45,9 +45,9 @@ func (kv KindVersion) Validate() error {
 	return nil
 }
 
-// Name returns the KindVersionName of the KindVersion.
-func (kv KindVersion) Name() KindVersionName {
-	return NewKindVersionName(kv.Kind.Name, kv.Version)
+// Name returns the Name of the KindVersion.
+func (kv KindVersion) Name() Name {
+	return NewName(kv.Kind.Name, kv.Version)
 }
 
 // SchemaJSON returns a string containing the [jsonschema.Schema] that

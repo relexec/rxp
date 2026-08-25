@@ -3,13 +3,12 @@ package rxp
 import (
 	"context"
 
-	"github.com/relexec/rxp/api"
 	apidomain "github.com/relexec/rxp/api/domain"
 	apikind "github.com/relexec/rxp/api/kind"
+	apikindversion "github.com/relexec/rxp/api/kindversion"
 	apiobject "github.com/relexec/rxp/api/object"
 	apirun "github.com/relexec/rxp/api/run"
 	apisystem "github.com/relexec/rxp/api/system"
-	"github.com/relexec/rxp/kind/kindversion"
 	"github.com/relexec/rxp/query"
 )
 
@@ -68,13 +67,13 @@ type ControlPlane interface {
 	// KindVersionRead reads a KindVersion from persistent storage.
 	KindVersionRead(
 		context.Context,
-		kindversion.Selector,
-	) (*api.KindVersion, error)
+		apikindversion.Selector,
+	) (*apikindversion.KindVersion, error)
 	// KindVersionWrite atomically writes the supplied KindVersion to
 	// persistent storage.
 	KindVersionWrite(
 		context.Context,
-		api.KindVersion,
+		apikindversion.KindVersion,
 	) error
 	// KindVersionQuery queries zero or more KindVersions from persistent
 	// storage.
@@ -82,12 +81,12 @@ type ControlPlane interface {
 		context.Context,
 		query.Expression,
 		...query.Option,
-	) (*query.Result[*api.KindVersion], error)
+	) (*query.Result[*apikindversion.KindVersion], error)
 
 	// ObjectRead reads a single Object from persistent storage.
 	ObjectRead(
 		context.Context,
-		api.KindVersionName,
+		apikindversion.Name,
 		apiobject.Selector,
 	) (*apiobject.Object, error)
 	// ObjectWrite persists a single supplied Object to backend storage, Note
@@ -101,7 +100,7 @@ type ControlPlane interface {
 	// kindversion from persistent storage.
 	ObjectQuery(
 		context.Context,
-		api.KindVersionName,
+		apikindversion.Name,
 		query.Expression,
 		...query.Option,
 	) (*query.Result[*apiobject.Object], error)

@@ -1,17 +1,17 @@
-package api_test
+package apikindversion_test
 
 import (
 	"testing"
 
 	"github.com/Masterminds/semver/v3"
-	"github.com/relexec/rxp/api"
+	apikindversion "github.com/relexec/rxp/api/kindversion"
 	"github.com/stretchr/testify/require"
 )
 
-func TestKindVersionName(t *testing.T) {
+func TestName(t *testing.T) {
 	cases := []struct {
 		name             string
-		subject          api.KindVersionName
+		subject          apikindversion.Name
 		expValidateError string
 		expKind          string
 		expVersionString string

@@ -3,8 +3,8 @@ package apimetrics
 import (
 	"go.opentelemetry.io/otel/attribute"
 
-	"github.com/relexec/rxp/api"
 	apicore "github.com/relexec/rxp/api/core"
+	apikindversion "github.com/relexec/rxp/api/kindversion"
 )
 
 const (
@@ -41,6 +41,6 @@ const (
 
 // AttributeKindVersion returns the kindversion attribute KeyValue with the
 // value of the supplied KindVersionName.
-func AttributeKindVersion(kv api.KindVersionName) attribute.KeyValue {
+func AttributeKindVersion(kv apikindversion.Name) attribute.KeyValue {
 	return attribute.String(AttributeNameKindVersion, string(kv))
 }

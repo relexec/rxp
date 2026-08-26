@@ -8,12 +8,12 @@ import (
 	apidomain "github.com/relexec/rxp/api/domain"
 	apikind "github.com/relexec/rxp/api/kind"
 	apikindversion "github.com/relexec/rxp/api/kindversion"
-	"github.com/relexec/rxp/query"
+	apiquery "github.com/relexec/rxp/api/query"
 	"github.com/stretchr/testify/require"
 )
 
 func TestContainsPredicate(t *testing.T) {
-	isKindish := func(p query.Predicate) bool {
+	isKindish := func(p apiquery.Predicate) bool {
 		switch p.(type) {
 		case
 			apikind.NamePredicate,
@@ -41,7 +41,7 @@ func TestContainsPredicate(t *testing.T) {
 	}
 	cases := []struct {
 		name    string
-		subject query.Expression
+		subject apiquery.Expression
 		exp     bool
 	}{
 		{
@@ -56,7 +56,7 @@ func TestContainsPredicate(t *testing.T) {
 		},
 		{
 			"Or with two NameEquals",
-			query.Or(
+			apiquery.Or(
 				apidomain.NameEqual(apidomain.Name("some.domain")),
 				apidomain.NameEqual(apidomain.Name("other.domain")),
 			),
@@ -64,7 +64,7 @@ func TestContainsPredicate(t *testing.T) {
 		},
 		{
 			"And with two NameEquals",
-			query.And(
+			apiquery.And(
 				apidomain.NameEqual(apidomain.Name("some.domain")),
 				apidomain.NameEqual(apidomain.Name("other.domain")),
 			),
@@ -82,7 +82,7 @@ func TestContainsPredicate(t *testing.T) {
 		},
 		{
 			"Or with KindNameEqual and NameEqual",
-			query.Or(
+			apiquery.Or(
 				apikind.NameEqual(kn),
 				apidomain.NameEqual(apidomain.Name("other.domain")),
 			),
@@ -90,7 +90,7 @@ func TestContainsPredicate(t *testing.T) {
 		},
 		{
 			"And with KindNameEqual and NameEqual",
-			query.And(
+			apiquery.And(
 				apikind.NameEqual(kn),
 				apidomain.NameEqual(apidomain.Name("other.domain")),
 			),
@@ -115,7 +115,7 @@ func TestContainsPredicate(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
 			require := require.New(t)
-			got := query.ContainsPredicate(c.subject, isKindish)
+			got := apiquery.ContainsPredicate(c.subject, isKindish)
 			require.Equal(c.exp, got)
 		})
 	}

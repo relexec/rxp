@@ -4,11 +4,11 @@ import (
 	"github.com/samber/lo"
 
 	apierrors "github.com/relexec/rxp/api/errors"
-	"github.com/relexec/rxp/query"
+	apiquery "github.com/relexec/rxp/api/query"
 )
 
 type NamePredicate struct {
-	query.BasePredicate
+	apiquery.BasePredicate
 }
 
 func (p NamePredicate) Validate() error {
@@ -34,11 +34,11 @@ func (p NamePredicate) Validate() error {
 
 // NameEqual returns an Expression that will match Objects of a particular
 // Name.
-func NameEqual(name Name) query.Expression {
-	return query.UnaryExpression{
+func NameEqual(name Name) apiquery.Expression {
+	return apiquery.UnaryExpression{
 		Predicate: NamePredicate{
-			query.BasePredicate{
-				Op:    query.PredicateOperatorEqual,
+			apiquery.BasePredicate{
+				Op:    apiquery.PredicateOperatorEqual,
 				Value: name,
 			},
 		},
@@ -47,11 +47,11 @@ func NameEqual(name Name) query.Expression {
 
 // NameNotEqual returns an Expression that will match Objects not of a
 // particular Name.
-func NameNotEqual(name Name) query.Expression {
-	return query.UnaryExpression{
+func NameNotEqual(name Name) apiquery.Expression {
+	return apiquery.UnaryExpression{
 		Predicate: NamePredicate{
-			query.BasePredicate{
-				Op:      query.PredicateOperatorEqual,
+			apiquery.BasePredicate{
+				Op:      apiquery.PredicateOperatorEqual,
 				Negated: true,
 				Value:   name,
 			},
@@ -61,11 +61,11 @@ func NameNotEqual(name Name) query.Expression {
 
 // NameIn returns an Expression that will match Objects that are any of a
 // set of specified Names.
-func NameIn(names ...Name) query.Expression {
-	return query.UnaryExpression{
+func NameIn(names ...Name) apiquery.Expression {
+	return apiquery.UnaryExpression{
 		Predicate: NamePredicate{
-			query.BasePredicate{
-				Op:    query.PredicateOperatorIn,
+			apiquery.BasePredicate{
+				Op:    apiquery.PredicateOperatorIn,
 				Value: names,
 			},
 		},
@@ -74,11 +74,11 @@ func NameIn(names ...Name) query.Expression {
 
 // NameNotIn returns an Expression that will match Objects that are not any
 // of a set of specified Names.
-func NameNotIn(names ...Name) query.Expression {
-	return query.UnaryExpression{
+func NameNotIn(names ...Name) apiquery.Expression {
+	return apiquery.UnaryExpression{
 		Predicate: NamePredicate{
-			query.BasePredicate{
-				Op:      query.PredicateOperatorIn,
+			apiquery.BasePredicate{
+				Op:      apiquery.PredicateOperatorIn,
 				Negated: true,
 				Value:   names,
 			},
@@ -87,24 +87,24 @@ func NameNotIn(names ...Name) query.Expression {
 }
 
 type KindVersionPredicate struct {
-	query.BasePredicate
+	apiquery.BasePredicate
 }
 
 // Equal returns an Expression that will match things having a
 // particular KindVersion.
-func Equal(kv *KindVersion) query.Expression {
+func Equal(kv *KindVersion) apiquery.Expression {
 	return NameEqual(kv.Name())
 }
 
 // NotEqual returns an Expression that will match things not having
 // a particular KindVersion.
-func NotEqual(kv *KindVersion) query.Expression {
+func NotEqual(kv *KindVersion) apiquery.Expression {
 	return NameNotEqual(kv.Name())
 }
 
 // In returns an Expression that will match things that have any of
 // a set of specified KindVersion.
-func In(kvs ...*KindVersion) query.Expression {
+func In(kvs ...*KindVersion) apiquery.Expression {
 	names := lo.Map(
 		kvs,
 		func(kv *KindVersion, _ int) Name {
@@ -116,7 +116,7 @@ func In(kvs ...*KindVersion) query.Expression {
 
 // NotIn returns an Expression that will match things that do not
 // have any of a set of specified KindVersion.
-func NotIn(kvs ...*KindVersion) query.Expression {
+func NotIn(kvs ...*KindVersion) apiquery.Expression {
 	names := lo.Map(
 		kvs,
 		func(kv *KindVersion, _ int) Name {

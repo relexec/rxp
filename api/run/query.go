@@ -3,11 +3,11 @@ package apirun
 import (
 	apierrors "github.com/relexec/rxp/api/errors"
 	apiobject "github.com/relexec/rxp/api/object"
-	"github.com/relexec/rxp/query"
+	apiquery "github.com/relexec/rxp/api/query"
 )
 
 type UUIDPredicate struct {
-	query.BasePredicate
+	apiquery.BasePredicate
 }
 
 func (p UUIDPredicate) Validate() error {
@@ -28,11 +28,11 @@ func (p UUIDPredicate) Validate() error {
 
 // UUIDEqual returns an Expression that will match runs having a particular
 // UUID.
-func UUIDEqual(uuid string) query.Expression {
-	return query.UnaryExpression{
+func UUIDEqual(uuid string) apiquery.Expression {
+	return apiquery.UnaryExpression{
 		Predicate: UUIDPredicate{
-			query.BasePredicate{
-				Op:    query.PredicateOperatorEqual,
+			apiquery.BasePredicate{
+				Op:    apiquery.PredicateOperatorEqual,
 				Value: uuid,
 			},
 		},
@@ -41,15 +41,15 @@ func UUIDEqual(uuid string) query.Expression {
 
 // UUIDIn returns an Expression that will match runs that have any of a set of
 // specified Request UUIDs.
-func UUIDIn(uuids ...string) query.Expression {
+func UUIDIn(uuids ...string) apiquery.Expression {
 	// flatten IN to = when there's only one value...
 	if len(uuids) == 1 {
 		return UUIDEqual(uuids[0])
 	}
-	return query.UnaryExpression{
+	return apiquery.UnaryExpression{
 		Predicate: UUIDPredicate{
-			query.BasePredicate{
-				Op:    query.PredicateOperatorIn,
+			apiquery.BasePredicate{
+				Op:    apiquery.PredicateOperatorIn,
 				Value: uuids,
 			},
 		},
@@ -57,7 +57,7 @@ func UUIDIn(uuids ...string) query.Expression {
 }
 
 type RootUUIDPredicate struct {
-	query.BasePredicate
+	apiquery.BasePredicate
 }
 
 func (p RootUUIDPredicate) Validate() error {
@@ -78,11 +78,11 @@ func (p RootUUIDPredicate) Validate() error {
 
 // RootUUIDEqual returns an Expression that will match runs having a Root
 // with a particular UUID.
-func RootUUIDEqual(uuid string) query.Expression {
-	return query.UnaryExpression{
+func RootUUIDEqual(uuid string) apiquery.Expression {
+	return apiquery.UnaryExpression{
 		Predicate: RootUUIDPredicate{
-			query.BasePredicate{
-				Op:    query.PredicateOperatorEqual,
+			apiquery.BasePredicate{
+				Op:    apiquery.PredicateOperatorEqual,
 				Value: uuid,
 			},
 		},
@@ -91,15 +91,15 @@ func RootUUIDEqual(uuid string) query.Expression {
 
 // RootUUIDIn returns an Expression that will match runs that have Roots
 // with any of a set of specified UUIDs.
-func RootUUIDIn(uuids ...string) query.Expression {
+func RootUUIDIn(uuids ...string) apiquery.Expression {
 	// flatten IN to = when there's only one value...
 	if len(uuids) == 1 {
 		return RootUUIDEqual(uuids[0])
 	}
-	return query.UnaryExpression{
+	return apiquery.UnaryExpression{
 		Predicate: RootUUIDPredicate{
-			query.BasePredicate{
-				Op:    query.PredicateOperatorIn,
+			apiquery.BasePredicate{
+				Op:    apiquery.PredicateOperatorIn,
 				Value: uuids,
 			},
 		},
@@ -107,7 +107,7 @@ func RootUUIDIn(uuids ...string) query.Expression {
 }
 
 type RootPredicate struct {
-	query.BasePredicate
+	apiquery.BasePredicate
 }
 
 func (p RootPredicate) Validate() error {
@@ -128,11 +128,11 @@ func (p RootPredicate) Validate() error {
 
 // RootEqual returns an Expression that will match runs having a particular
 // Root.
-func RootEqual(run *Run) query.Expression {
-	return query.UnaryExpression{
+func RootEqual(run *Run) apiquery.Expression {
+	return apiquery.UnaryExpression{
 		Predicate: RootPredicate{
-			query.BasePredicate{
-				Op:    query.PredicateOperatorEqual,
+			apiquery.BasePredicate{
+				Op:    apiquery.PredicateOperatorEqual,
 				Value: run,
 			},
 		},
@@ -141,15 +141,15 @@ func RootEqual(run *Run) query.Expression {
 
 // RootIn returns an Expression that will match runs that have any of the
 // supplied Roots.
-func RootIn(runs ...*Run) query.Expression {
+func RootIn(runs ...*Run) apiquery.Expression {
 	// flatten IN to = when there's only one value...
 	if len(runs) == 1 {
 		return RootEqual(runs[0])
 	}
-	return query.UnaryExpression{
+	return apiquery.UnaryExpression{
 		Predicate: RootPredicate{
-			query.BasePredicate{
-				Op:    query.PredicateOperatorIn,
+			apiquery.BasePredicate{
+				Op:    apiquery.PredicateOperatorIn,
 				Value: runs,
 			},
 		},
@@ -157,7 +157,7 @@ func RootIn(runs ...*Run) query.Expression {
 }
 
 type TargetUUIDPredicate struct {
-	query.BasePredicate
+	apiquery.BasePredicate
 }
 
 func (p TargetUUIDPredicate) Validate() error {
@@ -178,11 +178,11 @@ func (p TargetUUIDPredicate) Validate() error {
 
 // TargetUUIDEqual returns an Expression that will match runs having a Target
 // with a particular UUID.
-func TargetUUIDEqual(uuid string) query.Expression {
-	return query.UnaryExpression{
+func TargetUUIDEqual(uuid string) apiquery.Expression {
+	return apiquery.UnaryExpression{
 		Predicate: TargetUUIDPredicate{
-			query.BasePredicate{
-				Op:    query.PredicateOperatorEqual,
+			apiquery.BasePredicate{
+				Op:    apiquery.PredicateOperatorEqual,
 				Value: uuid,
 			},
 		},
@@ -191,15 +191,15 @@ func TargetUUIDEqual(uuid string) query.Expression {
 
 // TargetUUIDIn returns an Expression that will match runs that have Targets
 // with any of a set of specified UUIDs.
-func TargetUUIDIn(uuids ...string) query.Expression {
+func TargetUUIDIn(uuids ...string) apiquery.Expression {
 	// flatten IN to = when there's only one value...
 	if len(uuids) == 1 {
 		return TargetUUIDEqual(uuids[0])
 	}
-	return query.UnaryExpression{
+	return apiquery.UnaryExpression{
 		Predicate: TargetUUIDPredicate{
-			query.BasePredicate{
-				Op:    query.PredicateOperatorIn,
+			apiquery.BasePredicate{
+				Op:    apiquery.PredicateOperatorIn,
 				Value: uuids,
 			},
 		},
@@ -207,7 +207,7 @@ func TargetUUIDIn(uuids ...string) query.Expression {
 }
 
 type TargetPredicate struct {
-	query.BasePredicate
+	apiquery.BasePredicate
 }
 
 func (p TargetPredicate) Validate() error {
@@ -228,11 +228,11 @@ func (p TargetPredicate) Validate() error {
 
 // TargetEqual returns an Expression that will match runs having a particular
 // Target.
-func TargetEqual(target *apiobject.Object) query.Expression {
-	return query.UnaryExpression{
+func TargetEqual(target *apiobject.Object) apiquery.Expression {
+	return apiquery.UnaryExpression{
 		Predicate: TargetPredicate{
-			query.BasePredicate{
-				Op:    query.PredicateOperatorEqual,
+			apiquery.BasePredicate{
+				Op:    apiquery.PredicateOperatorEqual,
 				Value: target,
 			},
 		},
@@ -241,15 +241,15 @@ func TargetEqual(target *apiobject.Object) query.Expression {
 
 // TargetIn returns an Expression that will match runs that have any of the
 // supplied Targets.
-func TargetIn(targets ...*apiobject.Object) query.Expression {
+func TargetIn(targets ...*apiobject.Object) apiquery.Expression {
 	// flatten IN to = when there's only one value...
 	if len(targets) == 1 {
 		return TargetEqual(targets[0])
 	}
-	return query.UnaryExpression{
+	return apiquery.UnaryExpression{
 		Predicate: TargetPredicate{
-			query.BasePredicate{
-				Op:    query.PredicateOperatorIn,
+			apiquery.BasePredicate{
+				Op:    apiquery.PredicateOperatorIn,
 				Value: targets,
 			},
 		},

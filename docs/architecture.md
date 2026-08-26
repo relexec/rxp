@@ -65,8 +65,8 @@ Type-specific directories like `system/` or `object/` provide type-specific help
   struct pointer.
 * `Diff()` functions that return an `github.com/relexec/delta.Delta` struct
   describing differences between things of a type.
-* `query.Expression` functions, e.g. `domain/domain.RootEqual()` returns a
-  `query.Expression` that filters a query by a root Domain.
+* `apiquery.Expression` functions, e.g. `domain/domain.RootEqual()` returns a
+  `apiquery.Expression` that filters a query by a root Domain.
 * `Read()` selectors, e.g. `kind/kind.ByName()` returns a `kind/kind.Selector`
   that can be passed to `Driver.KindRead()` to fetch an `api.Kind` by its
   `api.KindName`.

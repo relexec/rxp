@@ -7,9 +7,9 @@ import (
 	apikind "github.com/relexec/rxp/api/kind"
 	apikindversion "github.com/relexec/rxp/api/kindversion"
 	apiobject "github.com/relexec/rxp/api/object"
+	apiquery "github.com/relexec/rxp/api/query"
 	apirun "github.com/relexec/rxp/api/run"
 	apisystem "github.com/relexec/rxp/api/system"
-	"github.com/relexec/rxp/query"
 )
 
 // ControlPlane is the interface that rxp backends implement for control plane
@@ -28,9 +28,9 @@ type ControlPlane interface {
 	// SystemQuery queries zero or more Systems from persistent storage.
 	SystemQuery(
 		context.Context,
-		query.Expression,
-		...query.Option,
-	) (*query.Result[*apisystem.System], error)
+		apiquery.Expression,
+		...apiquery.Option,
+	) (*apiquery.Result[*apisystem.System], error)
 	// DomainRead reads a Domain from persistent storage.
 	DomainRead(
 		context.Context,
@@ -44,9 +44,9 @@ type ControlPlane interface {
 	// DomainQuery queries zero or more Domains from persistent storage.
 	DomainQuery(
 		context.Context,
-		query.Expression,
-		...query.Option,
-	) (*query.Result[*apidomain.Domain], error)
+		apiquery.Expression,
+		...apiquery.Option,
+	) (*apiquery.Result[*apidomain.Domain], error)
 
 	// KindRead reads a Kind from persistent storage.
 	KindRead(
@@ -61,9 +61,9 @@ type ControlPlane interface {
 	// KindQuery queries zero or more Kinds from persistent storage.
 	KindQuery(
 		context.Context,
-		query.Expression,
-		...query.Option,
-	) (*query.Result[*apikind.Kind], error)
+		apiquery.Expression,
+		...apiquery.Option,
+	) (*apiquery.Result[*apikind.Kind], error)
 	// KindVersionRead reads a KindVersion from persistent storage.
 	KindVersionRead(
 		context.Context,
@@ -79,9 +79,9 @@ type ControlPlane interface {
 	// storage.
 	KindVersionQuery(
 		context.Context,
-		query.Expression,
-		...query.Option,
-	) (*query.Result[*apikindversion.KindVersion], error)
+		apiquery.Expression,
+		...apiquery.Option,
+	) (*apiquery.Result[*apikindversion.KindVersion], error)
 
 	// ObjectRead reads a single Object from persistent storage.
 	ObjectRead(
@@ -101,9 +101,9 @@ type ControlPlane interface {
 	ObjectQuery(
 		context.Context,
 		apikindversion.Name,
-		query.Expression,
-		...query.Option,
-	) (*query.Result[*apiobject.Object], error)
+		apiquery.Expression,
+		...apiquery.Option,
+	) (*apiquery.Result[*apiobject.Object], error)
 
 	// RunRead reads a single Run from persistent storage.
 	RunRead(
@@ -121,7 +121,7 @@ type ControlPlane interface {
 	// RunQuery queries zero or more Runs from persistent storage.
 	RunQuery(
 		context.Context,
-		query.Expression,
-		...query.Option,
-	) (*query.Result[*apirun.Run], error)
+		apiquery.Expression,
+		...apiquery.Option,
+	) (*apiquery.Result[*apirun.Run], error)
 }

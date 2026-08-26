@@ -4,11 +4,11 @@ import (
 	"github.com/samber/lo"
 
 	apierrors "github.com/relexec/rxp/api/errors"
-	"github.com/relexec/rxp/query"
+	apiquery "github.com/relexec/rxp/api/query"
 )
 
 type NamePredicate struct {
-	query.BasePredicate
+	apiquery.BasePredicate
 }
 
 func (p NamePredicate) Validate() error {
@@ -34,11 +34,11 @@ func (p NamePredicate) Validate() error {
 
 // NameEqual returns an Expression that will match things having a
 // particular Name.
-func NameEqual(name Name) query.Expression {
-	return query.UnaryExpression{
+func NameEqual(name Name) apiquery.Expression {
+	return apiquery.UnaryExpression{
 		Predicate: NamePredicate{
-			query.BasePredicate{
-				Op:    query.PredicateOperatorEqual,
+			apiquery.BasePredicate{
+				Op:    apiquery.PredicateOperatorEqual,
 				Value: name,
 			},
 		},
@@ -47,11 +47,11 @@ func NameEqual(name Name) query.Expression {
 
 // NameNotEqual returns an Expression that will match things not having a
 // particular Name.
-func NameNotEqual(name Name) query.Expression {
-	return query.UnaryExpression{
+func NameNotEqual(name Name) apiquery.Expression {
+	return apiquery.UnaryExpression{
 		Predicate: NamePredicate{
-			query.BasePredicate{
-				Op:      query.PredicateOperatorEqual,
+			apiquery.BasePredicate{
+				Op:      apiquery.PredicateOperatorEqual,
 				Negated: true,
 				Value:   name,
 			},
@@ -61,15 +61,15 @@ func NameNotEqual(name Name) query.Expression {
 
 // NameIn returns an Expression that will match things that have any of a
 // set of specified Names.
-func NameIn(names ...Name) query.Expression {
+func NameIn(names ...Name) apiquery.Expression {
 	// flatten IN to = when there's only one value...
 	if len(names) == 1 {
 		return NameEqual(names[0])
 	}
-	return query.UnaryExpression{
+	return apiquery.UnaryExpression{
 		Predicate: NamePredicate{
-			query.BasePredicate{
-				Op:    query.PredicateOperatorIn,
+			apiquery.BasePredicate{
+				Op:    apiquery.PredicateOperatorIn,
 				Value: names,
 			},
 		},
@@ -78,11 +78,11 @@ func NameIn(names ...Name) query.Expression {
 
 // NameNotIn returns an Expression that will match things that do not
 // have any of a set of specified Names.
-func NameNotIn(names ...Name) query.Expression {
-	return query.UnaryExpression{
+func NameNotIn(names ...Name) apiquery.Expression {
+	return apiquery.UnaryExpression{
 		Predicate: NamePredicate{
-			query.BasePredicate{
-				Op:      query.PredicateOperatorIn,
+			apiquery.BasePredicate{
+				Op:      apiquery.PredicateOperatorIn,
 				Negated: true,
 				Value:   names,
 			},
@@ -91,7 +91,7 @@ func NameNotIn(names ...Name) query.Expression {
 }
 
 type UUIDPredicate struct {
-	query.BasePredicate
+	apiquery.BasePredicate
 }
 
 func (p UUIDPredicate) Validate() error {
@@ -112,11 +112,11 @@ func (p UUIDPredicate) Validate() error {
 
 // UUIDEqual returns an Expression that will match things having a
 // particular UUID.
-func UUIDEqual(uuid string) query.Expression {
-	return query.UnaryExpression{
+func UUIDEqual(uuid string) apiquery.Expression {
+	return apiquery.UnaryExpression{
 		Predicate: UUIDPredicate{
-			query.BasePredicate{
-				Op:    query.PredicateOperatorEqual,
+			apiquery.BasePredicate{
+				Op:    apiquery.PredicateOperatorEqual,
 				Value: uuid,
 			},
 		},
@@ -125,11 +125,11 @@ func UUIDEqual(uuid string) query.Expression {
 
 // UUIDNotEqual returns an Expression that will match things not having a
 // particular UUID.
-func UUIDNotEqual(uuid string) query.Expression {
-	return query.UnaryExpression{
+func UUIDNotEqual(uuid string) apiquery.Expression {
+	return apiquery.UnaryExpression{
 		Predicate: UUIDPredicate{
-			query.BasePredicate{
-				Op:      query.PredicateOperatorEqual,
+			apiquery.BasePredicate{
+				Op:      apiquery.PredicateOperatorEqual,
 				Negated: true,
 				Value:   uuid,
 			},
@@ -139,15 +139,15 @@ func UUIDNotEqual(uuid string) query.Expression {
 
 // UUIDIn returns an Expression that will match things that have any of a
 // set of specified UUIDs.
-func UUIDIn(uuids ...string) query.Expression {
+func UUIDIn(uuids ...string) apiquery.Expression {
 	// flatten IN to = when there's only one value...
 	if len(uuids) == 1 {
 		return UUIDEqual(uuids[0])
 	}
-	return query.UnaryExpression{
+	return apiquery.UnaryExpression{
 		Predicate: UUIDPredicate{
-			query.BasePredicate{
-				Op:    query.PredicateOperatorIn,
+			apiquery.BasePredicate{
+				Op:    apiquery.PredicateOperatorIn,
 				Value: uuids,
 			},
 		},
@@ -156,11 +156,11 @@ func UUIDIn(uuids ...string) query.Expression {
 
 // UUIDNotIn returns an Expression that will match things that do not
 // have any of a set of specified UUIDs.
-func UUIDNotIn(uuids ...string) query.Expression {
-	return query.UnaryExpression{
+func UUIDNotIn(uuids ...string) apiquery.Expression {
+	return apiquery.UnaryExpression{
 		Predicate: UUIDPredicate{
-			query.BasePredicate{
-				Op:      query.PredicateOperatorIn,
+			apiquery.BasePredicate{
+				Op:      apiquery.PredicateOperatorIn,
 				Negated: true,
 				Value:   uuids,
 			},
@@ -169,22 +169,22 @@ func UUIDNotIn(uuids ...string) query.Expression {
 }
 
 type DomainPredicate struct {
-	query.BasePredicate
+	apiquery.BasePredicate
 }
 
 // Equal returns an Expression that will match things having a particular
 // Domain.
-func Equal(dom *Domain) query.Expression {
+func Equal(dom *Domain) apiquery.Expression {
 	if dom.UUID != "" {
 		return UUIDEqual(dom.UUID)
 	}
 	if dom.System == nil {
 		return NameEqual(dom.Name)
 	}
-	return query.UnaryExpression{
+	return apiquery.UnaryExpression{
 		Predicate: DomainPredicate{
-			query.BasePredicate{
-				Op:    query.PredicateOperatorEqual,
+			apiquery.BasePredicate{
+				Op:    apiquery.PredicateOperatorEqual,
 				Value: dom,
 			},
 		},
@@ -193,17 +193,17 @@ func Equal(dom *Domain) query.Expression {
 
 // NotEqual returns an Expression that will match things not having a
 // particular Domain.
-func NotEqual(dom *Domain) query.Expression {
+func NotEqual(dom *Domain) apiquery.Expression {
 	if dom.UUID != "" {
 		return UUIDNotEqual(dom.UUID)
 	}
 	if dom.System == nil {
 		return NameNotEqual(dom.Name)
 	}
-	return query.UnaryExpression{
+	return apiquery.UnaryExpression{
 		Predicate: DomainPredicate{
-			query.BasePredicate{
-				Op:      query.PredicateOperatorEqual,
+			apiquery.BasePredicate{
+				Op:      apiquery.PredicateOperatorEqual,
 				Negated: true,
 				Value:   dom,
 			},
@@ -213,38 +213,38 @@ func NotEqual(dom *Domain) query.Expression {
 
 // In returns an Expression that will match things that have any of a set
 // of specified Domain.
-func In(doms ...*Domain) query.Expression {
+func In(doms ...*Domain) apiquery.Expression {
 	uuids := lo.Map(doms, func(dom *Domain, _ int) string {
 		return dom.UUID
 	})
 	if !lo.Contains(uuids, "") {
 		return UUIDIn(uuids...)
 	}
-	exprs := make([]query.Expression, 0, len(doms))
+	exprs := make([]apiquery.Expression, 0, len(doms))
 	for _, dom := range doms {
 		exprs = append(exprs, Equal(dom))
 	}
-	return query.Or(exprs...)
+	return apiquery.Or(exprs...)
 }
 
 // NotIn returns an Expression that will match things that do not
 // have any of a set of specified Domain.
-func NotIn(doms ...*Domain) query.Expression {
+func NotIn(doms ...*Domain) apiquery.Expression {
 	uuids := lo.Map(doms, func(dom *Domain, _ int) string {
 		return dom.UUID
 	})
 	if !lo.Contains(uuids, "") {
 		return UUIDNotIn(uuids...)
 	}
-	exprs := make([]query.Expression, 0, len(doms))
+	exprs := make([]apiquery.Expression, 0, len(doms))
 	for _, dom := range doms {
 		exprs = append(exprs, NotEqual(dom))
 	}
-	return query.And(exprs...)
+	return apiquery.And(exprs...)
 }
 
 type RootNamePredicate struct {
-	query.BasePredicate
+	apiquery.BasePredicate
 }
 
 func (p RootNamePredicate) Validate() error {
@@ -270,11 +270,11 @@ func (p RootNamePredicate) Validate() error {
 
 // RootNameEqual returns an Expression that will match domains having a
 // particular Name as their root Domain.
-func RootNameEqual(name Name) query.Expression {
-	return query.UnaryExpression{
+func RootNameEqual(name Name) apiquery.Expression {
+	return apiquery.UnaryExpression{
 		Predicate: RootNamePredicate{
-			query.BasePredicate{
-				Op:    query.PredicateOperatorEqual,
+			apiquery.BasePredicate{
+				Op:    apiquery.PredicateOperatorEqual,
 				Value: name,
 			},
 		},
@@ -282,7 +282,7 @@ func RootNameEqual(name Name) query.Expression {
 }
 
 type RootUUIDPredicate struct {
-	query.BasePredicate
+	apiquery.BasePredicate
 }
 
 func (p RootUUIDPredicate) Validate() error {
@@ -303,11 +303,11 @@ func (p RootUUIDPredicate) Validate() error {
 
 // RootUUIDEqual returns an Expression that will match domains having a root
 // domain with a particular UUID.
-func RootUUIDEqual(uuid string) query.Expression {
-	return query.UnaryExpression{
+func RootUUIDEqual(uuid string) apiquery.Expression {
+	return apiquery.UnaryExpression{
 		Predicate: RootUUIDPredicate{
-			query.BasePredicate{
-				Op:    query.PredicateOperatorEqual,
+			apiquery.BasePredicate{
+				Op:    apiquery.PredicateOperatorEqual,
 				Value: uuid,
 			},
 		},
@@ -315,22 +315,22 @@ func RootUUIDEqual(uuid string) query.Expression {
 }
 
 type RootDomainPredicate struct {
-	query.BasePredicate
+	apiquery.BasePredicate
 }
 
 // RootEqual returns an Expression that will match domains having a particular
 // root Domain.
-func RootEqual(dom *Domain) query.Expression {
+func RootEqual(dom *Domain) apiquery.Expression {
 	if dom.UUID != "" {
 		return RootUUIDEqual(dom.UUID)
 	}
 	if dom.System == nil {
 		return RootNameEqual(dom.Name)
 	}
-	return query.UnaryExpression{
+	return apiquery.UnaryExpression{
 		Predicate: RootDomainPredicate{
-			query.BasePredicate{
-				Op:    query.PredicateOperatorEqual,
+			apiquery.BasePredicate{
+				Op:    apiquery.PredicateOperatorEqual,
 				Value: dom,
 			},
 		},
@@ -338,7 +338,7 @@ func RootEqual(dom *Domain) query.Expression {
 }
 
 type ParentNamePredicate struct {
-	query.BasePredicate
+	apiquery.BasePredicate
 }
 
 func (p ParentNamePredicate) Validate() error {
@@ -365,11 +365,11 @@ func (p ParentNamePredicate) Validate() error {
 // ParentNameEqual returns an Expression that will match domains having a
 // particular Name as their parent Domain and any of that Domain's child
 // domains.
-func ParentNameEqual(name Name) query.Expression {
-	return query.UnaryExpression{
+func ParentNameEqual(name Name) apiquery.Expression {
+	return apiquery.UnaryExpression{
 		Predicate: ParentNamePredicate{
-			query.BasePredicate{
-				Op:    query.PredicateOperatorEqual,
+			apiquery.BasePredicate{
+				Op:    apiquery.PredicateOperatorEqual,
 				Value: name,
 			},
 		},
@@ -377,7 +377,7 @@ func ParentNameEqual(name Name) query.Expression {
 }
 
 type ParentUUIDPredicate struct {
-	query.BasePredicate
+	apiquery.BasePredicate
 }
 
 func (p ParentUUIDPredicate) Validate() error {
@@ -398,11 +398,11 @@ func (p ParentUUIDPredicate) Validate() error {
 
 // ParentUUIDEqual returns an Expression that will match domains having a
 // parent domain with a particular UUID or any of that Domain's child domains.
-func ParentUUIDEqual(uuid string) query.Expression {
-	return query.UnaryExpression{
+func ParentUUIDEqual(uuid string) apiquery.Expression {
+	return apiquery.UnaryExpression{
 		Predicate: ParentUUIDPredicate{
-			query.BasePredicate{
-				Op:    query.PredicateOperatorEqual,
+			apiquery.BasePredicate{
+				Op:    apiquery.PredicateOperatorEqual,
 				Value: uuid,
 			},
 		},
@@ -410,16 +410,16 @@ func ParentUUIDEqual(uuid string) query.Expression {
 }
 
 type ParentDomainPredicate struct {
-	query.BasePredicate
+	apiquery.BasePredicate
 }
 
 // ParentEqual returns an Expression that will match domains that are in the
 // supplied Domain and any of that Domain's child domains.
-func ParentEqual(dom *Domain) query.Expression {
-	return query.UnaryExpression{
+func ParentEqual(dom *Domain) apiquery.Expression {
+	return apiquery.UnaryExpression{
 		Predicate: ParentDomainPredicate{
-			query.BasePredicate{
-				Op:    query.PredicateOperatorEqual,
+			apiquery.BasePredicate{
+				Op:    apiquery.PredicateOperatorEqual,
 				Value: dom,
 			},
 		},

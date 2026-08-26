@@ -41,7 +41,7 @@ func (p BasePredicate) Validate() error {
 
 // ContainsPredicate returns true if the supplied [Expression] has a Predicate
 // whose type is any of a specified list of types. If the supplied expression
-// is an [query.OrExpression] or [query.AndExpression], this function
+// is an [apiquery.OrExpression] or [apiquery.AndExpression], this function
 // recursively checks sub-expressions to ensure that a NamePredicate is present
 // in all sub-expressions.
 func ContainsPredicate(expr Expression, filter func(p Predicate) bool) bool {

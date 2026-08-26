@@ -3,7 +3,7 @@ package apirun
 import (
 	"time"
 
-	"github.com/relexec/rxp/api"
+	apicore "github.com/relexec/rxp/api/core"
 	"github.com/relexec/rxp/errors"
 )
 
@@ -19,7 +19,7 @@ type Request struct {
 	// *definition* of the thing that will be executed by Run.
 	Target Target
 	// Caller contains information about the calling identity.
-	Caller api.Caller
+	Caller apicore.Caller
 	// In contains the values of the input parameters when calling Run, encoded
 	// as a JSON string.
 	In string

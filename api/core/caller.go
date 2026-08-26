@@ -1,10 +1,8 @@
-package api
+package apicore
 
 import (
 	"context"
 
-	apidomain "github.com/relexec/rxp/api/domain"
-	apisystem "github.com/relexec/rxp/api/system"
 	"github.com/relexec/rxp/errors"
 )
 
@@ -20,14 +18,18 @@ type Caller struct {
 	// system-specific. It could be a UUID, a username, an email or any other
 	// type of identifier.
 	Identity string
-	// System is System that the caller's API request was routed through. If
-	// empty, the host System for the entity executing the API call is used.
-	System *apisystem.System
-	// Domain is the optional Domain the caller should have their rxp API calls
-	// scoped to. Calling systems may add this Domain to the API call request
-	// context automatically during authentication to avoid a caller needing to
-	// manually specify a Domain UUID in queries.
-	Domain *apidomain.Domain
+	// System is the UUID of the System that the caller's API request was
+	// routed through. If empty, the host System for the entity executing the
+	// API call is used.
+	System string
+	// Domain is the UUID of the Domain the caller should have their rxp API
+	// calls scoped to. Calling systems may add this Domain to the API call
+	// request context automatically during authentication to avoid a caller
+	// needing to manually specify a Domain UUID in queries.
+	//
+	// If Domain is not empty and System is not empty, the value of System is
+	// used as the Domain's System UUID.
+	Domain string
 }
 
 // Validate returns an error if the Caller is not valid.

@@ -4,7 +4,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/relexec/rxp/errors"
+	apierrors "github.com/relexec/rxp/api/errors"
 )
 
 const NamePattern = `^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$`
@@ -38,11 +38,11 @@ type Name string
 // Note that we do not use regexp parsing here for performance reasons.
 func (n Name) Validate() error {
 	if len(n) == 0 {
-		return errors.ErrKindNameEmpty
+		return apierrors.ErrKindNameEmpty
 	}
 	first := rune(n[0])
 	if !unicode.IsLetter(first) && !unicode.IsNumber(first) {
-		return errors.ErrKindNameInvalidFirstCharacter
+		return apierrors.ErrKindNameInvalidFirstCharacter
 	}
 	hasNonValidChars := func(r rune) bool {
 		if unicode.IsLetter(r) || unicode.IsNumber(r) || r == '.' || r == '-' {
@@ -51,10 +51,10 @@ func (n Name) Validate() error {
 		return true
 	}
 	if strings.ContainsFunc(string(n), hasNonValidChars) {
-		return errors.ErrKindNameInvalidCharacters
+		return apierrors.ErrKindNameInvalidCharacters
 	}
 	if strings.Contains(string(n), "..") {
-		return errors.ErrKindNameRepeatedPeriods
+		return apierrors.ErrKindNameRepeatedPeriods
 	}
 	return nil
 }

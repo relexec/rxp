@@ -1,4 +1,4 @@
-package errors
+package apierrors
 
 var (
 	ErrInvalidName      = New("invalid selector", WithWrap(ErrInvalidReadRequest))

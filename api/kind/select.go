@@ -1,8 +1,8 @@
 package apikind
 
 import (
+	apierrors "github.com/relexec/rxp/api/errors"
 	apisystem "github.com/relexec/rxp/api/system"
-	"github.com/relexec/rxp/errors"
 )
 
 // Selector selects a single Kind.
@@ -36,7 +36,7 @@ func (s Selector) Validate() error {
 		return nil
 	}
 	if s.name == "" {
-		return errors.ErrSelectorNameRequired
+		return apierrors.ErrSelectorNameRequired
 	}
 	// Note that if a nil system is provided, the host System is assumed.
 	if s.system != nil {

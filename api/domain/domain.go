@@ -2,8 +2,8 @@ package apidomain
 
 import (
 	apicore "github.com/relexec/rxp/api/core"
+	apierrors "github.com/relexec/rxp/api/errors"
 	apisystem "github.com/relexec/rxp/api/system"
-	"github.com/relexec/rxp/errors"
 )
 
 // Domain describes a division or partition of a System.
@@ -33,24 +33,24 @@ type Domain struct {
 // Validate returns an error if the Domain is invalid.
 func (d Domain) Validate() error {
 	if d.UUID == "" {
-		return errors.ErrDomainUUIDRequired
+		return apierrors.ErrDomainUUIDRequired
 	}
 	if d.Root != nil {
 		rootSystem := d.Root.System
 		if d.System != nil && rootSystem != nil {
 			if rootSystem.UUID != d.System.UUID {
-				return errors.ErrDomainRootSystemDifferent
+				return apierrors.ErrDomainRootSystemDifferent
 			}
 		}
 	}
 	if d.Parent != nil {
 		if d.Root == nil {
-			return errors.ErrDomainParentRootRequired
+			return apierrors.ErrDomainParentRootRequired
 		}
 		parentSystem := d.Parent.System
 		if d.System != nil && parentSystem != nil {
 			if parentSystem.UUID != d.System.UUID {
-				return errors.ErrDomainParentSystemDifferent
+				return apierrors.ErrDomainParentSystemDifferent
 			}
 		}
 	}

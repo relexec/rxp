@@ -3,7 +3,7 @@ package apikindversion
 import (
 	"github.com/samber/lo"
 
-	"github.com/relexec/rxp/errors"
+	apierrors "github.com/relexec/rxp/api/errors"
 	"github.com/relexec/rxp/query"
 )
 
@@ -21,13 +21,13 @@ func (p NamePredicate) Validate() error {
 	case []Name:
 		for _, dn := range v {
 			if err := dn.Validate(); err != nil {
-				return errors.PredicateInvalid(err.Error())
+				return apierrors.PredicateInvalid(err.Error())
 			}
 		}
 	case Name:
 		return v.Validate()
 	default:
-		return errors.PredicateUnsupportedValueType(v)
+		return apierrors.PredicateUnsupportedValueType(v)
 	}
 	return nil
 }

@@ -2,8 +2,8 @@ package apikind
 
 import (
 	apicore "github.com/relexec/rxp/api/core"
+	apierrors "github.com/relexec/rxp/api/errors"
 	apisystem "github.com/relexec/rxp/api/system"
-	"github.com/relexec/rxp/errors"
 )
 
 type Kind struct {
@@ -24,7 +24,7 @@ type Kind struct {
 // Validate returns an error if the Kind is not valid.
 func (k Kind) Validate() error {
 	if k.UUID == "" {
-		return errors.ErrKindUUIDRequired
+		return apierrors.ErrKindUUIDRequired
 	}
 	err := k.Name.Validate()
 	if err != nil {

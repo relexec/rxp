@@ -2,7 +2,7 @@ package apisystem
 
 import (
 	apicore "github.com/relexec/rxp/api/core"
-	"github.com/relexec/rxp/errors"
+	apierrors "github.com/relexec/rxp/api/errors"
 )
 
 // System represents the boundaries of an rxp system installation.
@@ -23,7 +23,7 @@ type System struct {
 // Validate returns an error if the System is invalid.
 func (s System) Validate() error {
 	if s.UUID == "" {
-		return errors.ErrSystemUUIDRequired
+		return apierrors.ErrSystemUUIDRequired
 	}
 	return nil
 }

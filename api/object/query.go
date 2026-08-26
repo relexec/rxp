@@ -2,7 +2,7 @@ package apiobject
 
 import (
 	apicore "github.com/relexec/rxp/api/core"
-	"github.com/relexec/rxp/errors"
+	apierrors "github.com/relexec/rxp/api/errors"
 	"github.com/relexec/rxp/query"
 )
 
@@ -20,7 +20,7 @@ func (p NamePredicate) Validate() error {
 	case []string, string:
 		return nil
 	default:
-		return errors.PredicateUnsupportedValueType(v)
+		return apierrors.PredicateUnsupportedValueType(v)
 	}
 }
 
@@ -160,7 +160,7 @@ func (p GenerationPredicate) Validate() error {
 	case apicore.Generation:
 		return nil
 	default:
-		return errors.PredicateUnsupportedValueType(v)
+		return apierrors.PredicateUnsupportedValueType(v)
 	}
 }
 

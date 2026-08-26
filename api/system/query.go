@@ -3,7 +3,7 @@ package apisystem
 import (
 	"github.com/samber/lo"
 
-	"github.com/relexec/rxp/errors"
+	apierrors "github.com/relexec/rxp/api/errors"
 	"github.com/relexec/rxp/query"
 )
 
@@ -23,7 +23,7 @@ func (p UUIDPredicate) Validate() error {
 	case string:
 		return nil
 	default:
-		return errors.PredicateUnsupportedValueType(v)
+		return apierrors.PredicateUnsupportedValueType(v)
 	}
 }
 

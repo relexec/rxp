@@ -5,8 +5,8 @@ import (
 
 	"github.com/Masterminds/semver/v3"
 
+	apierrors "github.com/relexec/rxp/api/errors"
 	apikind "github.com/relexec/rxp/api/kind"
-	"github.com/relexec/rxp/errors"
 )
 
 const (
@@ -23,7 +23,7 @@ type Name string
 // Validate returns an error if the Name is invalid.
 func (n Name) Validate() error {
 	if len(n) == 0 {
-		return errors.ErrKindNameEmpty
+		return apierrors.ErrKindNameEmpty
 	}
 	k := n.Kind()
 	err := k.Validate()

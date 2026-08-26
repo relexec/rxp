@@ -1,4 +1,4 @@
-package errors
+package apierrors
 
 var (
 	ErrInvalidObject             = New("invalid object", WithCode(ErrCodeBadRequest))

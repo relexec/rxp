@@ -3,8 +3,8 @@ package apiobject
 import (
 	apicore "github.com/relexec/rxp/api/core"
 	apidomain "github.com/relexec/rxp/api/domain"
+	apierrors "github.com/relexec/rxp/api/errors"
 	apisystem "github.com/relexec/rxp/api/system"
-	"github.com/relexec/rxp/errors"
 )
 
 // Selector selects a single Object.
@@ -54,7 +54,7 @@ func (s Selector) Validate() error {
 		return nil
 	}
 	if s.name == "" {
-		return errors.ErrSelectorUUIDOrNameRequired
+		return apierrors.ErrSelectorUUIDOrNameRequired
 	}
 	if s.system != nil {
 		if err := s.system.Validate(); err != nil {
@@ -65,7 +65,7 @@ func (s Selector) Validate() error {
 		// When looking up by Domain, we need either the domain's UUID or its
 		// Name, not both.
 		if s.domain.UUID == "" && s.domain.Name == "" {
-			return errors.ErrSelectorDomainUUIDOrNameRequired
+			return apierrors.ErrSelectorDomainUUIDOrNameRequired
 		}
 	}
 	return nil

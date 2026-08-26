@@ -1,8 +1,8 @@
 package apidomain
 
 import (
+	apierrors "github.com/relexec/rxp/api/errors"
 	apisystem "github.com/relexec/rxp/api/system"
-	"github.com/relexec/rxp/errors"
 )
 
 // Selector selects a single Domain.
@@ -36,7 +36,7 @@ func (s Selector) Validate() error {
 		return nil
 	}
 	if s.name == "" {
-		return errors.ErrSelectorUUIDOrNameRequired
+		return apierrors.ErrSelectorUUIDOrNameRequired
 	}
 	// Note that if a nil system is provided, the host System is assumed.
 	if s.system != nil {

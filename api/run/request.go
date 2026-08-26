@@ -4,7 +4,7 @@ import (
 	"time"
 
 	apicore "github.com/relexec/rxp/api/core"
-	"github.com/relexec/rxp/errors"
+	apierrors "github.com/relexec/rxp/api/errors"
 )
 
 // Request describes a single request to execute some work.
@@ -28,10 +28,10 @@ type Request struct {
 // Validate returns an error if the Request is not valid.
 func (r Request) Validate() error {
 	if r.UUID == "" {
-		return errors.ErrRunRequestUUIDRequired
+		return apierrors.ErrRunRequestUUIDRequired
 	}
 	if r.On.IsZero() {
-		return errors.ErrRunRequestOnRequired
+		return apierrors.ErrRunRequestOnRequired
 	}
 	if err := r.Caller.Validate(); err != nil {
 		return err

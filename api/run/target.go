@@ -3,9 +3,9 @@ package apirun
 import (
 	apicore "github.com/relexec/rxp/api/core"
 	apidomain "github.com/relexec/rxp/api/domain"
+	apierrors "github.com/relexec/rxp/api/errors"
 	apikindversion "github.com/relexec/rxp/api/kindversion"
 	apisystem "github.com/relexec/rxp/api/system"
-	"github.com/relexec/rxp/errors"
 )
 
 // Target uniquely identifies an Object generation that contains the
@@ -31,24 +31,24 @@ type Target struct {
 // Validate returns an error if the Target is not valid.
 func (t Target) Validate() error {
 	if t.KindVersionName == "" {
-		return errors.ErrRunTargetKindVersionNameRequired
+		return apierrors.ErrRunTargetKindVersionNameRequired
 	}
 	if t.UUID == "" {
-		return errors.ErrRunTargetUUIDRequired
+		return apierrors.ErrRunTargetUUIDRequired
 	}
 	if t.Generation == 0 {
-		return errors.ErrRunTargetGenerationRequired
+		return apierrors.ErrRunTargetGenerationRequired
 	}
 	if t.System != nil {
 		err := t.System.Validate()
 		if err != nil {
-			return errors.ErrRunTargetSystemInvalid
+			return apierrors.ErrRunTargetSystemInvalid
 		}
 	}
 	if t.Domain != nil {
 		err := t.Domain.Validate()
 		if err != nil {
-			return errors.ErrRunTargetDomainInvalid
+			return apierrors.ErrRunTargetDomainInvalid
 		}
 	}
 	return nil

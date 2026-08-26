@@ -1,4 +1,4 @@
-package errors
+package apierrors
 
 var (
 	ErrSystemInvalid      = New("invalid system", WithCode(ErrCodeBadRequest))

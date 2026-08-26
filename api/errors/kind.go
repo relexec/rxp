@@ -1,4 +1,4 @@
-package errors
+package apierrors
 
 var (
 	ErrKindInvalid                   = New("invalid kind", WithCode(ErrCodeBadRequest))

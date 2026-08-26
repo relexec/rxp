@@ -1,4 +1,4 @@
-package errors
+package apierrors
 
 var (
 	ErrMissingSelector                  = New("missing selector", WithWrap(ErrInvalidReadRequest))

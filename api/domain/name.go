@@ -4,7 +4,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/relexec/rxp/errors"
+	apierrors "github.com/relexec/rxp/api/errors"
 )
 
 const (
@@ -24,14 +24,14 @@ type Name string
 // Note that we do not use regexp parsing here for performance reasons.
 func (n Name) Validate() error {
 	if len(n) == 0 {
-		return errors.ErrDomainNameRequired
+		return apierrors.ErrDomainNameRequired
 	}
 	if len(n) > NameMaxLength {
-		return errors.ErrDomainNameMaxLengthExceeded
+		return apierrors.ErrDomainNameMaxLengthExceeded
 	}
 	first := rune(n[0])
 	if !unicode.IsLetter(first) && !unicode.IsNumber(first) {
-		return errors.ErrDomainNameInvalidFirstCharacter
+		return apierrors.ErrDomainNameInvalidFirstCharacter
 	}
 	hasNonValidChars := func(r rune) bool {
 		if unicode.IsLetter(r) || unicode.IsNumber(r) || r == '.' || r == '-' {
@@ -40,10 +40,10 @@ func (n Name) Validate() error {
 		return true
 	}
 	if strings.ContainsFunc(string(n), hasNonValidChars) {
-		return errors.ErrDomainNameInvalidCharacters
+		return apierrors.ErrDomainNameInvalidCharacters
 	}
 	if strings.Contains(string(n), "..") {
-		return errors.ErrDomainNameRepeatedPeriods
+		return apierrors.ErrDomainNameRepeatedPeriods
 	}
 	return nil
 }

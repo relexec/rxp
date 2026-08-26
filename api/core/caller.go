@@ -3,7 +3,7 @@ package apicore
 import (
 	"context"
 
-	"github.com/relexec/rxp/errors"
+	apierrors "github.com/relexec/rxp/api/errors"
 )
 
 type contextKey string
@@ -35,7 +35,7 @@ type Caller struct {
 // Validate returns an error if the Caller is not valid.
 func (c Caller) Validate() error {
 	if c.Identity == "" {
-		return errors.ErrCallerIdentityRequired
+		return apierrors.ErrCallerIdentityRequired
 	}
 	return nil
 }

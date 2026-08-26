@@ -1,4 +1,4 @@
-package errors
+package apierrors
 
 var (
 	ErrDomainInvalid                   = New("invalid domain", WithCode(ErrCodeBadRequest))

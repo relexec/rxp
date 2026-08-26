@@ -1,4 +1,4 @@
-package errors
+package apierrors
 
 var (
 	ErrRunRequestInvalid                = New("invalid run request", WithCode(ErrCodeBadRequest))

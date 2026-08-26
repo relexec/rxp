@@ -1,8 +1,8 @@
 package apirun
 
 import (
+	apierrors "github.com/relexec/rxp/api/errors"
 	apiobject "github.com/relexec/rxp/api/object"
-	"github.com/relexec/rxp/errors"
 	"github.com/relexec/rxp/query"
 )
 
@@ -22,7 +22,7 @@ func (p UUIDPredicate) Validate() error {
 	case string:
 		return nil
 	default:
-		return errors.PredicateUnsupportedValueType(v)
+		return apierrors.PredicateUnsupportedValueType(v)
 	}
 }
 
@@ -72,7 +72,7 @@ func (p RootUUIDPredicate) Validate() error {
 	case string:
 		return nil
 	default:
-		return errors.PredicateUnsupportedValueType(v)
+		return apierrors.PredicateUnsupportedValueType(v)
 	}
 }
 
@@ -122,7 +122,7 @@ func (p RootPredicate) Validate() error {
 	case *Run:
 		return nil
 	default:
-		return errors.PredicateUnsupportedValueType(v)
+		return apierrors.PredicateUnsupportedValueType(v)
 	}
 }
 
@@ -172,7 +172,7 @@ func (p TargetUUIDPredicate) Validate() error {
 	case string:
 		return nil
 	default:
-		return errors.PredicateUnsupportedValueType(v)
+		return apierrors.PredicateUnsupportedValueType(v)
 	}
 }
 
@@ -222,7 +222,7 @@ func (p TargetPredicate) Validate() error {
 	case *apiobject.Object:
 		return nil
 	default:
-		return errors.PredicateUnsupportedValueType(v)
+		return apierrors.PredicateUnsupportedValueType(v)
 	}
 }
 

@@ -6,10 +6,10 @@ import (
 	"github.com/Masterminds/semver/v3"
 
 	apicore "github.com/relexec/rxp/api/core"
+	apierrors "github.com/relexec/rxp/api/errors"
 	apikind "github.com/relexec/rxp/api/kind"
 	"github.com/relexec/rxp/api/kindversion/schema"
 	apisystem "github.com/relexec/rxp/api/system"
-	"github.com/relexec/rxp/errors"
 )
 
 type KindVersion struct {
@@ -40,7 +40,7 @@ func (kv KindVersion) Validate() error {
 		return err
 	}
 	if kv.Schema == nil {
-		return errors.KindVersionMissingSchema(kv.Name())
+		return apierrors.KindVersionMissingSchema(kv.Name())
 	}
 	return nil
 }

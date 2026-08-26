@@ -3,7 +3,7 @@ package apirun
 import (
 	"time"
 
-	"github.com/relexec/rxp/errors"
+	apierrors "github.com/relexec/rxp/api/errors"
 )
 
 // Run describes a thread of execution of some piece of work.
@@ -38,16 +38,16 @@ func (r Run) Validate() error {
 		return err
 	}
 	if r.scheduledOn.Before(r.startedOn) {
-		return errors.ErrRunScheduledBeforeStart
+		return apierrors.ErrRunScheduledBeforeStart
 	}
 	if !r.canceledOn.IsZero() {
 		if r.canceledOn.Before(r.scheduledOn) {
-			return errors.ErrRunCanceledBeforeScheduled
+			return apierrors.ErrRunCanceledBeforeScheduled
 		}
 	}
 	if !r.completedOn.IsZero() {
 		if !r.failedOn.IsZero() {
-			return errors.ErrRunCompletedAndFailed
+			return apierrors.ErrRunCompletedAndFailed
 		}
 	}
 	return nil

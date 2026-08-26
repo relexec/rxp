@@ -1,6 +1,6 @@
 package apirun
 
-import "github.com/relexec/rxp/errors"
+import apierrors "github.com/relexec/rxp/api/errors"
 
 // Selector selects a single Run.
 type Selector struct {
@@ -16,7 +16,7 @@ func (s Selector) UUID() string {
 // Validate returns an error if the Selector is not valid.
 func (s Selector) Validate() error {
 	if s.uuid == "" {
-		return errors.ErrSelectorUUIDRequired
+		return apierrors.ErrSelectorUUIDRequired
 	}
 	return nil
 }

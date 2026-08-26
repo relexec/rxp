@@ -1,4 +1,4 @@
-package errors
+package apierrors
 
 var (
 	ErrCallerInvalid          = New("invalid caller", WithCode(ErrCodeBadRequest))

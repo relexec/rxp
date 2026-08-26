@@ -1,7 +1,7 @@
 package query
 
 import (
-	"github.com/relexec/rxp/errors"
+	apierrors "github.com/relexec/rxp/api/errors"
 )
 
 // PredicateOperator is the type of comparison operator used by a Predicate.
@@ -34,7 +34,7 @@ type BasePredicate struct {
 // Validate returns an error if the Predicate is not valid.
 func (p BasePredicate) Validate() error {
 	if p.Value == nil {
-		return errors.ErrPredicateValueRequired
+		return apierrors.ErrPredicateValueRequired
 	}
 	return nil
 }

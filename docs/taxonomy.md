@@ -8,7 +8,7 @@ This document describes how this data is categorized and identified.
 
 Categorization refers to the ways in which things are grouped.
 
-In `rxp`, data is categorized by *Type* and *Scope*.
+In `rxp`, data is categorized by *Type* and [*Scope*][scope].
 
 Type refers to the class of thing. Types in `rxp` include System, Domain,
 Kind and Object.
@@ -31,6 +31,8 @@ System.
 
 Instances of a Type that is *domain-scoped* can be identified by Name and
 Domain.
+
+[scope]: https://github.com/relexec/rxp/blob/main/docs/reference.md#scope
 
 ## Identification
 

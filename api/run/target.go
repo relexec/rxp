@@ -12,15 +12,15 @@ import (
 // *definition* of the thing that will be executed by Run.
 type Target struct {
 	// NOTE(jaypipes): Record.SystemInternalID points to the internal ID of the
-	// Object+Generation record this RunTarget points at.
+	// Object+Generation record this Target points at.
 	apicore.Record
 	// KindVersionName is the kind and version identifier for the type of
 	// Object describing the Runnable.
 	KindVersionName apikindversion.Name
-	// System is System in which the target's Object resides. If empty, the
+	// System is System in which the Target's Object resides. If empty, the
 	// host System for the entity executing the API call is used.
 	System *apisystem.System
-	// Domain is the optional Domain the target's Object is scoped to.
+	// Domain is the optional Domain the Target's Object is scoped to.
 	Domain *apidomain.Domain
 	// UUID is the identifier of the Object describing the Runnable.
 	UUID string

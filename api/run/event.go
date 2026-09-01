@@ -37,6 +37,7 @@ const (
 	// EventTypeRunResumed is when a manual call to resume a paused Run was
 	// made.
 	EventTypeRunResumed
+
 	// EventTypeTimerStarted is when a timer is started within the execution of
 	// a Runnable.
 	EventTypeTimerStarted
@@ -47,7 +48,7 @@ const (
 // Event represents a single event that occurred in the timeline of a Run.
 type Event struct {
 	// Sequence stores the Event's sequence number within the Run.
-	Sequence int
+	Sequence uint32
 	// Type is the EventType of the event that occurred.
 	Type EventType
 	// On is the exact time that the Event occurred in UNIX nanoseconds.

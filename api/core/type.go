@@ -8,6 +8,4 @@ const (
 	TypeKind        Type = "kind"
 	TypeKindVersion Type = "kindversion"
 	TypeObject      Type = "object"
-	TypeRun         Type = "run"
-	TypeRunEvent    Type = "runevent"
 )

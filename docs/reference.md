@@ -11,7 +11,6 @@ This document contains the definition of terms and types in `rxp`.
 * [Kind](#kind)
 * [KindVersion](#kindversion)
 * [Object](#object)
-* [Run](#run)
 
 # Scope
 

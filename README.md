@@ -1,4 +1,4 @@
-# `rxp` - Reliable eXecution Primitives
+# `rxp` - Reliable Execution Primitives
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/relexec/rxp.svg)](https://pkg.go.dev/github.com/relexec/rxp)
 [![Test Status](https://github.com/relexec/rxp/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/relexec/rxp/actions)
@@ -8,8 +8,8 @@
 
 This source code repository contains the API and type definitions.
 
-The [`rxp-pg`][rxp-pg] repository implements the `rxp` API using PostgreSQL as
-the primary persistence store.
+The [`rxp-pg`][rxp-pg] repository contains a backend driver that uses
+PostgreSQL as the primary persistence store.
 
 At its core, a Reliable Execution platform must be able to:
 

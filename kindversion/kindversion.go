@@ -40,7 +40,7 @@ func (kv KindVersion) Validate() error {
 		return err
 	}
 	if kv.Schema == nil {
-		return errors.KindVersionMissingSchema(kv.Name())
+		return errors.ErrKindVersionSchemaRequired
 	}
 	return nil
 }

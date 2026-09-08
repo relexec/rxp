@@ -1,22 +1,20 @@
-# `rxp` - Reliable Execution Primitives
-
 [![Go Reference](https://pkg.go.dev/badge/github.com/relexec/rxp.svg)](https://pkg.go.dev/github.com/relexec/rxp)
 [![Test Status](https://github.com/relexec/rxp/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/relexec/rxp/actions)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
-`rxp` provides building blocks used to construct a Reliable Execution platform.
-
-This source code repository contains the API and type definitions.
+This source code repository contains type definitions and a simple but
+extensible framework for modeling resources that are read and written in a
+reliable execution platform.
 
 The [`rxp-pg`][rxp-pg] repository contains a backend driver that uses
 PostgreSQL as the primary persistence store.
 
-At its core, a Reliable Execution platform must be able to:
+The type definitions contained in this framework are designed to facilitate the
+following functionality:
 
 * Guarantee uniqueness of names within some scope
 * Safely evolve the *definition* of a thing
 * Safely mutate the *desired state* of a thing
-* Execute arbitrary code reliably
 * Safely *archive* managed things
 * Provide *auditability* for managed things
 
@@ -75,17 +73,6 @@ state to two different representations should be guarded to ensure only one
 writer succeeds and the other writers will need to reverify any conditions that
 led to their original desired state change.
 
-## Execute arbitrary code reliably
-
-Developers should be able to tell the Reliable Execution platform that some
-arbitrary code should be *executed reliably*.
-
-Reliable execution of code means that `rxp` wraps the execution of the
-arbitrary code in a safety envelope that tracks important events and
-checkpoints in the code execution so that if the execution of the code fails
-due to a runtime error -- network partitioning, out-of-memory errors, etc --
-that the code can start executing again elsewhere.
-
 ## Safe archival
 
 Things managed by `rxp` do not get deleted. This is so that `rxp` can ensure
@@ -95,7 +82,7 @@ at some point in the future.
 
 Instead of deletion, things managed by `rxp` can be *archived*. Archival marks
 the thing as not being in the *active data set*, which means the thing will no
-longer be returned from Read operations unless the caller indicates `rxp`
+longer be returned from read operations unless the caller indicates `rxp`
 should include archived items in its lookup actions.
 
 ## Auditability
@@ -104,9 +91,3 @@ Every change to a thing managed by `rxp` is tracked.
 
 For objects managed by `rxp`, a user can see every generation of the object and
 see exactly what changed from one generation to the next.
-
-An execution of a runnable thing is persisted as an event history.
-
-Objects managed by `rxp` that have status fields associated with the execution
-of a runnable thing can see the history of how that status field changed in
-response to the executions of those runnable things.

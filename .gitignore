@@ -1,8 +1,7 @@
 *.swp
 *.swo
 *~
-build/run/
-bin/
-build/
+.bin/
+.build/
 go.work
 go.work.sum

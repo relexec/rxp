@@ -1,0 +1,11 @@
+package core
+
+type Type string
+
+const (
+	TypeSystem      Type = "system"
+	TypeDomain      Type = "domain"
+	TypeKind        Type = "kind"
+	TypeKindVersion Type = "kindversion"
+	TypeObject      Type = "object"
+)

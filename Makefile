@@ -4,7 +4,7 @@
 GIT_VERSION ?= $(shell git describe --tags --always --dirty || echo "unknown")
 GIT_COMMIT ?= $(shell git rev-parse HEAD)
 
-BIN_DIR ?= $(shell pwd)/bin
+BIN_DIR ?= $(shell pwd)/.bin
 $(BIN_DIR):
 	@mkdir -p "$(BIN_DIR)"
 
